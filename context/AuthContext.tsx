@@ -1,5 +1,6 @@
 'use client';
 
+import '@/lib/axios-config';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import axios from 'axios';
 import type { User, SharedData } from '@/types';
