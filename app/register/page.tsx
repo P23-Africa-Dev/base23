@@ -152,12 +152,7 @@ const mobileTopContentPerStep = [
 ];
 
 export default function Register({ prefill }: RegisterProps) {
-    const getStepFromUrl = () => {
-        const params = new URLSearchParams(window.location.search);
-        return Number(params.get('step') || 1);
-    };
-
-    const [step, setStep] = useState<number>(getStepFromUrl);
+    const [step, setStep] = useState<number>(1);
     const [loading, setLoading] = useState(false);
     const [profilePicFile, setProfilePicFile] = useState<File | null>(null);
     const [profilePicPreview, setProfilePicPreview] = useState<string | null>(null);
@@ -171,8 +166,9 @@ export default function Register({ prefill }: RegisterProps) {
     // Track submission attempts for debugging
     const submissionAttemptRef = useRef(0);
 
-    // Listen for browser back/forward
     useEffect(() => {
+        const getStepFromUrl = () => Number(new URLSearchParams(window.location.search).get('step') || 1);
+        setStep(getStepFromUrl());
         const handlePopState = () => setStep(getStepFromUrl());
         window.addEventListener('popstate', handlePopState);
         return () => window.removeEventListener('popstate', handlePopState);
@@ -209,46 +205,39 @@ export default function Register({ prefill }: RegisterProps) {
         }
     }, []);
 
-    // Initialize form data with prefill values
-    const [formData, setFormData] = useState<RegisterForm>(() => {
-        // Build base data from prefill
-        const baseData: RegisterForm = {
-            name: prefill?.name ?? '',
-            email: prefill?.email ?? '',
-            password: '',
-            password_confirmation: '',
-            profile_picture: null,
-            company_name: prefill?.company_name ?? '',
-            company_description: '',
-            industry: prefill?.industry ?? '',
-            categories: prefill?.categories ?? [],
-            great_at: [],
-            can_help_with: [],
-            phone: prefill?.phone ?? '',
-            linkedin: prefill?.linkedin ?? '',
-            country: prefill?.country ?? '',
-            position: prefill?.position ?? '',
-            years_of_operation: prefill?.years_of_operation ?? '',
-            number_of_employees: prefill?.number_of_employees ?? '',
-            selected_outcome: prefill?.selected_outcome ?? '',
-            goals: prefill?.goals ?? '',
-            year_established: prefill?.year_established ?? '',
-            tier: prefill?.tier ?? 'silver', // Membership tier from prefill (hidden from user)
-        };
+    const [formData, setFormData] = useState<RegisterForm>({
+        name: prefill?.name ?? '',
+        email: prefill?.email ?? '',
+        password: '',
+        password_confirmation: '',
+        profile_picture: null,
+        company_name: prefill?.company_name ?? '',
+        company_description: '',
+        industry: prefill?.industry ?? '',
+        categories: prefill?.categories ?? [],
+        great_at: [],
+        can_help_with: [],
+        phone: prefill?.phone ?? '',
+        linkedin: prefill?.linkedin ?? '',
+        country: prefill?.country ?? '',
+        position: prefill?.position ?? '',
+        years_of_operation: prefill?.years_of_operation ?? '',
+        number_of_employees: prefill?.number_of_employees ?? '',
+        selected_outcome: prefill?.selected_outcome ?? '',
+        goals: prefill?.goals ?? '',
+        year_established: prefill?.year_established ?? '',
+        tier: prefill?.tier ?? 'silver',
+    });
 
-        // Try to restore from localStorage only for non-prefilled fields
+    useEffect(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 const parsedData = JSON.parse(saved);
-
-                // Decode password fields if they exist
                 const decodedPassword = parsedData._encodedPassword ? decodeData(parsedData._encodedPassword) : '';
                 const decodedPasswordConfirmation = parsedData._encodedPasswordConfirmation ? decodeData(parsedData._encodedPasswordConfirmation) : '';
-
-                // Merge saved data but prioritize prefill data
-                return {
-                    ...baseData,
+                setFormData((base) => ({
+                    ...base,
                     ...parsedData,
                     password: decodedPassword,
                     password_confirmation: decodedPasswordConfirmation,
@@ -266,16 +255,14 @@ export default function Register({ prefill }: RegisterProps) {
                     linkedin: prefill?.linkedin || parsedData.linkedin || '',
                     position: prefill?.position || parsedData.position || '',
                     year_established: prefill?.year_established || parsedData.year_established || '',
-                    tier: prefill?.tier || parsedData.tier || 'silver', // Always prioritize prefill tier
+                    tier: prefill?.tier || parsedData.tier || 'silver',
                     profile_picture: null,
-                };
+                }));
             }
         } catch (error) {
             console.warn('Error restoring form data:', error);
         }
-
-        return baseData;
-    });
+    }, []);
 
     const steps = ['Account Info', 'Company Info', 'Interests'];
 
