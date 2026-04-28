@@ -29,21 +29,37 @@ interface User {
 interface MobileTabsLeadsProps {
     users: User[];
     isLoadingSortedUsers?: boolean;
-    connected?: boolean;
-    pending?: boolean;
+    connected?: Array<{ id: number; name: string }>;
+    pending?: Array<{ id: number; name: string }>;
     auth?: any;
 }
 
 export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
     users,
     isLoadingSortedUsers = false,
-    connected = false,
-    pending = false,
+    connected = [],
+    pending = [],
     auth,
 }) => {
     const [activeTab, setActiveTab] = useState('connections');
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
+
+    const sortedUsers = users;
+
+    const formatArrayData = (data: string | string[] | null | undefined): string => {
+        if (!data) return 'Not specified';
+        if (typeof data === 'string') {
+            try { const p = JSON.parse(data); return Array.isArray(p) ? p.join(', ') : data; } catch { return data; }
+        }
+        return Array.isArray(data) ? data.join(', ') : 'Not specified';
+    };
+
+    const formatDate = (dateString: string | null | undefined): string => {
+        if (!dateString) return 'Not available';
+        try { return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+        catch { return 'Invalid date'; }
+    };
 
     const handleSearchIconClick = () => {
         if (!searchQuery.trim()) return;
@@ -128,6 +144,7 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                 .filter((user) => user.categories === 'connection')
                                 .map((user) => (
                                     <UserProfileSidebar
+                                        variant="all"
                                         key={user.id}
                                         userId={user.id}
                                         authUserId={auth.user?.id ?? 0}
@@ -177,6 +194,7 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                 .filter((user) => user.categories === 'smart-match')
                                 .map((user) => (
                                     <UserProfileSidebar
+                                        variant="all"
                                         key={user.id}
                                         userId={user.id}
                                         authUserId={auth.user?.id ?? 0}
@@ -226,6 +244,7 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                 .filter((user) => user.categories === 'connection')
                                 .map((user) => (
                                     <UserProfileSidebar
+                                        variant="all"
                                         key={user.id}
                                         userId={user.id}
                                         authUserId={auth.user?.id ?? 0}
