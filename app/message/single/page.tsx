@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import DirectChatCard from '@/components/cards/messages/user-direct-message-card';
 import MessageProfileOverlay from '@/components/modals/message/MessageProfileOverlay';
 import { Sheet, SheetTrigger } from '@/components/ui/sheet';

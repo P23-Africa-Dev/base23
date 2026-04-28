@@ -1,13 +1,15 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { Button } from '@/components/ui/button';
 import AuthLayout from '@/layouts/auth-layout';
 import axios from 'axios';
 import { LoaderCircle } from 'lucide-react';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function VerifyEmail() {
+function VerifyEmail() {
     const searchParams = useSearchParams();
     const status = searchParams.get('status') || '';
     const [processing, setProcessing] = useState(false);
@@ -48,3 +50,5 @@ export default function VerifyEmail() {
         </AuthLayout>
     );
 }
+
+export default function VerifyEmailPage() { return <Suspense fallback={null}><VerifyEmail /></Suspense>; }

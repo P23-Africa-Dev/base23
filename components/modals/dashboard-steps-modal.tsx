@@ -255,7 +255,7 @@ function StripePaymentForm({
             return;
         }
 
-        onSubmitReady(() => handleSubmit);
+        onSubmitReady(handleSubmit);
 
         return () => {
             onSubmitReady(null);

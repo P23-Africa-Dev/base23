@@ -1,8 +1,10 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { Transition } from '@headlessui/react';
 import axios from 'axios';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import DeleteUser from '@/components/delete-user';
@@ -16,7 +18,7 @@ import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { useAuth } from '@/context/AuthContext';
 
-export default function Profile() {
+function Profile() {
     const { user } = useAuth();
     const searchParams = useSearchParams();
     const mustVerifyEmail = searchParams.get('mustVerifyEmail') === 'true';
@@ -127,3 +129,5 @@ export default function Profile() {
         </AppLayout>
     );
 }
+
+export default function ProfilePage() { return <Suspense fallback={null}><Profile /></Suspense>; }

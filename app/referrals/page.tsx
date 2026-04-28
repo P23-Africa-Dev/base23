@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 // import { MatchSidebar } from '@/components/referral/MatchSidebar';
 // import UserProfileSidebar from '@/components/sidebars/user-show-sidebar';
 // import { Connection, connections } from '@/dummyDatas/connection';

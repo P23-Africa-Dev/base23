@@ -16,10 +16,11 @@ interface User {
     rating?: number;
     profile_picture?: string;
     company_description?: string;
-    leads: 'connection' | 'smart-match' | 'active-lead';
-    years_of_operation?: number;
+    leads?: 'connection' | 'smart-match' | 'active-lead';
+    categories?: string;
+    years_of_operation?: string | number;
     selected_outcome?: string;
-    great_at?: string[];
+    great_at?: string[] | string;
     goals?: string;
     total_score?: number;
     match_reasons?: string[];
@@ -151,7 +152,7 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                         name={user.name}
                                         title={user.position || 'Position not specified'}
                                         imageSrc={user.profile_picture || ''}
-                                        experience={user.years_of_operation || 'N/A'}
+                                        experience={String(user.years_of_operation || 'N/A')}
                                         industry={user.industry || 'N/A'}
                                         interest={formatArrayData(user.categories)}
                                         reviews={user.rating ? user.rating.toString() : '0'}
@@ -166,8 +167,6 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                         successfulDealsRate={'N/A'}
                                         connected={connected}
                                         pending={pending}
-                                        intelligentScore={user.total_score}
-                                        matchReasons={user.match_reasons}
                                     >
                                         <UserCard
                                             name={user.name}
@@ -201,7 +200,7 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                         name={user.name}
                                         title={user.position || 'Position not specified'}
                                         imageSrc={user.profile_picture || ''}
-                                        experience={user.years_of_operation || 'N/A'}
+                                        experience={String(user.years_of_operation || 'N/A')}
                                         industry={user.industry || 'N/A'}
                                         interest={formatArrayData(user.categories)}
                                         reviews={user.rating ? user.rating.toString() : '0'}
@@ -216,8 +215,6 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                         successfulDealsRate={'N/A'}
                                         connected={connected}
                                         pending={pending}
-                                        intelligentScore={user.total_score}
-                                        matchReasons={user.match_reasons}
                                     >
                                         <UserCard
                                             name={user.name}
@@ -251,7 +248,7 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                         name={user.name}
                                         title={user.position || 'Position not specified'}
                                         imageSrc={user.profile_picture || ''}
-                                        experience={user.years_of_operation || 'N/A'}
+                                        experience={String(user.years_of_operation || 'N/A')}
                                         industry={user.industry || 'N/A'}
                                         interest={formatArrayData(user.categories)}
                                         reviews={user.rating ? user.rating.toString() : '0'}
@@ -266,8 +263,6 @@ export const MobileTabsLeads: React.FC<MobileTabsLeadsProps> = ({
                                         successfulDealsRate={'N/A'}
                                         connected={connected}
                                         pending={pending}
-                                        intelligentScore={user.total_score}
-                                        matchReasons={user.match_reasons}
                                     >
                                         <UserCard
                                             name={user.name}

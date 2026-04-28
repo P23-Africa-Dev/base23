@@ -37,6 +37,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
         deal_card: 0,
         connection: 0,
         security: 0,
+        smart_match: 0,
     });
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);

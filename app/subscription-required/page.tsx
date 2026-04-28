@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { Button } from '@/components/ui/button';
 import images from '@/constants/image';
 import { AlertTriangle, CreditCard, Crown, Loader2, RefreshCw, Zap } from 'lucide-react';

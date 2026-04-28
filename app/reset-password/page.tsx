@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import InputError from '@/components/input-error';
 import LeftDesktopContent from '@/components/auths/LeftDesktopContent';
 import MobileTopContent from '@/components/auths/MobileContent';
@@ -10,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 import { LoaderCircle } from 'lucide-react';
 import axios from 'axios';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 const resetMobileContent = {
@@ -20,7 +22,7 @@ const resetMobileContent = {
     paragraphClassName: 'max-w-sm pr-5 text-[17px] font-light text-white',
 };
 
-export default function ResetPassword() {
+function ResetPassword() {
     const searchParams = useSearchParams();
     const token = searchParams.get('token') || '';
     const emailParam = searchParams.get('email') || '';
@@ -129,3 +131,5 @@ export default function ResetPassword() {
         </AuthLayout>
     );
 }
+
+export default function ResetPasswordPage() { return <Suspense fallback={null}><ResetPassword /></Suspense>; }

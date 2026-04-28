@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import LeftDesktopContent from '@/components/auths/LeftDesktopContent';
 import Loader from '@/components/auths/Loader';
 import MobileTopContent from '@/components/auths/MobileContent';

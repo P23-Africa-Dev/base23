@@ -58,6 +58,9 @@ export const LeadsFilterSidebar: React.FC<FilterSidebarProps> = ({ onFilterChang
         country: searchParams.get('country') || '',
         industry: searchParams.get('industry') || '',
         position: searchParams.get('position') || '',
+        companyType: searchParams.get('companyType') || '',
+        companySize: searchParams.get('companySize') || '',
+        yearsOfOperation: searchParams.get('yearsOfOperation') || '',
     };
 
     // Filter selection states

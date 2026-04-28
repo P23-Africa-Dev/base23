@@ -1,5 +1,8 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
+import { Suspense } from 'react';
 import CompanyProfileTab from '@/components/profile/company-profile-tab';
 import PersonalProfileTab from '@/components/profile/personal-profile-tab';
 import SettingsTab from '@/components/profile/settings-tab';
@@ -12,9 +15,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function ProfilePage() {
+function ProfilePage() {
     const { user } = useAuth();
-    const auth = { user };
     const searchParams = useSearchParams();
     const status = searchParams.get('status') || '';
     const mustVerifyEmail = searchParams.get('mustVerifyEmail') === 'true';
@@ -30,6 +32,7 @@ export default function ProfilePage() {
     }, []);
 
     if (!user) return null;
+    const auth = { user };
 
     return (
         <AppLayout>
@@ -180,3 +183,5 @@ export default function ProfilePage() {
         </AppLayout>
     );
 }
+
+export default function Page() { return <Suspense fallback={null}><ProfilePage /></Suspense>; }

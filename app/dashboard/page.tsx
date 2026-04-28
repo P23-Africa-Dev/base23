@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import SmartMatchesSection from '@/components/cards/SmartCard';
 import UserCard from '@/components/cards/UserCard';
 import UserCardLead from '@/components/cards/UserCardLead';

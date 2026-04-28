@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import images from '@/constants/image';
 
 import { DirectoryLeads } from '@/components/cards/directory/directory-leads';

@@ -1,7 +1,7 @@
 // components/leads/LeadFullProfilePanel.tsx
 import images from '@/constants/image';
-import { Linkedin, MapPin, Share2, Star, Twitter } from 'lucide-react';
-import { FaFacebook, FaInstagram } from 'react-icons/fa';
+import { MapPin, Share2, Star } from 'lucide-react';
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { useState } from 'react';
 import { LeadSidebarProfile } from './LeadsSidebar';
 
@@ -194,7 +194,7 @@ export function LeadFullProfilePanel({ data, onClose }: Props) {
                                         rel="noopener noreferrer"
                                         className="flex items-center gap-2 rounded-lg bg-[#0077B5] px-3 py-2 text-white text-[10px] hover:opacity-80 transition-opacity"
                                     >
-                                        <Linkedin className="h-4 w-4" />
+                                        <FaLinkedin className="h-4 w-4" />
                                         <span>LinkedIn</span>
                                     </a>
                                 )}
@@ -205,7 +205,7 @@ export function LeadFullProfilePanel({ data, onClose }: Props) {
                                         rel="noopener noreferrer"
                                         className="flex items-center gap-2 rounded-lg bg-[#1DA1F2] px-3 py-2 text-white text-[10px] hover:opacity-80 transition-opacity"
                                     >
-                                        <Twitter className="h-4 w-4" />
+                                        <FaTwitter className="h-4 w-4" />
                                         <span>Twitter</span>
                                     </a>
                                 )}

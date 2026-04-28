@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import LeftDesktopContent from '@/components/auths/LeftDesktopContent';
@@ -10,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 import { LoaderCircle } from 'lucide-react';
 import axios from 'axios';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 const forgotMobileContent = {
@@ -20,7 +22,7 @@ const forgotMobileContent = {
     paragraphClassName: 'max-w-sm pr-5 text-[17px] font-light text-white',
 };
 
-export default function ForgotPassword() {
+function ForgotPassword() {
     const searchParams = useSearchParams();
     const status = searchParams.get('status') || '';
 
@@ -109,3 +111,5 @@ export default function ForgotPassword() {
         </AuthLayout>
     );
 }
+
+export default function ForgotPasswordPage() { return <Suspense fallback={null}><ForgotPassword /></Suspense>; }

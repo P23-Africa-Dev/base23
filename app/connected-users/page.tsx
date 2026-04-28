@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import React, { useEffect, useState } from 'react';

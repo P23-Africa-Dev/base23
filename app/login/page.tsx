@@ -1,5 +1,8 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
+import { Suspense } from 'react';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import LeftDesktopContent from '@/components/auths/LeftDesktopContent';
@@ -23,7 +26,7 @@ const loginMobileContent = {
     paragraphClassName: 'max-w-sm pr-5 text-[14px] font-light text-white',
 };
 
-export default function Login() {
+function Login() {
     const searchParams = useSearchParams();
     const status = searchParams.get('status') || '';
 
@@ -207,3 +210,5 @@ export default function Login() {
         </>
     );
 }
+
+export default function LoginPage() { return <Suspense fallback={null}><Login /></Suspense>; }

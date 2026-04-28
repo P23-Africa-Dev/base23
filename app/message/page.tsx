@@ -1,10 +1,13 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import UserMessageCard from '@/components/cards/messages/user-message-card';
 import RecentChatCard from '@/components/cards/messages/user-recent-message-card';
 import images from '@/constants/image';
 import AppLayout from '@/layouts/app-layout';
 import { ChatNotifications } from '@/utils/notifications';
+import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import axios from 'axios';
 import { ChevronRight } from 'lucide-react';
@@ -97,7 +100,9 @@ function getFirstName(fullName: string): string {
     return fullName?.split(' ')[0] || 'User';
 }
 
-function Message({ connections = [], conversations = [], stats, auth }: MessagePageProps) {
+function Message({ connections = [], conversations = [], stats = { activeConversations: 0, readMessages: 0, unreadMessages: 0 } }: Partial<MessagePageProps>) {
+    const { user: authUser } = useAuth();
+    const auth = { user: authUser };
     const [searchConnectionQuery, setSearchConnectionQuery] = useState('');
     const [searchChatQuery, setSearchChatQuery] = useState('');
     const [onlineUsers, setOnlineUsers] = useState<Set<number>>(new Set()); // Track online user IDs
@@ -184,7 +189,7 @@ function Message({ connections = [], conversations = [], stats, auth }: MessageP
                             const updatedConversations = prevConversations.map((conversation) => {
                                 if (conversation.id === message.conversation_id) {
                                     // Check if the message is from another user (not current user)
-                                    const isFromOtherUser = message.user.id !== auth.user.id;
+                                    const isFromOtherUser = message.user.id !== auth.user?.id;
 
                                     return {
                                         ...conversation,
@@ -208,7 +213,7 @@ function Message({ connections = [], conversations = [], stats, auth }: MessageP
                         });
 
                         // Update stats if message is from another user
-                        if (message.user.id !== auth.user.id) {
+                        if (message.user.id !== auth.user?.id) {
                             setMessageStats((prevStats) => ({
                                 ...prevStats,
                                 unreadMessages: prevStats.unreadMessages + 1,
@@ -220,7 +225,7 @@ function Message({ connections = [], conversations = [], stats, auth }: MessageP
                     })
                     .listen('MessageRead', (event: { message_id: number; user: User; conversation_id: number }) => {
                         // Update unread count when message is read by current user
-                        if (event.user.id === auth.user.id) {
+                        if (event.user.id === auth.user?.id) {
                             setConversationsList((prevConversations) =>
                                 prevConversations.map((conversation) => {
                                     if (conversation.id === event.conversation_id) {
@@ -253,7 +258,7 @@ function Message({ connections = [], conversations = [], stats, auth }: MessageP
                 }
             });
         };
-    }, [conversationsList, auth.user.id]);
+    }, [conversationsList, auth.user?.id]);
 
     // Filter connections based on search
     const filteredConnections = connections.filter(
@@ -363,7 +368,7 @@ function Message({ connections = [], conversations = [], stats, auth }: MessageP
                                     <div className="flex w-full justify-between px-6 pl-7">
                                         <div className="mt-3.5 w-[60%] text-secondaryWhite">
                                             <div className="leading-4">
-                                                <h2 className="text-[18px] font-bold">Hello, {getFirstName(auth.user.name)}!</h2>
+                                                <h2 className="text-[18px] font-bold">Hello, {getFirstName(auth.user?.name || '')}!</h2>
                                                 <h4 className="text-xs font-light">{getGreeting()}</h4>
                                             </div>
                                         </div>
@@ -385,7 +390,7 @@ function Message({ connections = [], conversations = [], stats, auth }: MessageP
                                                 </div>
                                                 <div
                                                     style={{
-                                                        backgroundImage: `url(${auth.user.profile_picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(auth.user.name)}&background=6366f1&color=ffffff&size=200`})`,
+                                                        backgroundImage: `url(${auth.user?.profile_picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(auth.user?.name || '')}&background=6366f1&color=ffffff&size=200`})`,
                                                     }}
                                                     className="h-[46px] w-[46px] max-w-full overflow-hidden rounded-full bg-cover bg-top bg-no-repeat"
                                                 ></div>
