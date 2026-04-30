@@ -17,25 +17,25 @@
 > Restore: `git checkout main -- app/<route>/page.tsx`
 > Fix pattern: move `window`/`localStorage`/`document` out of render path → into `useEffect`.
 
-- [ ] app/dashboard/page.tsx
-- [ ] app/referrals/page.tsx
-- [ ] app/directory/page.tsx
-- [ ] app/message/page.tsx
-- [ ] app/message/single/page.tsx
-- [ ] app/chats/page.tsx
-- [ ] app/leads/page.tsx
-- [ ] app/dealcard/page.tsx
-- [ ] app/dealcard/view/page.tsx
-- [ ] app/profile/page.tsx
-- [ ] app/connected-users/page.tsx
-- [ ] app/settings/profile/page.tsx
-- [ ] app/settings/password/page.tsx
-- [ ] app/settings/appearance/page.tsx
-- [ ] app/settings/blocked-users/page.tsx
-- [ ] app/settings/subscription/page.tsx
-- [ ] app/payment/page.tsx
-- [ ] app/subscription-required/page.tsx
-- [ ] app/admin/activities/page.tsx
+- [x] app/dashboard/page.tsx
+- [x] app/referrals/page.tsx
+- [x] app/directory/page.tsx
+- [x] app/message/page.tsx
+- [x] app/message/single/page.tsx — wrapper pattern (useAuth), SSR fix for window.location
+- [x] app/chats/page.tsx — wrapper pattern (useAuth), SSR fix for window.location in useState
+- [x] app/leads/page.tsx — SSR fix: window.location moved to useEffect
+- [x] app/dealcard/page.tsx — wrapper pattern (useAuth)
+- [x] app/dealcard/view/page.tsx — wrapper pattern (useAuth)
+- [x] app/profile/page.tsx
+- [x] app/connected-users/page.tsx
+- [x] app/settings/profile/page.tsx
+- [x] app/settings/password/page.tsx
+- [x] app/settings/appearance/page.tsx
+- [x] app/settings/blocked-users/page.tsx — default [] for blockedUsers prop
+- [x] app/settings/subscription/page.tsx
+- [x] app/payment/page.tsx
+- [x] app/subscription-required/page.tsx
+- [x] app/admin/activities/page.tsx
 
 ---
 
