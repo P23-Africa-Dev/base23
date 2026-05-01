@@ -80,11 +80,52 @@ function Dashboard() {
         }));
     }
     return [
-      { id: 1, name: "Amara Osei", role: "CEO", company: "GreenBridge Ltd", image: "/assets/test.jpg", compatibility: 94, match_reasons: ["Same industry", "Complementary goals"], why_this_match: "Strong overlap in fintech and growth targets." },
-      { id: 2, name: "Kofi Mensah", role: "CTO", company: "TechNova Africa", image: "/assets/test.jpg", compatibility: 88, match_reasons: ["Tech background", "Shared network"] },
-      { id: 3, name: "Fatima Diallo", role: "Founder", company: "SolarPath", image: "/assets/test.jpg", compatibility: 81, match_reasons: ["Clean energy focus"] },
-      { id: 4, name: "Yaw Darko", role: "Investor", company: "Accra Ventures", image: "/assets/test.jpg", compatibility: 76, match_reasons: ["Active investor in your sector"] },
-      { id: 5, name: "Nia Boateng", role: "Head of Sales", company: "Nexus Corp", image: "/assets/test.jpg", compatibility: 72, match_reasons: ["Sales expertise"] },
+      {
+        id: 1,
+        name: "Amara Osei",
+        role: "CEO",
+        company: "GreenBridge Ltd",
+        image: "/assets/man1.jpg",
+        compatibility: 94,
+        match_reasons: ["Same industry", "Complementary goals"],
+        why_this_match: "Strong overlap in fintech and growth targets.",
+      },
+      {
+        id: 2,
+        name: "Kofi Mensah",
+        role: "CTO",
+        company: "TechNova Africa",
+        image: "/assets/man2.jpg",
+        compatibility: 88,
+        match_reasons: ["Tech background", "Shared network"],
+      },
+      {
+        id: 3,
+        name: "Fatima Diallo",
+        role: "Founder",
+        company: "SolarPath",
+        image: "/assets/man3.jpg",
+        compatibility: 81,
+        match_reasons: ["Clean energy focus"],
+      },
+      {
+        id: 4,
+        name: "Yaw Darko",
+        role: "Investor",
+        company: "Accra Ventures",
+        image: "/assets/man4.jpg",
+        compatibility: 76,
+        match_reasons: ["Active investor in your sector"],
+      },
+      {
+        id: 5,
+        name: "Nia Boateng",
+        role: "Head of Sales",
+        company: "Nexus Corp",
+        image: "/assets/business-man1.jpg",
+        compatibility: 72,
+        match_reasons: ["Sales expertise"],
+      },
     ];
   }, [matches]);
 
@@ -282,22 +323,9 @@ function Dashboard() {
           }}
         >
           <div className="relative z-10 no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-9 lg:pl-7 xl:pr-17 xl:pl-12">
-            {/* USER GREETINGS */}
-            <div className="hidden w-full text-gray-900 lg:block dark:text-white animate-fadeInDown">
-              {auth.user ? (
-                <h3 className="text-[27px] font-semibold tracking-wide">
-                  {getGreeting()}{" "}
-                  <span className="font-bold tracking-tight">
-                    {auth.user.name}
-                  </span>{" "}
-                </h3>
-              ) : (
-                <h3 className="text-[27px] font-medium">
-                  Good Morning <span className="font-bold">Kwame</span>{" "}
-                </h3>
-              )}
-            </div>
-            {/*-------------------------//////////////////////----------------- FIRST ROW MOBILE----------------//////////////////////------------------------- */}
+            <h3 className="text-[27px] font-medium px-9.25 pt-3">
+              Good Morning <span className="font-bold">Kwame</span>{" "}
+            </h3>
             <div className="relative mt-1.5 w-full bg-no-repeat px-2 pt-5 pb-4 lg:hidden animate-fadeIn">
               <Image
                 src={images.mobileCardBG}
@@ -350,7 +378,7 @@ function Dashboard() {
             </div>
 
             {/* FIRST ROW */}
-            <div className="grid auto-rows-min gap-4 lg:grid-cols-3 stagger-children">
+            <div className="grid auto-rows-min gap-4 lg:grid-cols-3 stagger-children px-8.5">
               {/* CHART CONTAINER */}
               <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-linear-to-r from-[#A47AF0] to-[#A47AF0]/60 p-2 lg:block hover-lift">
                 <SplineAreaChart userId={auth.user?.id} />
@@ -364,13 +392,9 @@ function Dashboard() {
                       Matching Status
                     </h4>
                     <div>
-                      <h5 className="flex items-center justify-end gap-1">
+                      <h5 className="flex items-center justify-end">
                         <span
-                          className={`text-xl leading-10 font-medium lg:text-sm xl:text-base ${
-                            activityChange.isIncrease
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
+                          className={`text-xl leading-10 font-medium lg:text-sm xl:text-base`}
                         >
                           {Math.abs(activityChange.change)}%
                         </span>
@@ -514,8 +538,6 @@ function Dashboard() {
 
               {/*-------------------------//////////////////////----------------- THIRD ROW MOBILE----------------//////////////////////------------------------- */}
               <div className="lg:hidden animate-fadeInUp animate-delay-200">
-                {/* <BasicColumnChart /> */}
-
                 <ActivityChartCard />
               </div>
 
@@ -898,7 +920,7 @@ function Dashboard() {
             </div>
 
             {/* SECOND ROW */}
-            <div className="drop-shadow-[0px_4px_6px_rgba(0,0,0,0.6)]">
+            <div className="drop-shadow-[0px_4px_6px_rgba(0,0,0,0.6)] mt-7">
               <div className="ticket-cutout relative aspect-auto h-133.75 w-full bg-white bg-cover rounded-3xl">
                 <div className="w-full h-[64%] bg-[#193E47] absolute bottom-0" />
                 <div className="relative no-scrollbar flex-1 overflow-y-auto lg:pb-0">
@@ -954,56 +976,9 @@ function Dashboard() {
                     {/* FILTER SIDEBAR INTEGRATION FOR SEARCH */}
                     <FilterSidebar variant="dashboard" />
                   </div>
-
-                  {/* Cards USER LEADS Container */}
-                  {/* <div className="h-[40vh] divide-y divide-white/30">
-                    {isLoadingSortedUsers ? (
-                      <div className="flex items-center justify-center py-8">
-                        <div className="text-white lg:text-deepBlack text-base">
-                          Loading intelligently sorted users...
-                        </div>
-                      </div>
-                    ) : (
-                      sortedUsers.map((user) => (
-                        <UserProfileSidebar
-                          variant="all"
-                          userId={user.id}
-                          authUserId={auth.user?.id ?? 0}
-                          key={user.id}
-                          name={user.name}
-                          title={user.position || "Position not specified"}
-                          imageSrc={user.profile_picture || ""}
-                          experience={user.years_of_operation || "N/A"}
-                          industry={user.industry || "N/A"}
-                          interest={formatArrayData(user.categories)}
-                          reviews={user.rating ? user.rating.toString() : "0"}
-                          baseLocation={user.country || "N/A"}
-                          operatesIn={user.country || "N/A"}
-                          bio={user.company_description || ""}
-                          companyStage={user.selected_outcome || ""}
-                          keyStrength={formatArrayData(user.great_at)}
-                          topGoal={user.goals || ""}
-                          brnMemberSince={formatDate(user.created_at)}
-                          responseRate={"N/A"}
-                          successfulDealsRate={"N/A"}
-                          connected={connected}
-                          pending={pending}
-                        >
-                          <UserCard
-                            name={user.name}
-                            location={user.country || "Location not specified"}
-                            title={user.position || "Position not specified"}
-                            industry={user.industry || "N/A"}
-                            rating={user.rating || 0}
-                            imageSrc={user.profile_picture || ""}
-                          />
-                        </UserProfileSidebar>
-                      ))
-                    )}
-                  </div> */}
                 </div>
 
-                <div className="mx-auto w-fit">
+                <div className="mx-auto w-full max-h-130.25 px-12.5">
                   <ReferralCardSlider
                     data={sliderData}
                     onMatch={handleSliderMatch}

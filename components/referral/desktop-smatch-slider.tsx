@@ -142,7 +142,7 @@ export default function ReferralCardSlider({
   };
 
   return (
-    <div className="relative flex gap-x-3 select-none">
+    <div className="relative flex gap-x-3 select-none h-full">
       {/* Invisible drag overlay - covers entire slider area for full card dragging */}
       <motion.div
         className="absolute inset-0 z-20 cursor-grab active:cursor-grabbing"
@@ -250,15 +250,15 @@ type SlotConfig = {
 
 const slotConfig: Record<number, SlotConfig> = {
   "-2": {
-    cardSize: "h-[245px] w-[200px]",
+    cardSize: "h-[33%] w-[200px]",
     imageRadius: "rounded-2xl",
   },
   "-1": {
-    cardSize: "h-[290px] w-[220px]",
+    cardSize: "h-[40%] w-[220px]",
     imageRadius: "rounded-2xl",
   },
   "0": {
-    cardSize: "h-[370px] w-[260px]",
+    cardSize: "h-[48%] w-[260px]",
     imageRadius: "rounded-3xl",
     overlayBottom: "bottom-24",
     titleClass: "text-xl leading-5",
@@ -269,11 +269,11 @@ const slotConfig: Record<number, SlotConfig> = {
     buttonClass: "px-[29px] py-[11.5px] text-[9px]",
   },
   "1": {
-    cardSize: "h-[290px] w-[220px]",
+    cardSize: "h-[40%] w-[220px]",
     imageRadius: "rounded-2xl",
   },
   "2": {
-    cardSize: "h-[245px] w-[200px]",
+    cardSize: "h-[33%] w-[200px]",
     imageRadius: "rounded-2xl",
   },
 };
