@@ -3,12 +3,14 @@ import { cn } from "@/lib/utils";
 interface InputWithLabelProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   htmlFor: string;
+  inputClassName?: string;
 }
 
 export const InputWithLabel = ({
   label,
   htmlFor,
   className,
+  inputClassName,
   ...props
 }: InputWithLabelProps) => {
   return (
@@ -21,7 +23,10 @@ export const InputWithLabel = ({
       </label>
       <input
         id={htmlFor}
-        className="w-full h-14.25 max-h-14.25 rounded-[20px] border-[#6D6D6D] border-2 px-4"
+        className={cn(
+          "w-full h-14.25 max-h-14.25 rounded-[20px] border-[#6D6D6D] border-2 px-4 focus:border-[#6D6D6D] outline-none",
+          inputClassName,
+        )}
         {...props}
       />
     </div>

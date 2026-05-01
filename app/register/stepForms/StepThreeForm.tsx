@@ -1,15 +1,11 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
-import { StepThreeData, stepThreeSchema } from "@/constants/formSchema";
 import images from "@/constants/image";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface StepThreeProps {
-  defaultValues?: Partial<StepThreeData>;
-  onNext: (data: StepThreeData) => void;
+  defaultValues?: { great_at?: string[]; can_help_with?: string[] };
+  onNext: (data: { great_at: string[]; can_help_with: string[] }) => void;
 }
 
 const sampleTags = [
@@ -28,13 +24,9 @@ export default function StepThreeForm({
   defaultValues,
   onNext,
 }: StepThreeProps) {
-  // Payment modal removed - subscription happens on dashboard after user is authenticated
-  // const [showPaymentModal, setShowPaymentModal] = useState(false);
-
   const stepContainerRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToTop = useCallback(() => {
-    // Scroll container (mobile)
     if (stepContainerRef.current) {
       stepContainerRef.current.scrollTo({
         top: 0,
@@ -42,7 +34,6 @@ export default function StepThreeForm({
       });
     }
 
-    // Fallback (desktop / window scroll)
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -53,36 +44,26 @@ export default function StepThreeForm({
     scrollToTop();
   }, [scrollToTop]);
 
-  const {
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm<StepThreeData>({
-    resolver: zodResolver(stepThreeSchema),
-    defaultValues: defaultValues as StepThreeData,
-  });
-
-  const greatAtSelected = watch("great_at") || [];
-  const helpWithSelected = watch("can_help_with") || [];
+  const [greatAtSelected, setGreatAtSelected] = useState<string[]>(
+    defaultValues?.great_at ?? [],
+  );
+  const [helpWithSelected, setHelpWithSelected] = useState<string[]>(
+    defaultValues?.can_help_with ?? [],
+  );
 
   const toggleTag = (field: "great_at" | "can_help_with", value: string) => {
     const selected = field === "great_at" ? greatAtSelected : helpWithSelected;
+    const set = field === "great_at" ? setGreatAtSelected : setHelpWithSelected;
     if (selected.includes(value)) {
-      setValue(
-        field,
-        selected.filter((v) => v !== value),
-      );
+      set(selected.filter((v) => v !== value));
     } else if (selected.length < 3) {
-      setValue(field, [...selected, value]);
+      set([...selected, value]);
     }
   };
 
-  // Directly proceed to registration - payment/subscription will be on dashboard
-  const onSubmit = (data: StepThreeData) => {
+  const handleProceed = () => {
     scrollToTop();
-
-    onNext(data);
+    onNext({ great_at: greatAtSelected, can_help_with: helpWithSelected });
   };
 
   return (
@@ -90,9 +71,9 @@ export default function StepThreeForm({
       <div className="overflow-hidden w-full ">
         <div
           ref={stepContainerRef}
-          className="relative z-7 mt-8 h-[1200px] w-full overflow-hidden md:overflow-y-auto p-5 md:mt-5 md:h-[870px]  lg:h-full lg:mt-0 "
+          className="relative z-7 mt-8 h-300 w-full overflow-hidden md:overflow-y-auto p-5 md:mt-5 md:h-217.5 lg:h-full lg:mt-0 "
         >
-          <div className="relative  mx-auto max-w-md xl:max-w-[650px]">
+          <div className="relative  mx-auto max-w-md xl:max-w-162.5">
             {/* Heading */}
             <div className="mb-4">
               <h2 className="mb-1 text-2xl font-extrabold text-primary lg:text-3xl dark:text-black">
@@ -103,11 +84,8 @@ export default function StepThreeForm({
               </p>
             </div>
 
-            <div className="w-full xl:max-w-[590px]">
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="mr-6 space-y-6 lg:mr-0"
-              >
+            <div className="w-full xl:max-w-147.5">
+              <div className="mr-6 space-y-6 lg:mr-0">
                 {/* I'm great at */}
                 <div className="space-y-3 py-2">
                   <h4 className="mb-2 text-base font-bold dark:text-black">
@@ -131,11 +109,13 @@ export default function StepThreeForm({
                               : "font-semibold text-[#0B1727]/60 shadow-md"
                           } ${disableRest ? "pointer-events-none opacity-40 blur-[1px]" : ""}`}
                         >
-                          <img
+                          <Image
                             src={
                               isSelected ? images.checkedBadge : images.badge
                             }
                             alt=""
+                            width={28}
+                            height={28}
                             className="h-7 w-7"
                           />
                           <span className="whitespace-wrap">{tag.label}</span>
@@ -143,18 +123,13 @@ export default function StepThreeForm({
                       );
                     })}
                   </div>
-
-                  {errors.great_at && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.great_at.message}
-                    </p>
-                  )}
                 </div>
 
                 {/* Submit */}
-                <div className="mt-13 flex flex-col items-center lg:mt-0 lg:w-[400px]">
+                <div className="mt-13 flex flex-col items-center lg:mt-0 lg:w-100">
                   <Button
-                    type="submit"
+                    type="button"
+                    onClick={handleProceed}
                     className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90"
                   >
                     Proceed
@@ -180,13 +155,14 @@ export default function StepThreeForm({
                     </span>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
 
-        <img
+        <Image
           src={images.bottomFormBgP}
+          fill
           className="absolute md:hidden  top-[60%] z-2 h-auto w-full object-cover"
           alt=""
         />

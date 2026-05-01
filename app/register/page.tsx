@@ -108,7 +108,6 @@ export default function Register() {
     if (typeof window === "undefined") return 1;
     return Number(new URLSearchParams(window.location.search).get("step") || 1);
   });
-  const [profilePicFile, setProfilePicFile] = useState<File | null>(null);
 
   const [formData, setFormData] = useState<RegisterForm>();
 
@@ -148,14 +147,46 @@ export default function Register() {
         LeftDesktopContent={
           <LeftDesktopContent
             topContentLayout={
-              <StepTopContent
-                steps={steps}
-                currentStep={step}
-                title={topContentPerStep[step - 1].title}
-                spanElement={topContentPerStep[step - 1].spanElement}
-                headingClassName={topContentPerStep[step - 1].headingClassName}
-                description={topContentPerStep[step - 1].description}
-              />
+              step === 1 ? (
+                <div className="max-w-77 mx-auto mt-[5%] w-fit pr-4">
+                  <h2 className="text-[36px] max-w-57.5 leading-10 mb-3.5 font-semibold text-[#F3F0E9]">
+                    Let&apos;s get you started!{" "}
+                  </h2>
+                  <p className="text-[13px] max-w-69.75 text-[#F3F0E9] mb-4.75 tracking-[0.5px]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
+                  </p>
+                </div>
+              ) : (
+                <div className="max-w-77 mx-auto mt-[5%] w-fit pr-4">
+                  <h2 className="text-[36px] max-w-68 leading-10 mb-3.5 font-semibold text-[#F3F0E9]">
+                    <div className="font-light">Almost There!</div>
+                    <div>Superpowers</div>
+                  </h2>
+                  <p className="text-[13px] max-w-69.75 text-[#F3F0E9] mb-4.75 tracking-[0.5px]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
+                  </p>
+                </div>
+              )
+            }
+            bottomContent={
+              <div className="w-fit text-base mx-auto  my-[15%] pr-10">
+                <p className="mb-1 font-light">
+                  Already have an account?{" "}
+                  <a href="/login" className="font-medium italic">
+                    Sign In
+                  </a>
+                </p>
+                <p>
+                  <a
+                    href="/help"
+                    className="font-medium italic hover:underline dark:text-deepBlack"
+                  >
+                    Need Help?
+                  </a>
+                </p>
+              </div>
             }
           />
         }

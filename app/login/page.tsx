@@ -75,7 +75,7 @@ function Login() {
               <div className="w-fit text-base mx-auto  my-[15%] pr-10">
                 <p className="mb-1 font-light">
                   Don’t have an account?{" "}
-                  <a href="/login" className="font-medium italic">
+                  <a href="/register" className="font-medium italic">
                     Sign up
                   </a>
                 </p>

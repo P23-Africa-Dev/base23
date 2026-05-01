@@ -1,8 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import InputWithLabel from "@/components/input/InputWithLabel";
 import images from "@/constants/image";
 import { Eye, EyeOff } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -106,69 +108,52 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-7">
             {/* Name */}
-            <div className="relative w-full">
-              <label
+            <div>
+              <InputWithLabel
+                label="Full Name"
                 htmlFor="name"
-                className="absolute -top-2.5 left-8 bg-white px-4 text-sm text-[#0B1727]/70"
-              >
-                Full Name
-              </label>
-              <input
-                id="name"
                 type="text"
                 value={defaultValues.name}
                 disabled
                 {...register("name")}
-                className="w-full rounded-2xl border border-primary py-3 pl-11 font-semibold text-gray-900 ring-1 ring-[#0B1727]/80 outline-none"
               />
               {errors.name && (
-                <p className="text-sm text-red-500">{errors.name.message}</p>
+                <p className="mt-1 ml-3 text-sm text-red-500">{errors.name.message}</p>
               )}
             </div>
 
             {/* Email */}
-            <div className="relative w-full">
-              <label
+            <div>
+              <InputWithLabel
+                label="Email"
                 htmlFor="email"
-                className="absolute -top-2.5 left-8 bg-white px-4 text-sm text-[#0B1727]"
-              >
-                Email
-              </label>
+                type="email"
+                value={defaultValues.email}
+                readOnly
+                {...register("email")}
+                onFocus={(e) => {
+                  const el = e.currentTarget;
+                  requestAnimationFrame(() => {
+                    el.scrollLeft = el.scrollWidth;
+                  });
+                }}
+              />
               {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
+                <p className="mt-1 ml-3 text-sm text-red-500">{errors.email.message}</p>
               )}
             </div>
-            <input
-              id="email"
-              type="email"
-              value={defaultValues.email}
-              readOnly
-              {...register("email")}
-              onFocus={(e) => {
-                const el = e.currentTarget;
-                requestAnimationFrame(() => {
-                  el.scrollLeft = el.scrollWidth;
-                });
-              }}
-              className="w-full overflow-x-auto rounded-2xl border border-primary py-3 pr-4 pl-11 font-semibold whitespace-nowrap text-gray-900 ring-1 ring-[#0B1727]/80 outline-none"
-            />
 
             {/* Password */}
-            <div className="relative w-full">
-              <div className="relative w-full">
-                <label
+            <div className="relative">
+              <div className="relative">
+                <InputWithLabel
+                  label="Password"
                   htmlFor="password"
-                  className="absolute -top-2.5 left-8 bg-white px-4 text-sm text-[#0B1727]"
-                >
-                  Password
-                </label>
-                <input
-                  id="password"
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
                   onFocus={() => setMeterVisible(true)}
                   onBlur={() => setMeterVisible(false)}
-                  className="w-full rounded-2xl border border-primary py-3 pr-12 pl-11 font-semibold text-gray-900 ring-1 ring-[#0B1727]/80 outline-none placeholder:bg-white"
+                  inputClassName="pr-12"
                 />
                 <button
                   type="button"
@@ -223,32 +208,25 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
             </div>
 
             {/* Confirm Password */}
-            <div className="w-full">
-              <div className="relative w-full">
-                <label
-                  htmlFor="password_confirmation"
-                  className="absolute -top-2.5 left-8 bg-white px-4 text-sm text-[#0B1727]"
-                >
-                  Confirm Password
-                </label>
-                <input
-                  id="password_confirmation"
-                  type={showConfirmPassword ? "text" : "password"}
-                  {...register("password_confirmation")}
-                  className="w-full rounded-2xl border-1 border-primary py-3 pr-12 pl-11 font-semibold text-gray-900 ring-1 ring-[#0B1727]/80 outline-none placeholder:bg-white"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-4 flex items-center text-gray-500 hover:text-gray-700"
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
+            <div className="relative">
+              <InputWithLabel
+                label="Confirm Password"
+                htmlFor="password_confirmation"
+                type={showConfirmPassword ? "text" : "password"}
+                {...register("password_confirmation")}
+                inputClassName="pr-12"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-4 flex items-center text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
               {errors.password_confirmation && (
                 <p className="mt-1 ml-3 text-xs text-red-500">
                   {errors.password_confirmation.message}
@@ -268,7 +246,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
           </form>
 
           {/* Login/Signups */}
-          <div className="mt-10 -ml-12 w-[400px] px-4 text-left md:hidden lg:px-0">
+          <div className="mt-10 -ml-12 w-100 px-4 text-left md:hidden lg:px-0">
             <p className="mb-1 pl-10 text-base font-extralight">
               Already have an account?{" "}
               <a
@@ -290,9 +268,10 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
         </div>
       </div>
 
-      <img
+      <Image
         src={images.bottomFormBgP}
         className="absolute top-[5%] z-2 h-auto w-full object-cover md:hidden"
+        fill
         alt=""
       />
     </div>
