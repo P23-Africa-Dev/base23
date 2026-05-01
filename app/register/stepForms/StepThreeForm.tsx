@@ -126,7 +126,8 @@ export default function StepThreeForm({
                 </div>
 
                 {/* Submit */}
-                <div className="mt-13 flex flex-col items-center lg:mt-0 lg:w-100">
+                <div className="h-16 lg:h-6" />
+                <div className="flex flex-col items-center lg:w-100">
                   <Button
                     type="button"
                     onClick={handleProceed}

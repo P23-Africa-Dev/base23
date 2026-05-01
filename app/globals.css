@@ -1,6 +1,34 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
+@font-face {
+  font-family: "GT Walsheim Trial Cn Rg";
+  font-style: normal;
+  font-weight: normal;
+  src: local("GT Walsheim Trial Cn Rg"), url("/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Trial-BF651b7fc730eb2.woff") format("woff");
+}
+
+@font-face {
+  font-family: "GT Walsheim Trial Cn U Lt";
+  font-style: normal;
+  font-weight: normal;
+  src: local("GT Walsheim Trial Cn U Lt"), url("/fonts/gt-trials/GT-Walsheim-Condensed-Ultra-Light-Trial-BF651b7fc73b30e.woff") format("woff");
+}
+
+@font-face {
+  font-family: "GT Walsheim Trial Cn Rg Ob";
+  font-style: normal;
+  font-weight: normal;
+  src: local("GT Walsheim Trial Cn Rg Ob"), url("/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Oblique-Trial-BF651b7fc71cf17.woff") format("woff");
+}
+
+@font-face {
+  font-family: "GT Walsheim Trial Cn Th";
+  font-style: normal;
+  font-weight: normal;
+  src: local("GT Walsheim Trial Cn Th"), url("/fonts/gt-trials/GT-Walsheim-Condensed-Thin-Trial-BF651b7fc72dc1c.woff") format("woff");
+}
+
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));

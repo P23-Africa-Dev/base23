@@ -16,6 +16,7 @@ import OnboardingActivator from "@/components/OnboardingActivator";
 import ReferralCardSlider, {
   type SliderConnection,
 } from "@/components/referral/desktop-smatch-slider";
+import { DUMMY_SLIDER_CONNECTIONS } from "@/constants/dummy-data";
 import { useAuth } from "@/context/AuthContext";
 import useSmartMatch from "@/hooks/use-smart-match";
 import { Counter } from "@/hooks/useCounter";
@@ -79,54 +80,7 @@ function Dashboard() {
           selected_tags: match.selected_tags,
         }));
     }
-    return [
-      {
-        id: 1,
-        name: "Amara Osei",
-        role: "CEO",
-        company: "GreenBridge Ltd",
-        image: "/assets/man1.jpg",
-        compatibility: 94,
-        match_reasons: ["Same industry", "Complementary goals"],
-        why_this_match: "Strong overlap in fintech and growth targets.",
-      },
-      {
-        id: 2,
-        name: "Kofi Mensah",
-        role: "CTO",
-        company: "TechNova Africa",
-        image: "/assets/man2.jpg",
-        compatibility: 88,
-        match_reasons: ["Tech background", "Shared network"],
-      },
-      {
-        id: 3,
-        name: "Fatima Diallo",
-        role: "Founder",
-        company: "SolarPath",
-        image: "/assets/man3.jpg",
-        compatibility: 81,
-        match_reasons: ["Clean energy focus"],
-      },
-      {
-        id: 4,
-        name: "Yaw Darko",
-        role: "Investor",
-        company: "Accra Ventures",
-        image: "/assets/man4.jpg",
-        compatibility: 76,
-        match_reasons: ["Active investor in your sector"],
-      },
-      {
-        id: 5,
-        name: "Nia Boateng",
-        role: "Head of Sales",
-        company: "Nexus Corp",
-        image: "/assets/business-man1.jpg",
-        compatibility: 72,
-        match_reasons: ["Sales expertise"],
-      },
-    ];
+    return DUMMY_SLIDER_CONNECTIONS;
   }, [matches]);
 
   const handleSliderMatch = async (user: SliderConnection) => {

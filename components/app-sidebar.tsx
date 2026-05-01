@@ -207,13 +207,8 @@ export const AppSidebar: React.FC = () => {
   }, [activePath]);
 
   useEffect(() => {
-    if (profileOpen) return;
     setOpen(true);
-    const timer = setTimeout(() => {
-      setOpen(false);
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, [profileOpen, setOpen]);
+  }, [setOpen]);
 
   // Add this function to clean the URL
   const getProfilePicture = () => {
@@ -409,47 +404,21 @@ export const AppSidebar: React.FC = () => {
     <div className="">
       {/* Desktop Navigation */}
       <aside
-        className={`sticky top-0 left-0 z-[2] no-scrollbar hidden h-screen overflow-x-hidden overflow-y-auto transition-all duration-400 outline-none select-none lg:block ${open ? "w-56" : "w-20 overflow-x-hidden"} ${
+        className={`sticky top-0 left-0 z-[2] no-scrollbar hidden h-screen w-56 overflow-x-hidden overflow-y-auto outline-none select-none lg:block ${
           isLeadsPage
             ? "bg-[linear-gradient(180deg,#4D95AF_0%,#215568_100%)]"
             : "bg-gradient-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B] text-white"
         }`}
-        aria-expanded={open}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => {
-          if (!profileOpen) {
-            setOpen(false);
-          }
-        }}
+        aria-expanded={true}
       >
         <div className="flex h-full flex-col justify-between">
           {/* Logo */}
           <div className="px-5 pt-14">
-            <AnimatePresence mode="wait">
-              {open ? (
-                <motion.img
-                  key="full-logo"
-                  src={images.fulllogo}
-                  alt="full logo"
-                  initial={{ scale: 0.6, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.6, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="h-auto w-[110px]"
-                />
-              ) : (
-                <motion.img
-                  key="half-logo"
-                  src={images.halflogo}
-                  alt="half logo"
-                  initial={{ scale: 0.6, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.6, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="h-auto w-[110px]"
-                />
-              )}
-            </AnimatePresence>
+            <img
+              src={images.fulllogo}
+              alt="full logo"
+              className="h-auto w-[110px]"
+            />
           </div>
 
           {/* NAV */}
@@ -578,11 +547,7 @@ export const AppSidebar: React.FC = () => {
                         </div>
 
                         <span
-                          className={`overflow-hidden whitespace-nowrap transition-all duration-400 ${
-                            open
-                              ? "ml-1.5 max-w-[120px] opacity-100"
-                              : "ml-0 max-w-0 opacity-0"
-                          }`}
+                          className="ml-1.5 overflow-hidden whitespace-nowrap"
                         >
                           {item.name}
                         </span>
@@ -597,7 +562,7 @@ export const AppSidebar: React.FC = () => {
           {/* User Account Section */}
           <div className="relative px-5">
             <p
-              className={`mb-4 text-xs font-light tracking-wider ${isLeadsPage ? "text-secondaryWhite" : "text-gray-400"} transition-all duration-400 ${open ? "max-w-[150px] opacity-60" : "max-w-0 opacity-0"} overflow-hidden`}
+              className={`mb-4 text-xs font-light tracking-wider opacity-60 ${isLeadsPage ? "text-secondaryWhite" : "text-gray-400"}`}
             >
               USER ACCOUNT
             </p>
@@ -618,9 +583,7 @@ export const AppSidebar: React.FC = () => {
                 />
               </div>
 
-              <div
-                className={`overflow-hidden transition-all duration-400 ${open ? "max-w-[150px] opacity-100" : "max-w-0 opacity-0"}`}
-              >
+              <div className="overflow-hidden max-w-37.5">
                 <h3
                   className={`truncate text-[12px] font-bold ${isLeadsPage ? "text-secondaryWhite" : ""} `}
                 >
@@ -655,11 +618,7 @@ export const AppSidebar: React.FC = () => {
                         )}
                       </div>
                       <span
-                        className={`overflow-hidden text-[13px] whitespace-nowrap transition-all duration-300 ${
-                          open
-                            ? "ml-2 max-w-[120px] opacity-100"
-                            : "ml-0 max-w-0 opacity-0"
-                        }`}
+                        className="ml-2 overflow-hidden text-[13px] whitespace-nowrap"
                       >
                         {item.name}
                       </span>
@@ -674,11 +633,7 @@ export const AppSidebar: React.FC = () => {
                     <div className="relative flex items-center rounded-lg transition-colors duration-400">
                       <img src={item.icon} className="mr-5" alt="" />
                       <span
-                        className={`overflow-hidden text-[13px] whitespace-nowrap transition-all duration-300 ${
-                          open
-                            ? "ml-2 max-w-[120px] opacity-100"
-                            : "ml-0 max-w-0 opacity-0"
-                        }`}
+                        className="ml-2 overflow-hidden text-[13px] whitespace-nowrap"
                       >
                         {item.name}
                       </span>
