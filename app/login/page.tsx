@@ -65,7 +65,7 @@ function Login() {
                   {" "}
                   Welcome Back!{" "}
                 </h2>
-                <p className="text-[13px] max-w-[279px] text-[#F3F0E9] mb-4.75 tracking-[0.5px] max-w-110.5">
+                <p className="text-[13px] max-w-69.75 text-[#F3F0E9] mb-4.75 tracking-[0.5px]">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor
                 </p>
@@ -115,7 +115,7 @@ function Login() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-[42px] mb-6"
+              className="mt-10.5 mb-6"
             />
 
             <div className="flex items-center justify-between px-2 text-sm font-medium text-primary dark:text-gray-300">
@@ -134,7 +134,7 @@ function Login() {
 
             <Button
               type="submit"
-              className="mt-10 mb-2 leading-[24px] w-full rounded-2xl text-[20px] bg-pinkLight py-[27px] text-lg font-semibold text-white hover:bg-pinkLight/90 dark:bg-blue-600 dark:hover:bg-blue-700"
+              className="mt-10 mb-2 leading-6 w-full rounded-2xl text-[20px] bg-pinkLight py-[27px] text-lg font-semibold text-white hover:bg-pinkLight/90 dark:bg-blue-600 dark:hover:bg-blue-700"
               tabIndex={4}
             >
               Log in

@@ -9,18 +9,22 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type Step1FormData = {
+  company_name: string;
   name: string;
   email: string;
   password: string;
   password_confirmation: string;
+  role: string;
 };
 
 type Step1Props = {
   defaultValues: {
+    company_name?: string;
     name?: string;
     email?: string;
     password?: string;
     password_confirmation?: string;
+    role?: string;
   };
   onNext: (data: Step1FormData) => void;
 };
@@ -100,8 +104,9 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
             <h2 className="mb-1 text-2xl font-extrabold text-primary lg:text-3xl dark:text-black">
               First, Account Setup
             </h2>
-            <p className="max-w-sm pr-20 text-[12px] font-normal text-primary lg:pr-5 lg:text-[17px] dark:text-black">
-              Setup the account and joined like minds in few steps.
+            <p className="max-w-sm pr-20 text-[16px] font-normal text-primary lg:pr-5 lg:text-[17px]">
+              Setup the account to gain endless smart matches with suitable
+              professionals.
             </p>
           </div>
 
@@ -110,16 +115,51 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
             {/* Name */}
             <div>
               <InputWithLabel
-                label="Full Name"
-                htmlFor="name"
+                label="Company Name"
+                htmlFor="company_name"
                 type="text"
-                value={defaultValues.name}
+                value={defaultValues.company_name}
                 disabled
-                {...register("name")}
+                {...register("company_name")}
               />
-              {errors.name && (
-                <p className="mt-1 ml-3 text-sm text-red-500">{errors.name.message}</p>
+              {errors.company_name && (
+                <p className="mt-1 ml-3 text-sm text-red-500">
+                  {errors.company_name.message}
+                </p>
               )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-5.75">
+              <div>
+                <InputWithLabel
+                  label="Full Name"
+                  htmlFor="name"
+                  type="text"
+                  value={defaultValues.name}
+                  disabled
+                  {...register("name")}
+                />
+                {errors.name && (
+                  <p className="mt-1 ml-3 text-sm text-red-500">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <InputWithLabel
+                  label="Role"
+                  htmlFor="role"
+                  type="text"
+                  value={defaultValues.role}
+                  disabled
+                  {...register("role")}
+                />
+                {errors.role && (
+                  <p className="mt-1 ml-3 text-sm text-red-500">
+                    {errors.role.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Email */}
@@ -139,7 +179,9 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                 }}
               />
               {errors.email && (
-                <p className="mt-1 ml-3 text-sm text-red-500">{errors.email.message}</p>
+                <p className="mt-1 ml-3 text-sm text-red-500">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -235,7 +277,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
             </div>
 
             {/* Submit Button */}
-            <div className="mt-20 flex flex-col items-center">
+            <div className="mt-11 flex flex-col items-center">
               <Button
                 type="submit"
                 className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90"

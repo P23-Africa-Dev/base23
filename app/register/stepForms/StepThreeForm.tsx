@@ -103,10 +103,10 @@ export default function StepThreeForm({
                           type="button"
                           key={tag.value}
                           onClick={() => toggleTag("great_at", tag.value)}
-                          className={`flex items-center justify-center space-x-2 rounded-3xl px-2 py-2 pr-3 xl:pr-6 xl:pl-4 font-GtrialsTh text-[14px] tracking-wide transition-all duration-200 md:px-10 lg:text-base ${
+                          className={`flex items-center justify-center space-x-2 rounded-[20px] px-2 py-2 pr-3 xl:pr-6 xl:pl-4 font-GtrialsTh text-[14px] tracking-wide transition-all duration-200 md:px-10 lg:text-base shadow-[0px_3px_2px_0px_#21212133] ${
                             isSelected
-                              ? "bg-[#2ABFBB] font-bold text-secondaryWhite shadow-[0px_4px_2px_-1px_rgba(0,0,0,0.12),0px_4px_0px_-1px_rgba(0,0,0,0.12)]"
-                              : "font-semibold text-[#0B1727]/60 shadow-md"
+                              ? "bg-[#2ABFBB] font-bold text-secondaryWhite"
+                              : "font-semibold text-[#0B1727]/60 shadow-md bg-white"
                           } ${disableRest ? "pointer-events-none opacity-40 blur-[1px]" : ""}`}
                         >
                           <Image
