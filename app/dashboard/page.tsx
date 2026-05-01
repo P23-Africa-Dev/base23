@@ -932,7 +932,7 @@ function Dashboard() {
                   </div>
                 </div>
 
-                <div className="mx-auto w-full max-h-130.25 px-12.5">
+                <div className="mx-auto w-full h-130.25 max-h-130.25 px-12.5">
                   <ReferralCardSlider
                     data={sliderData}
                     onMatch={handleSliderMatch}

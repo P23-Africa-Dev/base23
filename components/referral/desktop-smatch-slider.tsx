@@ -156,7 +156,7 @@ export default function ReferralCardSlider({
       />
 
       {/* Cards container - doesn't move, only cards animate */}
-      <div className="relative flex gap-x-3 pointer-events-none">
+      <div className="relative grid grid-cols-[1fr_1fr_minmax(250px,1fr)_1fr_1fr] gap-x-3 pointer-events-none">
         <AnimatePresence mode="popLayout" initial={false}>
           {SLOT_OFFSETS.map((slot) => {
             const user = getUserAt(slot);
@@ -250,15 +250,15 @@ type SlotConfig = {
 
 const slotConfig: Record<number, SlotConfig> = {
   "-2": {
-    cardSize: "h-[33%] w-[200px]",
+    cardSize: "h-[55%] w-full",
     imageRadius: "rounded-2xl",
   },
   "-1": {
-    cardSize: "h-[40%] w-[220px]",
+    cardSize: "h-[65%] w-full",
     imageRadius: "rounded-2xl",
   },
   "0": {
-    cardSize: "h-[48%] w-[260px]",
+    cardSize: "h-[80%] w-full",
     imageRadius: "rounded-3xl",
     overlayBottom: "bottom-24",
     titleClass: "text-xl leading-5",
@@ -269,11 +269,11 @@ const slotConfig: Record<number, SlotConfig> = {
     buttonClass: "px-[29px] py-[11.5px] text-[9px]",
   },
   "1": {
-    cardSize: "h-[40%] w-[220px]",
+    cardSize: "h-[65%] w-full",
     imageRadius: "rounded-2xl",
   },
   "2": {
-    cardSize: "h-[33%] w-[200px]",
+    cardSize: "h-[55%] w-full",
     imageRadius: "rounded-2xl",
   },
 };
@@ -292,12 +292,12 @@ function CardSlot({
   return (
     <div
       onClick={onCardClick}
-      className={`flex ${config.cardSize} flex-col items-center justify-center rounded-3xl bg-white p-3 shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.4),-2px_3px_5px_-1px_rgba(0,0,0,0.4)] cursor-pointer pointer-events-auto relative z-30 transition-transform hover:scale-[1.01]`}
+      className={`flex ${config.cardSize} flex-col items-center justify-center rounded-3xl bg-white p-2 shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.4),-2px_3px_5px_-1px_rgba(0,0,0,0.4)] cursor-pointer pointer-events-auto relative z-30 transition-transform hover:scale-[1.01]`}
     >
       <div className="relative flex h-full w-full flex-col gap-3">
         {/* IMAGE */}
         <div
-          className={`relative h-screen w-full overflow-hidden shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] ${config.imageRadius}`}
+          className={`relative h-full w-full overflow-hidden shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] ${config.imageRadius}`}
         >
           <img
             src={user.image || fallbackAvatar}

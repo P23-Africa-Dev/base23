@@ -10,7 +10,7 @@ export const AppContent: React.FC<AppContentProps> = ({ children, className = ''
 
     // when sidebar collapsed we might want different padding
     return (
-        <main {...props} className={`relative  flex flex-col w-full  transition-all ${className}`}>
+        <main {...props} className={`relative flex flex-col flex-1 min-w-0 overflow-x-hidden transition-all ${className}`}>
         {/* <main {...props} className={`relative overflow-hidden z-[1]  flex h-full w-full flex-1 flex-col gap-4  transition-all ${className}`}> */}
             {children}
         </main>

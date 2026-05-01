@@ -36,7 +36,7 @@ export default function AppLayoutTemplate({ children }: { children: React.ReactN
     return (
         <OnboardingProvider>
             <AppShell defaultSidebarOpen>
-                <div className="flex">
+                <div className="flex w-full">
                     <AppSidebar />
                     <TooltipProvider delayDuration={100}>
                         <AppContent>{children}</AppContent>
