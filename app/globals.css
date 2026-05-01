@@ -207,7 +207,7 @@ body {
     --notch-size: 25px;
     mask-image:
       radial-gradient(
-        circle var(--notch-size) at 0% 32%,
+        circle var(--notch-size) at 0% 26%,
         transparent 98%,
         black 100%
       ),
@@ -217,7 +217,7 @@ body {
         black 100%
       ),
       radial-gradient(
-        circle var(--notch-size) at 100% 32%,
+        circle var(--notch-size) at 100% 26%,
         transparent 98%,
         black 100%
       ),
@@ -231,7 +231,7 @@ body {
     mask-composite: intersect;
     -webkit-mask-image:
       radial-gradient(
-        circle var(--notch-size) at 0% 32%,
+        circle var(--notch-size) at 0% 26%,
         transparent 98%,
         black 100%
       ),
@@ -241,7 +241,7 @@ body {
         black 100%
       ),
       radial-gradient(
-        circle var(--notch-size) at 100% 32%,
+        circle var(--notch-size) at 100% 26%,
         transparent 98%,
         black 100%
       ),

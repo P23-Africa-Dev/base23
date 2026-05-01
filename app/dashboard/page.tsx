@@ -13,11 +13,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import ActivityChartCard from "@/components/chart/ActivityChartCard";
 import OnboardingActivator from "@/components/OnboardingActivator";
+import ReferralCardSlider, {
+  type SliderConnection,
+} from "@/components/referral/desktop-smatch-slider";
 import { useAuth } from "@/context/AuthContext";
+import useSmartMatch from "@/hooks/use-smart-match";
 import { Counter } from "@/hooks/useCounter";
 import AppLayout from "@/layouts/app-layout";
+import SmartMatchService from "@/services/smart-match-service";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type User = {
   id: number;
@@ -50,6 +55,67 @@ type User = {
 function Dashboard() {
   const { user: authUser } = useAuth();
   const auth = { user: authUser };
+
+  const { matches, matchWithUser } = useSmartMatch();
+
+  const sliderData: SliderConnection[] = useMemo(() => {
+    if (matches && matches.length > 0) {
+      return [...matches]
+        .sort((a, b) => b.compatibility - a.compatibility)
+        .map((match) => ({
+          id: match.id,
+          name: match.name,
+          role: match.position || "Professional",
+          company: match.company_name || "",
+          image: match.profile_picture || images.man1,
+          compatibility: match.compatibility,
+          compatibility_breakdown: match.compatibility_breakdown,
+          match_reasons: match.match_reasons,
+          why_this_match: match.ai_insights,
+          industry: match.industry,
+          user_needs: match.user_needs,
+          preferred_industry: match.preferred_industry,
+          business_level: match.business_level,
+          selected_tags: match.selected_tags,
+        }));
+    }
+    return [
+      { id: 1, name: "Amara Osei", role: "CEO", company: "GreenBridge Ltd", image: "/assets/test.jpg", compatibility: 94, match_reasons: ["Same industry", "Complementary goals"], why_this_match: "Strong overlap in fintech and growth targets." },
+      { id: 2, name: "Kofi Mensah", role: "CTO", company: "TechNova Africa", image: "/assets/test.jpg", compatibility: 88, match_reasons: ["Tech background", "Shared network"] },
+      { id: 3, name: "Fatima Diallo", role: "Founder", company: "SolarPath", image: "/assets/test.jpg", compatibility: 81, match_reasons: ["Clean energy focus"] },
+      { id: 4, name: "Yaw Darko", role: "Investor", company: "Accra Ventures", image: "/assets/test.jpg", compatibility: 76, match_reasons: ["Active investor in your sector"] },
+      { id: 5, name: "Nia Boateng", role: "Head of Sales", company: "Nexus Corp", image: "/assets/test.jpg", compatibility: 72, match_reasons: ["Sales expertise"] },
+    ];
+  }, [matches]);
+
+  const handleSliderMatch = async (user: SliderConnection) => {
+    try {
+      const result = await matchWithUser(user.id);
+      if (result) {
+        await SmartMatchService.sendSmartMatch({
+          recipient_id: user.id,
+          compatibility: user.compatibility,
+          match_reasons: user.match_reasons,
+          why_this_match: user.why_this_match,
+        });
+        toast.success(`Match request sent to ${user.name}!`, {
+          duration: 4000,
+          position: "top-center",
+          style: {
+            background: "#0B1727",
+            color: "#fff",
+            padding: "16px",
+            borderRadius: "12px",
+          },
+          icon: "🤝",
+        });
+      }
+    } catch {
+      toast.error("Failed to send match request. Please try again.", {
+        duration: 3000,
+      });
+    }
+  };
 
   const [users] = useState<User[]>([]);
   const [connected] = useState<User[]>([]);
@@ -832,16 +898,17 @@ function Dashboard() {
             </div>
 
             {/* SECOND ROW */}
-            <div className="drop-shadow-[0px_4px_6px_rgba(0,0,0,0.3)]">
-              <div className="ticket-cutout relative aspect-auto h-133.75 w-full bg-white bg-cover rounded-2xl">
-                <div className="relative no-scrollbar flex-1 overflow-y-auto pb-10 lg:pb-0">
-                  <div className="sticky top-0 z-10 flex w-full items-center justify-between overflow-hidden border-b-0 bg-deepBlack px-3 pt-4 pb-3 lg:border-b lg:bg-white lg:px-0">
+            <div className="drop-shadow-[0px_4px_6px_rgba(0,0,0,0.6)]">
+              <div className="ticket-cutout relative aspect-auto h-133.75 w-full bg-white bg-cover rounded-3xl">
+                <div className="w-full h-[64%] bg-[#193E47] absolute bottom-0" />
+                <div className="relative no-scrollbar flex-1 overflow-y-auto lg:pb-0">
+                  <div className="sticky top-0 z-10 flex w-full max-w-[70%] mx-auto items-center justify-between overflow-hidden px-3 pt-4 pb-3 bg-white lg:px-0">
                     <div className="flex w-full flex-col text-white italic lg:text-deepBlack xl:w-40">
                       <h2 className="text-[12px] leading-2 font-normal sm:text-[14px] md:text-[15px] lg:text-[17px] lg:leading-3">
-                        Let&apos;s find your
+                        Your smart
                       </h2>
                       <h3 className="text-base font-extrabold sm:text-xl lg:text-[25px]">
-                        next deal
+                        matches
                       </h3>
                     </div>
 
@@ -889,7 +956,7 @@ function Dashboard() {
                   </div>
 
                   {/* Cards USER LEADS Container */}
-                  <div className="h-[40vh] divide-y divide-white/30">
+                  {/* <div className="h-[40vh] divide-y divide-white/30">
                     {isLoadingSortedUsers ? (
                       <div className="flex items-center justify-center py-8">
                         <div className="text-white lg:text-deepBlack text-base">
@@ -933,7 +1000,14 @@ function Dashboard() {
                         </UserProfileSidebar>
                       ))
                     )}
-                  </div>
+                  </div> */}
+                </div>
+
+                <div className="mx-auto w-fit">
+                  <ReferralCardSlider
+                    data={sliderData}
+                    onMatch={handleSliderMatch}
+                  />
                 </div>
               </div>
             </div>
