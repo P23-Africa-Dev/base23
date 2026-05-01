@@ -1,64 +1,48 @@
-import images from '@/constants/image';
-import { ReactNode, type PropsWithChildren } from 'react';
+import images from "@/constants/image";
+import { ReactNode, type PropsWithChildren } from "react";
 
 interface AuthLayoutProps {
-    LeftDesktopContent?: ReactNode;
-    mobileTopContent?: ReactNode;
+  LeftDesktopContent?: ReactNode;
+  mobileTopContent?: ReactNode;
+  title?: string;
+  subtitle?: string;
 }
 
-// export default function AuthSimpleLayout({ mobileTopContent, LeftDesktopContent, children }: PropsWithChildren<AuthLayoutProps>) {
-//     return (
-//         <>
-//             <div className="h-screen w-full items-start bg-white md:flex lg:bg-transparent dark:bg-gray-900 dark:lg:bg-transparent">
-//                 {/* Left Desktop Side*/}
-//                 {LeftDesktopContent}
+export default function AuthSimpleLayout({
+  title,
+  subtitle,
+  mobileTopContent,
+  LeftDesktopContent,
+  children,
+}: PropsWithChildren<AuthLayoutProps>) {
+  return (
+    <>
+      <div className="relative h-screen w-full items-start bg-white md:flex lg:bg-transparent dark:bg-gray-900 dark:lg:bg-transparent">
+        {LeftDesktopContent}
 
-//                 {/* Mobile Pattern Screen and Topcontent */}
-//                 {mobileTopContent}
+        {/* Mobile Pattern Screen and Topcontent */}
+        {mobileTopContent}
 
-//                 {/* Right Side Desktop and Mobile (Scrollable) */}
-//                 <div
-//                     style={{
-//                         backgroundImage: `url(${images.formBG})`,
-//                     }}
-//                     className="relative pb-10 md:pb-0 flex w-full bg-white md:h-screen md:w-2/4 lg:justify-end xl:w-full xl:justify-center dark:bg-gray-900"
-//                 >
-//                     {children}
-// {/*
-//                     <div className="absolute md:hidden right-0 h-full w-3 bg-deepBlack"> </div>
-//                     <div className="absolute md:hidden right-3 top-[51px] rounded-tr-full h-[92%] w-0.5 bg-[#2ABFBB]"> </div> */}
-//                 </div>
-
-//                 <div className="h-[200px] rounded-[100%_31%_0%_81%/_56%_0%_45%_0%] bg-deepBlack md:hidden"></div>
-//             </div>
-//         </>
-//     );
-// }
-
-export default function AuthSimpleLayout({ mobileTopContent, LeftDesktopContent, children }: PropsWithChildren<AuthLayoutProps>) {
-    return (
-        <>
-            <div className="relative h-screen w-full items-start bg-white md:flex lg:bg-transparent dark:bg-gray-900 dark:lg:bg-transparent">
-                {/* Left Desktop Side*/}
-                {LeftDesktopContent}
-
-                {/* Mobile Pattern Screen and Topcontent */}
-                {mobileTopContent}
-
-                {/* Right Side Desktop and Mobile (Scrollable) */}
-                <div
-                    style={{
-                        backgroundImage: `url(${images.formBG})`,
-                    }}
-                    className="flex w-full bg-white md:h-screen md:w-2/4 lg:justify-end xl:w-full xl:justify-center dark:bg-gray-900"
-                >
-                    {children}
-
-              
-                </div>
-
-              
+        {/* Right Side Desktop and Mobile (Scrollable) */}
+        <div
+          style={{
+            backgroundImage: `url(${images.formBG})`,
+          }}
+          className="relative z-10 mx-auto flex flex-col justify-center items-center w-full bg-white md:h-screen md:w-2/4 lg:justify-end xl:w-full xl:justify-center dark:bg-gray-900"
+        >
+          <div className="min-w-116.5">
+            <div>
+              <h2 className="text-[36px] font-extrabold text-[#0B1727]">
+                {title}
+              </h2>
+              <p className="text-[16px] text-[#0B1727] mb-4.75 tracking-[0.5px] max-w-110.5">
+                {subtitle}
+              </p>
             </div>
-        </>
-    );
+            {children}
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
