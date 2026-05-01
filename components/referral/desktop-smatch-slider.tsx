@@ -239,37 +239,23 @@ type CardSlotProps = {
 type SlotConfig = {
   cardSize: string;
   imageRadius: string;
-  overlayBottom: string;
-  titleClass: string;
-  roleClass: string;
-  iconSize: string;
-  iconInnerSize: string;
-  compatibilityText: string;
-  buttonClass: string;
+  overlayBottom?: string;
+  titleClass?: string;
+  roleClass?: string;
+  iconSize?: string;
+  iconInnerSize?: string;
+  compatibilityText?: string;
+  buttonClass?: string;
 };
 
 const slotConfig: Record<number, SlotConfig> = {
   "-2": {
     cardSize: "h-[245px] w-[200px]",
     imageRadius: "rounded-2xl",
-    overlayBottom: "bottom-14",
-    titleClass: "text-base leading-2",
-    roleClass: "text-[11px]",
-    iconSize: "h-[15px] w-[15px]",
-    iconInnerSize: "h-3 w-3",
-    compatibilityText: "text-[10px]",
-    buttonClass: "px-2 py-1 text-[7px]",
   },
   "-1": {
     cardSize: "h-[290px] w-[220px]",
     imageRadius: "rounded-2xl",
-    overlayBottom: "bottom-16",
-    titleClass: "text-lg leading-3",
-    roleClass: "text-sm",
-    iconSize: "h-[20px] w-[20px]",
-    iconInnerSize: "h-3.5 w-3.5",
-    compatibilityText: "text-[12px]",
-    buttonClass: "px-2 py-1.5 text-[8px]",
   },
   "0": {
     cardSize: "h-[370px] w-[260px]",
@@ -285,28 +271,20 @@ const slotConfig: Record<number, SlotConfig> = {
   "1": {
     cardSize: "h-[290px] w-[220px]",
     imageRadius: "rounded-2xl",
-    overlayBottom: "bottom-16",
-    titleClass: "text-lg leading-3",
-    roleClass: "text-sm",
-    iconSize: "h-[20px] w-[20px]",
-    iconInnerSize: "h-3.5 w-3.5",
-    compatibilityText: "text-[12px]",
-    buttonClass: "px-2 py-1.5 text-[8px]",
   },
   "2": {
     cardSize: "h-[245px] w-[200px]",
     imageRadius: "rounded-2xl",
-    overlayBottom: "bottom-14",
-    titleClass: "text-base leading-2",
-    roleClass: "text-[11px]",
-    iconSize: "h-[15px] w-[15px]",
-    iconInnerSize: "h-3 w-3",
-    compatibilityText: "text-[10px]",
-    buttonClass: "px-2 py-1 text-[7px]",
   },
 };
 
-function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps) {
+function CardSlot({
+  slot,
+  user,
+  onMatch,
+  onCardClick,
+  isCenter,
+}: CardSlotProps) {
   const config = slotConfig[slot];
 
   const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=6366f1&color=ffffff&size=200`;
@@ -319,7 +297,7 @@ function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps)
       <div className="relative flex h-full w-full flex-col gap-3">
         {/* IMAGE */}
         <div
-          className={`relative h-screen w-full overflow-hidden ${config.imageRadius}`}
+          className={`relative h-screen w-full overflow-hidden shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] ${config.imageRadius}`}
         >
           <img
             src={user.image || fallbackAvatar}
@@ -377,7 +355,7 @@ function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps)
                   e.stopPropagation();
                   onMatch();
                 }}
-                className={`ml-1.5 rounded-full bg-darkBlue font-bold whitespace-nowrap text-white shadow-[1px_2px_4px_-1px_rgba(0,0,0,0.2)] pointer-events-auto relative z-30 ${config.buttonClass}`}
+                className={`ml-1.5 rounded-full bg-darkBlue font-bold whitespace-nowrap shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] text-white pointer-events-auto relative z-30 ${config.buttonClass}`}
               >
                 View
               </button>
@@ -403,14 +381,6 @@ function EmptyCardSlot({ slot }: EmptyCardSlotProps) {
   const config = slotConfig[slot];
   const isCenter = slot === 0;
 
-  // Calculate icon size based on card size
-  const iconSize =
-    slot === 0
-      ? "w-20 h-20"
-      : slot === -1 || slot === 1
-        ? "w-16 h-16"
-        : "w-12 h-12";
-
   return (
     <div
       className={`flex ${config.cardSize} flex-col items-center justify-center rounded-3xl bg-white p-3 shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.4),-2px_3px_5px_-1px_rgba(0,0,0,0.4)]`}
@@ -420,80 +390,78 @@ function EmptyCardSlot({ slot }: EmptyCardSlotProps) {
         <div
           className={`h-screen w-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 ${config.imageRadius} flex items-center justify-center`}
         >
-          <div
-            className={`${iconSize} flex items-center justify-center rounded-full bg-gray-300`}
-          >
+          <div className="flex items-center justify-center rounded-full bg-gray-300 w-16 h-16">
             <User className="w-1/2 h-1/2 text-gray-400" />
           </div>
         </div>
 
-        {/* OVERLAY - Empty state */}
-        <div
-          style={{ backgroundImage: `url(${images.blurProfilename})` }}
-          className={`absolute left-1/2 ${config.overlayBottom} w-full -translate-x-1/2 rounded-xl bg-cover bg-center bg-no-repeat px-3 text-right`}
-        >
-          <div className="py-4 pr-3 text-white">
-            <h1 className={`font-bold ${config.titleClass}`}>—</h1>
-            <p className={`mt-1 font-medium ${config.roleClass}`}>—</p>
-          </div>
-        </div>
-
-        {/* COMPATIBILITY - Empty state */}
-        <div className="flex flex-col items-center gap-0.5 px-4">
-          <div className="flex items-center gap-1.5">
+        {isCenter ? (
+          <>
+            {/* OVERLAY - center empty state */}
             <div
-              className={`flex ${config.iconSize} items-center justify-center rounded-full bg-gray-300`}
+              style={{ backgroundImage: `url(${images.blurProfilename})` }}
+              className="absolute left-1/2 bottom-24 w-full -translate-x-1/2 rounded-xl bg-cover bg-center bg-no-repeat px-3 text-right"
             >
-              <div className={`relative ${config.iconInnerSize}`}>
-                <img
-                  src={images.aiMagic}
-                  className="absolute inset-0 h-full w-full object-contain opacity-50"
-                  alt=""
-                />
+              <div className="py-4 pr-3 text-white">
+                <h1 className="font-bold text-xl leading-5">—</h1>
+                <p className="mt-1 font-medium text-sm">—</p>
               </div>
             </div>
 
-            <div className="leading-[10px]">
-              <h5 className="text-[6.5px] font-medium text-gray-400">
-                Smart Matching
-              </h5>
-              <p className="text-[9px] font-bold text-gray-400">
-                Compatibility
-              </p>
+            {/* COMPATIBILITY - center empty state */}
+            <div className="flex flex-col items-center gap-0.5 px-4">
+              <div className="flex items-center gap-1.5">
+                <div className="flex h-6.25 w-6.25 items-center justify-center rounded-full bg-gray-300">
+                  <div className="relative h-4.5 w-4.5">
+                    <img
+                      src={images.aiMagic}
+                      className="absolute inset-0 h-full w-full object-contain opacity-50"
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div className="leading-2.5">
+                  <h5 className="text-[6.5px] font-medium text-gray-400">
+                    Smart Matching
+                  </h5>
+                  <p className="text-[9px] font-bold text-gray-400">
+                    Compatibility
+                  </p>
+                </div>
+                <div className="font-extrabold text-[13.8px] text-gray-400">
+                  —%
+                </div>
+                <button
+                  disabled
+                  className="ml-1.5 rounded-full bg-gray-300 font-semibold whitespace-nowrap text-gray-500 cursor-not-allowed px-[29px] py-[11.5px] text-[9px]"
+                >
+                  Match us!
+                </button>
+              </div>
             </div>
 
-            <div
-              className={`font-extrabold ${config.compatibilityText} text-gray-400`}
-            >
-              —%
+            {/* "No matches yet" overlay */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center px-4">
+                <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-100">
+                  <User className="w-8 h-8 text-gray-400" />
+                </div>
+                <p className="text-gray-600 text-sm font-medium">
+                  No One Needs Your Help Yet
+                </p>
+                <p className="text-gray-400 text-xs mt-1">
+                  Users who need your expertise will appear here
+                </p>
+              </div>
             </div>
-
-            <button
-              disabled
-              className={`ml-1.5 rounded-full bg-gray-300 font-semibold whitespace-nowrap text-gray-500 cursor-not-allowed ${config.buttonClass}`}
-            >
-              Match us!
-            </button>
+          </>
+        ) : (
+          <div className="flex items-center gap-2 px-3">
+            <div className="shrink-0 h-5 w-5 rounded-full bg-purple-300" />
+            <div className="flex-1 h-0.75 rounded-full bg-linear-to-r from-pink-300 to-pink-200" />
           </div>
-        </div>
+        )}
       </div>
-
-      {/* Center card gets the "No matches yet" message */}
-      {isCenter && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center px-4">
-            <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-100">
-              <User className="w-8 h-8 text-gray-400" />
-            </div>
-            <p className="text-gray-600 text-sm font-medium">
-              No One Needs Your Help Yet
-            </p>
-            <p className="text-gray-400 text-xs mt-1">
-              Users who need your expertise will appear here
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
