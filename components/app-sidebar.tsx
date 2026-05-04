@@ -430,7 +430,7 @@ export const AppSidebar: React.FC = () => {
                     <Link
                       href={item.href}
                       onClick={() => setActivePath(item.href)}
-                      className={`relative z-[1] flex cursor-pointer items-center transition-all duration-300 ${
+                      className={`relative z-[1] flex cursor-pointer items-center ${
                         isActive
                           ? "font-bold"
                           : "text-gray-400 hover:text-white"
@@ -438,81 +438,17 @@ export const AppSidebar: React.FC = () => {
                       aria-current={isActive ? "page" : undefined}
                     >
                       {/* Highlight background */}
-                      <div
-                        className={`absolute top-0 left-0 z-0 h-full w-[250px] transform bg-cover bg-center bg-no-repeat transition-all duration-300 ${
-                          isActive
-                            ? `active-link-bg -translate-x-3 rounded-l-full`
-                            : ""
-                        }`}
-                      ></div>
-
-                      {/* For close sidebar  */}
-                      {isActive && isLeadsPage ? (
-                        <img
-                          src={images.leadstopActiveBg}
-                          alt="active pattern"
-                          className={`absolute z-[2] w-full opacity-85 transition-all duration-300 ${open ? "-top-[71px] left-[1680px] -z-[5] h-20" : "-top-[43px] left-10 z-0 h-[50px] w-full delay-300"} `}
-                        />
-                      ) : (
-                        isActive && (
-                          <img
-                            src={images.TopactivesmallBG}
-                            alt="active pattern"
-                            className={`absolute z-[2] w-full transition-all duration-300 ${open ? "-top-[71px] left-[1680px] -z-[5] h-20" : "-top-10 left-10 z-0 h-[50px] w-full delay-300"} `}
-                          />
-                        )
-                      )}
-                      {isActive && isLeadsPage ? (
-                        <img
-                          src={images.leadsbottomActiveBg}
-                          alt="active pattern"
-                          className={`absolute z-[2] w-full transition-all duration-300 ${open ? "top-[71px] left-[1680px] -z-[5] h-20" : "-bottom-[41px] left-[60px] z-0 h-[50px] w-full delay-300"} `}
-                        />
-                      ) : (
-                        isActive && (
-                          <img
-                            src={images.BottomactivesmallBG}
-                            alt="active pattern"
-                            className={`absolute z-[2] w-full transition-all duration-300 ${open ? "top-[71px] left-[1680px] -z-[5] h-20" : "-bottom-[44px] left-[40px] z-0 h-[50px] w-full delay-300"} `}
-                          />
-                        )
-                      )}
-
-                      {/* For Open  sidebar  */}
-                      {isActive && isLeadsPage ? (
-                        <img
-                          src={images.leadstopActiveBg}
-                          alt="active pattern"
-                          className="absolute -top-[69px] left-[184px] h-20 w-auto transform"
-                        />
-                      ) : (
-                        isActive && (
-                          <img
-                            src={images.topActiveBg}
-                            alt="active pattern"
-                            className="absolute -top-[71px] left-[160px] h-20 w-auto transform"
-                          />
-                        )
-                      )}
-                      {isActive && isLeadsPage ? (
-                        <img
-                          src={images.leadsbottomActiveBg}
-                          alt="active pattern"
-                          className="absolute -bottom-[65px] left-[172px] h-20 w-auto transform"
-                        />
-                      ) : (
-                        isActive && (
-                          <img
-                            src={images.BottomActiveBg}
-                            alt="active pattern"
-                            className="absolute -bottom-[70px] left-[172px] h-20 w-auto transform"
-                          />
-                        )
+                      {isActive && (
+                        <div
+                          className={`absolute top-0 left-0 z-[-1] h-full w-62.5 -translate-x-3 rounded-l-full bg-cover bg-center bg-no-repeat ${
+                            isLeadsPage ? "bg-[#5E9AB0]" : "active-link-bg"
+                          }`}
+                        ></div>
                       )}
 
                       {/* Icon + Label */}
                       <div
-                        className={`relative flex w-full items-center rounded-lg py-2 transition-colors duration-300 ${
+                        className={`relative flex w-full items-center rounded-lg py-2 ${
                           isActive
                             ? "py-2.5 font-bold text-deepBlack hover:text-deepBlack/80"
                             : "font-light text-white hover:text-white/80"
@@ -676,7 +612,7 @@ export const AppSidebar: React.FC = () => {
                           key={item.name}
                           href={item.href}
                           onClick={() => setActivePath(item.href)}
-                          className={`flex items-center justify-center rounded-full transition-all duration-300 ${isMiddle ? "-mt-10 h-18 w-18 border bg-white shadow-[inset_0_4px_6px_rgba(0,0,0,0.5)] md:-mt-24 md:h-26 md:w-26" : "h-12 w-12"} ${
+                          className={`flex items-center justify-center rounded-full ${isMiddle ? "-mt-10 h-18 w-18 border bg-white shadow-[inset_0_4px_6px_rgba(0,0,0,0.5)] md:-mt-24 md:h-26 md:w-26" : "h-12 w-12"} ${
                             isActive && isLeadsPage
                               ? "bg-[#978FED] shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] md:p-1.5"
                               : isActive
@@ -688,7 +624,7 @@ export const AppSidebar: React.FC = () => {
                           <img
                             src={isActive ? item.activeIcon : item.icon}
                             alt={item.name}
-                            className={`object-contain transition-all ${isMiddle ? "h-10 w-10 md:h-16 md:w-16" : "h-7 w-7 md:h-14 md:w-14"} `}
+                            className={`object-contain ${isMiddle ? "h-10 w-10 md:h-16 md:w-16" : "h-7 w-7 md:h-14 md:w-14"} `}
                           />
                         </Link>
                       );
