@@ -86,7 +86,6 @@ const NAV_ITEMS: NavItem[] = [
   { name: "Dashboard", icon: images.dashboardIcon, href: "/dashboard" },
   { name: "Match", icon: images.repeatIcon, href: "/referrals" },
   { name: "Messages", icon: images.bubbleChat1, href: "/message" },
-  { name: "Directory", icon: images.shareKnowledeg, href: "/directory" },
 ];
 const MOBILE_NAV_ITEMS: MobileNavItem[] = [
   {
@@ -546,9 +545,7 @@ export const AppSidebar: React.FC = () => {
                             )}
                         </div>
 
-                        <span
-                          className="ml-1.5 overflow-hidden whitespace-nowrap"
-                        >
+                        <span className="ml-1.5 overflow-hidden whitespace-nowrap">
                           {item.name}
                         </span>
                       </div>
@@ -617,9 +614,7 @@ export const AppSidebar: React.FC = () => {
                           </div>
                         )}
                       </div>
-                      <span
-                        className="ml-2 overflow-hidden text-[13px] whitespace-nowrap"
-                      >
+                      <span className="ml-2 overflow-hidden text-[13px] whitespace-nowrap">
                         {item.name}
                       </span>
                     </div>
@@ -632,9 +627,7 @@ export const AppSidebar: React.FC = () => {
                   >
                     <div className="relative flex items-center rounded-lg transition-colors duration-400">
                       <img src={item.icon} className="mr-5" alt="" />
-                      <span
-                        className="ml-2 overflow-hidden text-[13px] whitespace-nowrap"
-                      >
+                      <span className="ml-2 overflow-hidden text-[13px] whitespace-nowrap">
                         {item.name}
                       </span>
                     </div>
