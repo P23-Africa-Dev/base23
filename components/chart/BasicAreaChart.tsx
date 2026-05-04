@@ -25,6 +25,8 @@ interface ChartState {
             zoom: { enabled: boolean };
             toolbar?: { show: boolean };
             sparkline?: { enabled: boolean };
+            parentHeightOffset?: number;
+            offsetY?: number;
         };
         dataLabels: {
             enabled: boolean;
@@ -41,6 +43,19 @@ interface ChartState {
                 opacityTo: number;
                 stops: number[];
             };
+            pattern?: {
+                style: string;
+                width: number;
+                height: number;
+                strokeWidth: number;
+            };
+        };
+        markers?: {
+            size: number;
+            colors: string[];
+            strokeColors: string;
+            strokeWidth: number;
+            hover?: { size: number };
         };
         colors?: string[];
         labels: string[];
@@ -97,6 +112,8 @@ const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
                 zoom: { enabled: false },
                 toolbar: { show: false },
                 sparkline: { enabled: true },
+                parentHeightOffset: 0,
+                offsetY: 5,
             },
             dataLabels: {
                 enabled: false,
@@ -106,13 +123,20 @@ const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
                 width: 2,
             },
             fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.4,
-                    opacityTo: 0.1,
-                    stops: [0, 100],
+                type: 'pattern',
+                pattern: {
+                    style: 'verticalLines',
+                    width: 6,
+                    height: 6,
+                    strokeWidth: 2,
                 },
+            },
+            markers: {
+                size: 0,
+                colors: ['#ffffff'],
+                strokeColors: '#ffffff',
+                strokeWidth: 2,
+                hover: { size: 6 },
             },
             colors: ['#ffffff'],
             labels: [],
@@ -232,14 +256,16 @@ const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
     }
 
     return (
-        <div className="relative overflow-hidden bg-transparent">
+        <div className="relative w-full overflow-hidden bg-transparent">
             <div className="absolute top-2 left-3 z-[100] pointer-events-none">
                 <div className="backdrop-blur-sm bg-black/20 rounded-md px-2 py-1">
                     <h3 className="text-white text-xs font-medium">7-Day Activity</h3>
                     <p className="text-white/80 text-[10px]">Time online per day</p>
                 </div>
             </div>
-            <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={105} />
+            <div className="leading-0">
+                <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={105} />
+            </div>
         </div>
     );
 };
