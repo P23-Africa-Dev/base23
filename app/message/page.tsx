@@ -12,6 +12,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
 
 type User = {
@@ -103,10 +104,17 @@ function getFirstName(fullName: string): string {
 function Message({ connections = [], conversations = [], stats = { activeConversations: 0, readMessages: 0, unreadMessages: 0 } }: Partial<MessagePageProps>) {
     const { user: authUser } = useAuth();
     const auth = { user: authUser };
+    const router = useRouter();
     const [searchConnectionQuery, setSearchConnectionQuery] = useState('');
     const [searchChatQuery, setSearchChatQuery] = useState('');
     const [onlineUsers, setOnlineUsers] = useState<Set<number>>(new Set()); // Track online user IDs
-    const [conversationsList, setConversationsList] = useState<Conversation[]>(conversations);
+    const [conversationsList, setConversationsList] = useState<Conversation[]>(() =>
+        [...conversations].sort((a, b) => {
+            const aTime = a.last_message?.created_at ? new Date(a.last_message.created_at).getTime() : 0;
+            const bTime = b.last_message?.created_at ? new Date(b.last_message.created_at).getTime() : 0;
+            return bTime - aTime;
+        })
+    );
     const [messageStats, setMessageStats] = useState<MessageStats>(stats);
     const [currentTime, setCurrentTime] = useState(new Date()); // Add state for current time
     const dateInfo = getCurrentDateInfo();
@@ -142,18 +150,7 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
         return () => clearInterval(timer);
     }, []);
 
-    // Update conversations list when prop changes and sort by most recent
-    useEffect(() => {
-        // Sort conversations by last message time (most recent first)
-        const sortedConversations = [...conversations].sort((a, b) => {
-            const aTime = a.last_message?.created_at ? new Date(a.last_message.created_at).getTime() : 0;
-            const bTime = b.last_message?.created_at ? new Date(b.last_message.created_at).getTime() : 0;
-            return bTime - aTime;
-        });
-        setConversationsList(sortedConversations);
-    }, [conversations]); // Remove currentTime dependency - it's not needed for sorting
-
-    // Track online users and real-time message updates
+// Track online users and real-time message updates
     useEffect(() => {
         // Join all conversation channels to track presence and messages
         if (!(window as any).Echo || conversationsList.length === 0) return;
@@ -280,7 +277,7 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
     // Handle starting a conversation with a connection
     const handleStartConversation = (userId: number) => {
         axios.post('/messages/start', { user_id: userId, redirect_to: 'message/single' })
-            .then((res) => { window.location.href = res.data.redirect ?? '/message/single'; })
+            .then((res) => { router.push(res.data.redirect ?? '/message/single'); })
             .catch((err) => console.error('Failed to start conversation:', err));
     };
 
@@ -309,7 +306,7 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
         );
 
         // Navigate to conversation
-        window.location.href = `/message/single?conversation=${encryptedId}`;
+        router.push(`/message/single?conversation=${encryptedId}`);
     }, []);
 
     // ONLOAD BG BLUE BACKGROUND
@@ -324,7 +321,6 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
 
     return (
         <AppLayout>
-            
             <Toaster
                 position="top-right"
                 toastOptions={{
@@ -356,7 +352,7 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="relative z-[10] no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto pb-1 lg:px-2 lg:py-0 lg:pr-9 lg:pl-7 xl:pr-17 xl:pl-12">
+                    <div className="relative z-[1] no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto pb-1 lg:px-2 lg:py-0 lg:pr-9 lg:pl-7 xl:pr-17 xl:pl-12">
                         {/* -------------------------------------------MOBILE STRUCTURE-------------------------------------------------------- */}
                         <div className="h-screen lg:pt-5 page-transition">
                             {/* FIRST ROW MOBILE MESSAGE STATS */}
