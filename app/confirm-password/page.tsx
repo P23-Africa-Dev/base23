@@ -3,13 +3,23 @@
 export const dynamic = "force-dynamic";
 
 import InputError from "@/components/input-error";
+import InputWithLabel from "@/components/input/InputWithLabel";
+import LeftDesktopContent from "@/components/auths/LeftDesktopContent";
+import MobileTopContent from "@/components/auths/MobileContent";
+import StepTopContent from "@/components/auths/StepTopContent";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import AuthLayout from "@/layouts/auth-layout";
 import axios from "axios";
 import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
+
+const confirmMobileContent = {
+  title: "Confirm your Password",
+  description:
+    "This is a secure area of the application. Please confirm your password before continuing.",
+  headingClassName: "text-3xl font-bold text-white",
+  paragraphClassName: "max-w-sm pr-5 text-[17px] font-light text-white",
+};
 
 export default function ConfirmPassword() {
   const [password, setPassword] = useState("");
@@ -33,35 +43,46 @@ export default function ConfirmPassword() {
 
   return (
     <AuthLayout
-      title="Confirm your password"
-      subtitle="This is a secure area of the application. Please confirm your password before continuing."
+      mobileTopContent={<MobileTopContent content={confirmMobileContent} />}
+      LeftDesktopContent={
+        <LeftDesktopContent
+          topContentLayout={
+            <StepTopContent
+              title="Confirm your Password"
+              description="This is a secure area of the application. Please confirm your password before continuing."
+              headingClassName="max-w-[100px] lg:max-w-[300px]"
+            />
+          }
+        />
+      }
     >
-      <form onSubmit={submit}>
-        <div className="space-y-6">
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
+      <div className="w-full overflow-x-hidden">
+        <form onSubmit={submit} className="space-y-7">
+          <div>
+            <InputWithLabel
+              label="Password"
+              htmlFor="password"
               type="password"
-              name="password"
-              placeholder="Password"
               autoComplete="current-password"
               value={password}
               autoFocus
               onChange={(e) => setPassword(e.target.value)}
             />
-            <InputError message={error} />
+            <InputError message={error} className="mt-2" />
           </div>
-          <div className="flex items-center">
-            <Button className="w-full" disabled={processing}>
-              {processing && (
-                <LoaderCircle className="h-4 w-4 animate-spin mr-2" />
-              )}
-              Confirm password
-            </Button>
-          </div>
-        </div>
-      </form>
+
+          <Button
+            type="submit"
+            className="w-full rounded-2xl bg-pinkLight py-[27px] text-lg font-semibold text-white hover:bg-pinkLight/90 dark:bg-blue-600 dark:hover:bg-blue-700"
+            disabled={processing}
+          >
+            {processing && (
+              <LoaderCircle className="h-4 w-4 animate-spin mr-2" />
+            )}
+            Confirm password
+          </Button>
+        </form>
+      </div>
     </AuthLayout>
   );
 }

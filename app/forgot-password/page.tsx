@@ -60,62 +60,48 @@ function ForgotPassword() {
         />
       }
     >
-      <div className="w-full p-8 mt-20 lg:overflow-y-auto">
-        <div className="relative z-10 mx-auto max-w-md">
-          <div className="mb-10">
-            <h2 className="mb-1 text-2xl font-extrabold text-primary lg:text-3xl dark:text-black">
-              Forgot your Password
-            </h2>
-            <p className="max-w-sm pr-5 text-[17px] font-normal text-primary dark:text-black">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor
-            </p>
-          </div>
-
+      <div className="w-full overflow-x-hidden">
+        <form onSubmit={submit} className="space-y-7">
           {status && (
             <div className="mb-4 text-center text-sm font-medium text-green-600">
               {status}
             </div>
           )}
 
-          <div className="max-w-sm">
-            <form onSubmit={submit} className="space-y-7">
-              <div>
-                <InputWithLabel
-                  label="Email Address"
-                  htmlFor="email"
-                  type="email"
-                  name="email"
-                  autoComplete="off"
-                  value={email}
-                  autoFocus
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="email@example.com"
-                />
-                <InputError message={error} className="mt-2" />
-              </div>
-
-              <div className="w-full text-center">
-                <span>Or, return to</span>
-                <TextLink className="ml-2" href="/login">
-                  log in
-                </TextLink>
-              </div>
-
-              <Button
-                type="submit"
-                className="mt-4 w-full rounded-2xl bg-primary py-8 text-lg font-semibold text-white hover:bg-pinkLight/90 dark:bg-black"
-                tabIndex={4}
-                disabled={processing}
-              >
-                {processing && (
-                  <LoaderCircle className="h-4 w-4 animate-spin mr-2" />
-                )}
-                Email password reset link
-              </Button>
-            </form>
+          <div>
+            <InputWithLabel
+              label="Email Address"
+              htmlFor="email"
+              type="email"
+              name="email"
+              autoComplete="off"
+              value={email}
+              autoFocus
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email@example.com"
+            />
+            <InputError message={error} className="mt-2" />
           </div>
-        </div>
+
+          <div className="w-full text-center">
+            <span>Or, return to</span>
+            <TextLink className="ml-2" href="/login">
+              log in
+            </TextLink>
+          </div>
+
+          <Button
+            type="submit"
+            className="mt-4 w-full rounded-2xl bg-pinkLight py-[27px] text-lg font-semibold text-white hover:bg-pinkLight/90 dark:bg-blue-600 dark:hover:bg-blue-700"
+            tabIndex={4}
+            disabled={processing}
+          >
+            {processing && (
+              <LoaderCircle className="h-4 w-4 animate-spin mr-2" />
+            )}
+            Email password reset link
+          </Button>
+        </form>
       </div>
     </AuthLayout>
   );
