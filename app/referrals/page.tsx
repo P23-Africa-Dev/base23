@@ -206,99 +206,121 @@ export default function Referrals() {
                   ></div>
                 </div>
 
-                <div className="-mt-3 ml-1 grid grid-cols-1 gap-x-0 pb-10 lg:grid-cols-[30%_46%_25%]">
+                <div className="flex justify-between pb-10 flex-1 w-full">
                   <ReferralSmartMatchChart />
 
-                  <div className="relative aspect-auto h-[27vh] overflow-hidden rounded-3xl bg-deepBlack bg-cover bg-center bg-no-repeat px-10 pt-4 pb-30 lg:bg-transparent lg:pb-20">
-                    <img
-                      src={images.dealBgCard}
-                      alt={`lead card bg`}
-                      className="absolute inset-0 hidden h-full w-full overflow-hidden rounded-3xl object-center lg:block"
-                    />
-
-                    <div className="relative no-scrollbar flex-1 overflow-y-auto pb-10">
-                      {/* Search Header */}
-                      <div className="sticky top-0 z-2 flex items-center justify-between overflow-hidden border-b-1 bg-white px-2 pt-1 pb-2">
-                        <div className="">
-                          <>
-                            <h2 className="text-[14px] leading-1 font-extrabold text-deepBlack">
-                              Recent Network
-                            </h2>
-                          </>
+                  <div className="flex">
+                    <div className="drop-shadow-[0px_1px_2px_0px_#0000004D,0px_4px_7px_3px_#00000026]">
+                      <div className="relative shrink-0 min-w-116.5 bg-white px-6.25 py-3.5 ticket-cutout h-57.25 no-scrollbar flex-1 rounded-3xl">
+                        <div className="sticky top-0 z-2 flex items-center justify-between overflow-hidden border-b bg-white px-2 pt-1 pb-2">
+                          <h2 className="text-[14px] leading-1 font-extrabold text-deepBlack">
+                            Shortlisted
+                          </h2>
                         </div>
-                      </div>
 
-                      {/* Cards Container */}
-                      <div className="flex h-[14vh] flex-col gap-2">
-                        <div className="flex items-center justify-center py-4">
-                          <p className="text-sm text-gray-500">
-                            No recent connections yet
-                          </p>
+                        {/* Cards Container */}
+                        <div className="no-scrollbar flex flex-col overflow-y-auto">
+                          {sliderData.slice(0, 2).map((person, idx) => (
+                            <div key={person.id}>
+                              <div className="flex items-center gap-3 py-3 px-2">
+                                <div className="relative h-18 w-19 shrink-0 overflow-hidden rounded-l-2xl">
+                                  <Image
+                                    src={person.image}
+                                    alt={person.name}
+                                    fill
+                                    className="object-cover"
+                                  />
+                                </div>
+                                <div className="flex flex-1 flex-col gap-1 min-w-0">
+                                  <div className="flex items-start justify-between gap-1">
+                                    <div className="min-w-0">
+                                      <p className="truncate text-[13px] font-bold text-deepBlack leading-tight">
+                                        {person.name}
+                                      </p>
+                                      <p className="truncate text-[11px] text-gray-400 leading-tight">
+                                        {person.company || "—"}
+                                      </p>
+                                    </div>
+                                    <div className="flex shrink-0 items-center gap-1">
+                                      <span className="text-[13px] font-semibold text-deepBlack">
+                                        {(
+                                          (person.compatibility ?? 0) / 20
+                                        ).toFixed(1)}
+                                      </span>
+                                      <svg
+                                        className="h-4 w-4 fill-[#27E6A7]"
+                                        viewBox="0 0 20 20"
+                                      >
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                      </svg>
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-x-2">
+                                    <div>
+                                      <p className="text-[10px] font-semibold text-[#27E6A7]">
+                                        Title
+                                      </p>
+                                      <p className="truncate text-[11px] font-bold text-deepBlack">
+                                        {person.role}
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p className="text-[10px] font-semibold text-[#27E6A7]">
+                                        Industry
+                                      </p>
+                                      <p className="truncate text-[11px] font-bold text-deepBlack">
+                                        {person.industry || "—"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              {idx < sliderData.slice(0, 5).length - 1 && (
+                                <div className="h-px bg-gray-100 mx-2" />
+                              )}
+                            </div>
+                          ))}
+                          {sliderData.length === 0 && (
+                            <div className="flex items-center justify-center py-4">
+                              <p className="text-sm text-gray-500">
+                                No recent connections yet
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex w-full max-w-48 flex-col gap-y-2.5 bg-transparent px-2">
-                    {/* Matching History chart*/}
-                    <MatchingHistoryChart />
-
-                    {/* Profile setup */}
-                    <div
-                      onClick={() => setOpenProfile(true)}
-                      className="relative flex min-h-22.5 py-4.25 px-6.5 pl-5.25 w-full cursor-pointer flex-col rounded-2xl bg-[linear-gradient(90deg,#DF87B1_0%,#CD6BD0_49.4%,#BE51EA_92.79%)] shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.2),-2px_3px_5px_-1px_rgba(0,0,0,0.2)]"
-                    >
-                      <div className="flex w-full justify-end">
-                        <div className="flex h-9.25 w-9.25 items-center justify-center rounded-lg bg-[#F5F4F4] shadow-md">
-                          <div className="relative h-5.5 w-5.5">
-                            <Image
-                              src={images.margicband}
-                              className="absolute object-contain"
-                              alt=""
-                              width={22}
-                              height={22}
-                            />
+                    <div className="flex w-full max-w-48 flex-col gap-y-2.5 bg-transparent px-2">
+                      <MatchingHistoryChart />
+                      <div
+                        onClick={() => setOpenProfile(true)}
+                        className="relative flex min-h-22.5 py-4.25 px-6.5 pl-5.25 w-full cursor-pointer flex-col rounded-2xl bg-[linear-gradient(90deg,#DF87B1_0%,#CD6BD0_49.4%,#BE51EA_92.79%)] shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.2),-2px_3px_5px_-1px_rgba(0,0,0,0.2)]"
+                      >
+                        <div className="flex w-full justify-end">
+                          <div className="flex h-9.25 w-9.25 items-center justify-center rounded-lg bg-[#F5F4F4] shadow-md">
+                            <div className="relative h-5.5 w-5.5">
+                              <Image
+                                src={images.margicband}
+                                className="absolute object-contain"
+                                alt=""
+                                width={22}
+                                height={22}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="mt-2 flex flex-col leading-4.5 text-secondaryWhite italic">
-                        <h4 className="text-[20px] leading-6 font-extrabold">
-                          Set-up
-                        </h4>
-                        <h4 className="text-[20px] leading-6 font-extrabold">
-                          New Profile
-                        </h4>
+                        <div className="mt-2 flex flex-col leading-4.5 text-secondaryWhite italic">
+                          <h4 className="text-[20px] leading-6 font-extrabold">
+                            Set-up
+                          </h4>
+                          <h4 className="text-[20px] leading-6 font-extrabold">
+                            New Profile
+                          </h4>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Mobile SAmtch Card Profile */}
-              <div className="flex w-full flex-col items-center justify-center lg:hidden">
-                <div className="mx-auto mt-4 flex w-[80%] flex-col items-center justify-center">
-                  <MobileReferralCardSlider
-                    data={sliderData}
-                    onMatch={handleSliderMatch}
-                  />
-                </div>
-
-                {/* Buttons Actions */}
-                <div className="mt-6">
-                  <div className="flex gap-x-2.5">
-                    <button
-                      onClick={() => setOpenProfile(true)}
-                      className="flex h-[46px] w-[46px] -translate-x-[50px] transform items-center justify-center rounded-full bg-[linear-gradient(83.85deg,#A47AF0_10.01%,#CCA6FF_88.82%)] shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.2),-2px_3px_5px_-1px_rgba(0,0,0,0.2)]"
-                    >
-                      <div className="relative h-5 w-5">
-                        <img
-                          src={images.adduser}
-                          className="absolute object-contain"
-                          alt=""
-                        />
-                      </div>
-                    </button>
                   </div>
                 </div>
               </div>

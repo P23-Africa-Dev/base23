@@ -19,7 +19,7 @@ export default function ReferralSmartMatchChart() {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 shrink-0">
       <div className="flex h-47.5 w-18 flex-col items-center justify-between rounded-2xl bg-[#22272A] pt-9 pb-3 text-white shadow">
         <p className="-rotate-90 text-sm font-bold tracking-widest text-white">
           1000+
@@ -38,11 +38,11 @@ export default function ReferralSmartMatchChart() {
           </div>
         </div>
       </div>
-      <div className="relative mr-16 h-[190px] w-[60%] rounded-2xl bg-[#CDCADB] p-8 shadow-[2px_5px_5px_-4px_rgba(0,0,0,0.3),-2px_3px_5px_-1px_rgba(0,0,0,0.3)]">
+      <div className="relative min-w-58 mr-16 h-47.5 w-[60%] rounded-2xl bg-[#CDCADB] p-8 shadow-[2px_5px_5px_-4px_rgba(0,0,0,0.3),-2px_3px_5px_-1px_rgba(0,0,0,0.3)]">
         {/* Floating profile badge - Clickable */}
         <div
           onClick={handleProfileSetupClick}
-          className="absolute top-5 -right-10 cursor-pointer rounded-xl bg-[#D6F955] px-4 py-5 text-[#22272A] shadow-[2px_5px_5px_-4px_rgba(0,0,0,0.4),-2px_3px_5px_-1px_rgba(0,0,0,0.4)] transition-all hover:scale-105 hover:shadow-[2px_7px_7px_-4px_rgba(0,0,0,0.5),-2px_5px_7px_-1px_rgba(0,0,0,0.5)]"
+          className="absolute top-5 -right-18 cursor-pointer rounded-xl bg-[#D6F955] px-4 py-5 text-[#22272A] shadow-[2px_5px_5px_-4px_rgba(0,0,0,0.4),-2px_3px_5px_-1px_rgba(0,0,0,0.4)] transition-all hover:scale-105 hover:shadow-[2px_7px_7px_-4px_rgba(0,0,0,0.5),-2px_5px_7px_-1px_rgba(0,0,0,0.5)]"
         >
           <div className="flex items-center justify-between gap-10">
             <div className="flex items-center gap-1">
