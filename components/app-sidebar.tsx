@@ -189,9 +189,10 @@ export const AppSidebar: React.FC = () => {
   };
 
   // Handle smart match accept - creates conversation and navigates to messages
-  const handleSmartMatchAccept = (_data: SmartMatchData) => { window.location.href = "/message"; };
+  const handleSmartMatchAccept = (_data: SmartMatchData) => {
+    window.location.href = "/message";
+  };
   const handleSmartMatchDecline = (_data: SmartMatchData) => {};
-
 
   if (!authUser) return null;
 
@@ -226,7 +227,7 @@ export const AppSidebar: React.FC = () => {
                     >
                       {active && (
                         <>
-                          <span className="absolute inset-y-0 left-0 right-0 rounded-l-full bg-white" />
+                          <span className="absolute inset-y-0 left-0 right-0 rounded-l-full bg-[#F9F9F9]" />
                           <span
                             className="absolute right-0 -top-5 h-5 w-5 rounded-br-[20px]"
                             style={{ backgroundColor: SIDEBAR_BG }}
@@ -236,7 +237,7 @@ export const AppSidebar: React.FC = () => {
                             style={{ backgroundColor: SIDEBAR_BG }}
                           />
                           <span
-                            className="absolute right-0 -top-5 h-5 w-5 bg-white"
+                            className="absolute right-0 -top-5 h-5 w-5 bg-[#F9F9F9]"
                             style={{
                               WebkitMaskImage:
                                 "radial-gradient(circle 20px at 0 0, transparent 0, transparent 20px, black 21px)",
@@ -245,7 +246,7 @@ export const AppSidebar: React.FC = () => {
                             }}
                           />
                           <span
-                            className="absolute right-0 -bottom-5 h-5 w-5 bg-white"
+                            className="absolute right-0 -bottom-5 h-5 w-5 bg-[#F9F9F9]"
                             style={{
                               WebkitMaskImage:
                                 "radial-gradient(circle 20px at 0 100%, transparent 0, transparent 20px, black 21px)",
