@@ -83,7 +83,7 @@ export default function LandingPage() {
           <Link
             key={opt.title}
             href={opt.href}
-            className="flex items-center gap-3.75 rounded-[20px] bg-[#0B1727] px-6 pl-9 py-5 cursor-pointer hover:bg-[#0d1e35] transition-colors group"
+            className="flex items-center gap-3.75 rounded-[20px] bg-[#0B1727] pr-8.25 pl-9 py-5 cursor-pointer hover:bg-[#0d1e35] transition-colors group"
           >
             <div className="relative shrink-0">
               <div
@@ -114,7 +114,7 @@ export default function LandingPage() {
             <Image
               src={ArrowRight}
               alt="Arrow Right"
-              className="shrink-0 self-baseline h-5 w-5 text-[#F6F6F6] group-hover:text-white transition-colors"
+              className="shrink-0 self-baseline mt-1 h-5 w-5 text-[#F6F6F6] group-hover:text-white transition-colors"
             />
           </Link>
         ))}
