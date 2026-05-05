@@ -137,7 +137,7 @@ export default function Referrals() {
           >
             <div className="h-screen gap-5 overflow-hidden lg:pt-2 page-transition">
               {/*  Desktop and Mobile -  Header Search Bar */}
-              <div className="sticky top-0 z-10 flex w-full max-w-[70%] mx-auto items-center justify-between overflow-hidden px-3 pt-4 pb-3 bg-white lg:px-0">
+              <div className="sticky top-0 z-10 flex w-full max-w-[70%] mx-auto items-center justify-between overflow-hidden px-3 pt-4 pb-3 lg:px-0">
                 <div className="flex w-full flex-col text-white italic lg:text-deepBlack xl:w-40">
                   <h2 className="text-[12px] leading-2 font-normal sm:text-[14px] md:text-[15px] lg:text-[17px] lg:leading-3">
                     Your smart
