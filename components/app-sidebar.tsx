@@ -199,10 +199,7 @@ export const AppSidebar: React.FC = () => {
   return (
     <div className="">
       {/* Desktop Navigation */}
-      <aside
-        className="sticky top-0 left-0 z-[2] no-scrollbar hidden h-screen w-56 overflow-x-hidden overflow-y-auto text-white outline-none select-none lg:block"
-        style={{ backgroundColor: SIDEBAR_BG }}
-      >
+      <aside className="sticky top-0 left-0 z-2 no-scrollbar hidden h-screen w-56 overflow-x-hidden overflow-y-auto text-white outline-none select-none lg:block bg-linear-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B]">
         <div className="flex h-full flex-col justify-between">
           {/* Logo */}
           <div className="px-5 pt-14">
