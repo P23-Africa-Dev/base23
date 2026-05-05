@@ -20,13 +20,13 @@ export default function ReferralSmartMatchChart() {
 
   return (
     <div className="flex gap-4">
-      <div className="flex h-[190px] w-[72px] flex-col items-center justify-between rounded-2xl bg-[#22272A] pt-9 pb-3 text-white shadow">
+      <div className="flex h-47.5 w-18 flex-col items-center justify-between rounded-2xl bg-[#22272A] pt-9 pb-3 text-white shadow">
         <p className="-rotate-90 text-sm font-bold tracking-widest text-white">
           1000+
         </p>
 
         <div className="flex flex-col items-center gap-7">
-          <p className="-rotate-90 text-[9px] text-white">Connections</p>
+          <p className="-rotate-90 text-[9px] text-white">Sales Agents</p>
           <div className="relative flex h-5 w-5 items-center justify-center rounded-full border">
             <Image
               src={images.matches}
@@ -83,15 +83,11 @@ export default function ReferralSmartMatchChart() {
               <LineChart data={data}>
                 <Tooltip content={() => null} />
                 <Line
-                  type="monotone"
+                  type="basis"
                   dataKey="value"
                   stroke="#22272A"
                   strokeWidth={4}
-                  dot={{
-                    r: 5,
-                    stroke: "#22272A",
-                    fill: "#22272A",
-                  }}
+                  dot={false}
                 />
               </LineChart>
             </ResponsiveContainer>

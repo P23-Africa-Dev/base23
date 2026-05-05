@@ -3,26 +3,108 @@
 export const dynamic = "force-dynamic";
 
 import { MatchSidebar } from "@/components/referral/MatchSidebar";
+import { FilterSidebar } from "@/components/sidebars/dashbord-filter";
 import MatchingHistoryChart from "@/components/referral/profile-history-graph";
 import ReferralSmartMatchChart from "@/components/referral/referral-smart-matches";
 import SmartMatchTutorial from "@/components/referral/SmartMatchTutorial";
-import images from "@/constants/image";
-
-import ReferralCardSlider from "@/components/referral/desktop-smatch-slider";
+import ReferralCardSlider, {
+  type SliderConnection,
+} from "@/components/referral/desktop-smatch-slider";
 import MobileReferralCardSlider from "@/components/referral/mobile-smatch-slider";
 import ReferralSmatchProfile from "@/components/referral/referral-smatch-profile";
 import AppLayout from "@/layouts/app-layout";
+import { DUMMY_SLIDER_CONNECTIONS } from "@/constants/dummy-data";
+import useSmartMatch from "@/hooks/use-smart-match";
+import SmartMatchService from "@/services/smart-match-service";
+import images from "@/constants/image";
+import toast from "react-hot-toast";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
 export default function Referrals() {
+  const { matches, matchWithUser } = useSmartMatch();
+
+  const sliderData: SliderConnection[] = useMemo(() => {
+    if (matches && matches.length > 0) {
+      return [...matches]
+        .sort((a, b) => b.compatibility - a.compatibility)
+        .map((match) => ({
+          id: match.id,
+          name: match.name,
+          role: match.position || "Professional",
+          company: match.company_name || "",
+          image: match.profile_picture || images.man1,
+          compatibility: match.compatibility,
+          compatibility_breakdown: match.compatibility_breakdown,
+          match_reasons: match.match_reasons,
+          why_this_match: match.ai_insights,
+          industry: match.industry,
+          user_needs: match.user_needs,
+          preferred_industry: match.preferred_industry,
+          business_level: match.business_level,
+          selected_tags: match.selected_tags,
+        }));
+    }
+    return DUMMY_SLIDER_CONNECTIONS;
+  }, [matches]);
+
+  const handleSliderMatch = async (user: SliderConnection) => {
+    try {
+      const result = await matchWithUser(user.id);
+      if (result) {
+        await SmartMatchService.sendSmartMatch({
+          recipient_id: user.id,
+          compatibility: user.compatibility,
+          match_reasons: user.match_reasons,
+          why_this_match: user.why_this_match,
+        });
+        toast.success(`Match request sent to ${user.name}!`, {
+          duration: 4000,
+          position: "top-center",
+          style: {
+            background: "#0B1727",
+            color: "#fff",
+            padding: "16px",
+            borderRadius: "12px",
+          },
+          icon: "🤝",
+        });
+      }
+    } catch {
+      toast.error("Failed to send match request. Please try again.", {
+        duration: 3000,
+      });
+    }
+  };
+
   const [bgLoaded, setBgLoaded] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [isMatchOpen, setIsMatchOpen] = useState(false);
   const [activeUser, setActiveUser] = useState<null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+    setIsSearching(true);
+    try {
+      window.location.href = `/directory?search=${encodeURIComponent(searchQuery)}`;
+    } catch (error) {
+      console.error("Search navigation error:", error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSearch();
+  };
+
+  const handleSearchIconClick = () => {
+    handleSearch();
+  };
 
   useEffect(() => {
     const hasSeenTutorial = localStorage.getItem("smart_match_tutorial_seen");
@@ -31,13 +113,6 @@ export default function Referrals() {
       return () => clearTimeout(timer);
     }
   }, []);
-
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchQuery(e.target.value);
-    },
-    [],
-  );
 
   const handleMatchClose = () => {
     setIsMatchOpen(false);
@@ -62,75 +137,65 @@ export default function Referrals() {
           >
             <div className="h-screen gap-5 overflow-hidden lg:pt-2 page-transition">
               {/*  Desktop and Mobile -  Header Search Bar */}
-              <div className="mx-auto flex w-full items-center justify-center self-center bg-darkBlue px-4 py-3 lg:w-[85%] lg:bg-transparent lg:px-0">
-                <div className="flex w-[170px] flex-col leading-4 text-white not-italic lg:w-[280px] lg:leading-5 lg:text-deepBlack lg:italic">
-                  <h2 className="text-[10px] font-light lg:text-[20px]">
-                    {" "}
-                    Your Smart
+              <div className="sticky top-0 z-10 flex w-full max-w-[70%] mx-auto items-center justify-between overflow-hidden px-3 pt-4 pb-3 bg-white lg:px-0">
+                <div className="flex w-full flex-col text-white italic lg:text-deepBlack xl:w-40">
+                  <h2 className="text-[12px] leading-2 font-normal sm:text-[14px] md:text-[15px] lg:text-[17px] lg:leading-3">
+                    Your smart
                   </h2>
-                  <h3 className="text-[14px] font-bold tracking-wide lg:text-[27px]">
-                    {" "}
-                    Matches
+                  <h3 className="text-base font-extrabold sm:text-xl lg:text-[25px]">
+                    matches
                   </h3>
                 </div>
 
-                <div className="flex w-full">
+                <div className="flex w-[57%] items-center space-x-2 lg:mr-14 lg:w-[60%] lg:items-start">
                   <div className="relative w-full cursor-pointer">
                     <input
                       type="text"
-                      placeholder="Search by name, company, industry..."
+                      placeholder="Search "
                       value={searchQuery}
-                      onChange={handleSearchChange}
-                      className="w-full rounded-full border-0 text-white pr-10 border-deepBlue bg-[#629FF04D] placeholder:text-[7px] px-4 py-2 text-xs text-deepBlack lg:placeholder:text-[10px] placeholder:font-light placeholder:text-white placeholder:italic focus:ring-0 focus:ring-primary/30 focus:outline-none lg:border lg:bg-transparent lg:px-4 lg:py-2 lg:pl-5 lg:text-base lg:placeholder:text-base lg:placeholder:text-primary/80 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={handleSearchKeyPress}
+                      disabled={isSearching}
+                      className="w-full rounded-full border-0 bg-gray-700 px-4 text-sm py-2 text-deepBlack placeholder:text-sm placeholder:text-white placeholder:italic focus:ring-0 focus:ring-primary/30 focus:outline-none disabled:opacity-50 lg:bg-[#27E6A729] lg:px-4 lg:py-3 lg:pr-18 lg:pl-5 lg:placeholder:text-deepBlue dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
                     />
-                    <Image
-                      src={images.desktopSearch}
-                      className="absolute top-1/2 right-2 hidden h-6 w-6 -translate-y-1/2 lg:right-5 lg:block"
-                      alt=""
-                      width={24}
-                      height={24}
-                    />
-                    <Image
-                      src={images.aiSearch}
-                      className="absolute top-1/2 right-3 block h-4 w-4 -translate-y-1/2 lg:right-5 lg:hidden"
-                      alt=""
-                      width={16}
-                      height={16}
-                    />
-                  </div>
-                </div>
-                <div className="flex w-28 items-end justify-end lg:w-60">
-                  <div className="flex items-end justify-end">
                     <button
-                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-transparent lg:h-12 lg:w-12 lg:bg-[#D6F955] transition-all duration-200 hover:scale-105 active:scale-95"
+                      onClick={handleSearchIconClick}
+                      disabled={isSearching || !searchQuery.trim()}
+                      className="absolute top-1/2 right-5 -translate-y-1/2 disabled:cursor-not-allowed"
                     >
-                      <div className="relative hidden h-8 w-8 lg:block">
-                        <img
-                          src={images.refreshcolored}
-                          className="absolute object-contain"
-                          alt="Refresh matches"
-                        />
-                      </div>
-                      <div className="relative h-6 w-6 lg:hidden">
-                        <img
-                          src={images.refreshNew}
-                          className="absolute object-contain"
-                          alt="Refresh matches"
-                        />
-                      </div>
+                      <Image
+                        src={images.desktopSearch}
+                        className="hidden h-6 w-6 lg:right-10 lg:block"
+                        alt="Search"
+                        width={24}
+                        height={24}
+                      />
+                      <Image
+                        src={images.aiSearch}
+                        className="h-7 w-7 lg:right-10 lg:hidden"
+                        alt="AI Search"
+                        width={28}
+                        height={28}
+                      />
                     </button>
+                    {isSearching && (
+                      <div className="absolute top-1/2 right-12 -translate-y-1/2">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                      </div>
+                    )}
                   </div>
                 </div>
+
+                <FilterSidebar variant="dashboard" />
               </div>
 
               {/*  Desktop Layout (Smatch Match ) */}
               <div className="mx-auto mt-2 hidden w-[95%] lg:block animate-fadeIn">
                 <div className="relative h-[416px]">
-                  <div className="relative z-10 flex max-h-22 w-full justify-center">
+                  <div className="relative z-10 flex max-h-22 w-full justify-center px-[30px]">
                     <ReferralCardSlider
-                      data={[]}
-                      onMatch={() => {}}
-                      showEmpty={true}
+                      data={sliderData}
+                      onMatch={handleSliderMatch}
                     />
                   </div>
                   <div
@@ -141,7 +206,7 @@ export default function Referrals() {
                   ></div>
                 </div>
 
-                <div className="-mt-3 ml-5 grid grid-cols-1 gap-x-0 pb-10 lg:grid-cols-[30%_46%_25%]">
+                <div className="-mt-3 ml-1 grid grid-cols-1 gap-x-0 pb-10 lg:grid-cols-[30%_46%_25%]">
                   <ReferralSmartMatchChart />
 
                   <div className="relative aspect-auto h-[27vh] overflow-hidden rounded-3xl bg-deepBlack bg-cover bg-center bg-no-repeat px-10 pt-4 pb-30 lg:bg-transparent lg:pb-20">
@@ -174,30 +239,34 @@ export default function Referrals() {
                     </div>
                   </div>
 
-                  <div className="flex w-full flex-col gap-y-2.5 bg-transparent px-2">
+                  <div className="flex w-full max-w-48 flex-col gap-y-2.5 bg-transparent px-2">
                     {/* Matching History chart*/}
                     <MatchingHistoryChart />
 
                     {/* Profile setup */}
                     <div
                       onClick={() => setOpenProfile(true)}
-                      className="relative flex h-[90px] w-full cursor-pointer flex-col rounded-2xl bg-[linear-gradient(90deg,#DF87B1_0%,#CD6BD0_49.4%,#BE51EA_92.79%)] p-2 shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.2),-2px_3px_5px_-1px_rgba(0,0,0,0.2)]"
+                      className="relative flex min-h-22.5 py-4.25 px-6.5 pl-5.25 w-full cursor-pointer flex-col rounded-2xl bg-[linear-gradient(90deg,#DF87B1_0%,#CD6BD0_49.4%,#BE51EA_92.79%)] shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.2),-2px_3px_5px_-1px_rgba(0,0,0,0.2)]"
                     >
                       <div className="flex w-full justify-end">
-                        <div className="flex h-[37px] w-[37px] items-center justify-center rounded-lg bg-[#F5F4F4] shadow-md">
+                        <div className="flex h-9.25 w-9.25 items-center justify-center rounded-lg bg-[#F5F4F4] shadow-md">
                           <div className="relative h-5.5 w-5.5">
-                            <img
+                            <Image
                               src={images.margicband}
                               className="absolute object-contain"
                               alt=""
+                              width={22}
+                              height={22}
                             />
                           </div>
                         </div>
                       </div>
 
-                      <div className="-mt-2 flex flex-col pl-6 leading-4.5 text-secondaryWhite italic">
-                        <h4 className="text-[18px] font-extrabold">Set-up</h4>
-                        <h4 className="text-[18px] font-extrabold">
+                      <div className="mt-2 flex flex-col leading-4.5 text-secondaryWhite italic">
+                        <h4 className="text-[20px] leading-6 font-extrabold">
+                          Set-up
+                        </h4>
+                        <h4 className="text-[20px] leading-6 font-extrabold">
                           New Profile
                         </h4>
                       </div>
@@ -210,9 +279,8 @@ export default function Referrals() {
               <div className="flex w-full flex-col items-center justify-center lg:hidden">
                 <div className="mx-auto mt-4 flex w-[80%] flex-col items-center justify-center">
                   <MobileReferralCardSlider
-                    data={[]}
-                    onMatch={() => {}}
-                    showEmpty={true}
+                    data={sliderData}
+                    onMatch={handleSliderMatch}
                   />
                 </div>
 
