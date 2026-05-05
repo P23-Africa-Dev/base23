@@ -225,32 +225,6 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
             </div>
           )}
 
-          {/* FOR MOBILE SCREEN */}
-          {variant !== "all" && variant !== "dashboard" && (
-            <div
-              className={`relative flex w-[40px] lg:hidden items-center justify-end md:w-[100px] md:items-end md:pr-2 lg:w-[50px] lg:items-center `}
-            >
-              <Image
-                src={images.desktopSlide}
-                width={40}
-                height={40}
-                className="hidden cursor-pointer lg:mt-2 lg:block lg:h-8 lg:w-8 xl:mt-0 xl:h-10 xl:w-10"
-                alt="filter"
-              />
-              <Image
-                src={images.preferenceHorizontal}
-                width={24}
-                height={24}
-                className="h-6 w-6 cursor-pointer lg:hidden"
-                alt="filter"
-              />
-              {/* Filter active indicator */}
-              {hasActiveFilters && (
-                <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-green-500 text-[8px] text-white"></span>
-              )}
-            </div>
-          )}
-
           {/* REFRESH CONTAINER FOR DIRECTORY SCREEN */}
           {isDirectoryPage && (
             <button

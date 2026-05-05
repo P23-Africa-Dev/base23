@@ -5,28 +5,40 @@
   font-family: "GT Walsheim Trial Cn Rg";
   font-style: normal;
   font-weight: normal;
-  src: local("GT Walsheim Trial Cn Rg"), url("/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Trial-BF651b7fc730eb2.woff") format("woff");
+  src:
+    local("GT Walsheim Trial Cn Rg"),
+    url("/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Trial-BF651b7fc730eb2.woff")
+      format("woff");
 }
 
 @font-face {
   font-family: "GT Walsheim Trial Cn U Lt";
   font-style: normal;
   font-weight: normal;
-  src: local("GT Walsheim Trial Cn U Lt"), url("/fonts/gt-trials/GT-Walsheim-Condensed-Ultra-Light-Trial-BF651b7fc73b30e.woff") format("woff");
+  src:
+    local("GT Walsheim Trial Cn U Lt"),
+    url("/fonts/gt-trials/GT-Walsheim-Condensed-Ultra-Light-Trial-BF651b7fc73b30e.woff")
+      format("woff");
 }
 
 @font-face {
   font-family: "GT Walsheim Trial Cn Rg Ob";
   font-style: normal;
   font-weight: normal;
-  src: local("GT Walsheim Trial Cn Rg Ob"), url("/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Oblique-Trial-BF651b7fc71cf17.woff") format("woff");
+  src:
+    local("GT Walsheim Trial Cn Rg Ob"),
+    url("/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Oblique-Trial-BF651b7fc71cf17.woff")
+      format("woff");
 }
 
 @font-face {
   font-family: "GT Walsheim Trial Cn Th";
   font-style: normal;
   font-weight: normal;
-  src: local("GT Walsheim Trial Cn Th"), url("/fonts/gt-trials/GT-Walsheim-Condensed-Thin-Trial-BF651b7fc72dc1c.woff") format("woff");
+  src:
+    local("GT Walsheim Trial Cn Th"),
+    url("/fonts/gt-trials/GT-Walsheim-Condensed-Thin-Trial-BF651b7fc72dc1c.woff")
+      format("woff");
 }
 
 @plugin 'tailwindcss-animate';
@@ -233,6 +245,58 @@ body {
 @layer utilities {
   .ticket-cutout {
     --notch-size: 25px;
+    mask-image:
+      radial-gradient(
+        circle var(--notch-size) at 0% 26%,
+        transparent 98%,
+        black 100%
+      ),
+      radial-gradient(
+        circle var(--notch-size) at 0% 62%,
+        transparent 98%,
+        black 100%
+      ),
+      radial-gradient(
+        circle var(--notch-size) at 100% 26%,
+        transparent 98%,
+        black 100%
+      ),
+      radial-gradient(
+        circle var(--notch-size) at 100% 62%,
+        transparent 98%,
+        black 100%
+      );
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    mask-composite: intersect;
+    -webkit-mask-image:
+      radial-gradient(
+        circle var(--notch-size) at 0% 26%,
+        transparent 98%,
+        black 100%
+      ),
+      radial-gradient(
+        circle var(--notch-size) at 0% 62%,
+        transparent 98%,
+        black 100%
+      ),
+      radial-gradient(
+        circle var(--notch-size) at 100% 26%,
+        transparent 98%,
+        black 100%
+      ),
+      radial-gradient(
+        circle var(--notch-size) at 100% 62%,
+        transparent 98%,
+        black 100%
+      );
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-composite: source-in;
+  }
+
+  .match-cutout {
+    --notch-size: 30px;
     mask-image:
       radial-gradient(
         circle var(--notch-size) at 0% 26%,

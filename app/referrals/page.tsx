@@ -210,8 +210,8 @@ export default function Referrals() {
                   <ReferralSmartMatchChart />
 
                   <div className="flex">
-                    <div className="drop-shadow-[0px_1px_2px_0px_#0000004D,0px_4px_7px_3px_#00000026]">
-                      <div className="relative shrink-0 min-w-116.5 bg-white px-6.25 py-3.5 ticket-cutout h-57.25 no-scrollbar flex-1 rounded-3xl">
+                    <div className="drop-shadow-[1px_1px_2px_0px_#000000,1px_4px_7px_3px_#00000026]">
+                      <div className="relative shrink-0 min-w-116.5 bg-white px-6.25 py-3.5 match-cutout h-57.25 no-scrollbar flex-1 rounded-3xl">
                         <div className="sticky top-0 z-2 flex items-center justify-between overflow-hidden border-b bg-white px-2 pt-1 pb-2">
                           <h2 className="text-[14px] leading-1 font-extrabold text-deepBlack">
                             Shortlisted

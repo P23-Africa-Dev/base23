@@ -1,18 +1,18 @@
 import images from "@/constants/image";
+import { useAuth } from "@/context/AuthContext";
+import type { SmartMatchData } from "@/services/notification-service";
+import axios from "axios";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { IoPerson } from "react-icons/io5";
 import { MdOutlineWorkspacePremium } from "react-icons/md";
 import { SlSettings } from "react-icons/sl";
-import axios from "axios";
+import DealCardPopup from "./DealCardPopup";
 import { LogoutConfirmationModal } from "./ui/logout-confirmation-modal";
 import NotificationCard from "./ui/notification-card";
-import DealCardPopup from "./DealCardPopup";
-import type { SmartMatchData } from "@/services/notification-service";
 
 const SIDEBAR_BG = "#0B1727";
 
@@ -139,10 +139,7 @@ export const AppSidebar: React.FC = () => {
   const profileImage: string = `${images.man6}`;
 
   const getProfilePicture = () => {
-    if (!authUser?.profile_picture) return profileImage;
-    return authUser.profile_picture.startsWith("http")
-      ? authUser.profile_picture
-      : `${window.location.origin}${authUser.profile_picture}`;
+    return profileImage;
   };
 
   // Add logout handler functions
@@ -201,13 +198,8 @@ export const AppSidebar: React.FC = () => {
       {/* Desktop Navigation */}
       <aside className="sticky top-0 left-0 z-2 no-scrollbar hidden h-screen w-56 overflow-x-hidden overflow-y-auto text-white outline-none select-none lg:block bg-linear-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B]">
         <div className="flex h-full flex-col justify-between">
-          {/* Logo */}
-          <div className="px-5 pt-14">
-            <img
-              src={images.fulllogo}
-              alt="full logo"
-              className="h-auto w-[110px]"
-            />
+          <div className="px-5 pt-14 text-[36px] font-extrabold text-[#F3F0E9]">
+            BASE 23
           </div>
 
           {/* NAV */}
