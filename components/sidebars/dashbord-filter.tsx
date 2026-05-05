@@ -194,7 +194,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 src={Refresh2}
                 width={32}
                 height={32}
-                className="ml-[33px]"
+                className="ml-8.25"
               />
             </div>
           )}
@@ -261,7 +261,13 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
               title="Clear filters & refresh"
               className={`ml-6 hidden h-12 cursor-pointer lg:flex ${variant === "all" ? "" : "mr-16"} w-12 items-center justify-center gap-2 rounded-full bg-deepBlack hover:bg-deepBlack/80`}
             >
-              <Image src={images.refresh} width={32} height={32} className="h-8 w-8" alt="" />
+              <Image
+                src={images.refresh}
+                width={32}
+                height={32}
+                className="h-8 w-8"
+                alt=""
+              />
             </button>
           )}
         </div>
