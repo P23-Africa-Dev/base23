@@ -334,7 +334,7 @@ function Dashboard() {
             {/* FIRST ROW */}
             <div className="grid auto-rows-min gap-4 lg:grid-cols-3 stagger-children px-8.5">
               {/* CHART CONTAINER */}
-              <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-linear-to-r from-[#A47AF0] to-[#A47AF0]/60 p-2 lg:block hover-lift">
+              <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-linear-to-r from-[#A47AF0] to-[#A47AF0]/60 lg:block hover-lift">
                 <SplineAreaChart userId={auth.user?.id} />
               </div>
 

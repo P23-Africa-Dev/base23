@@ -11,6 +11,7 @@ import { Button } from "@/components/ui";
 import images from "@/constants/image";
 import AuthLayout from "@/layouts/auth-layout";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -24,6 +25,7 @@ const loginMobileContent = {
 };
 
 function Login() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const status = searchParams.get("status") || "";
 
@@ -49,6 +51,7 @@ function Login() {
       toast.error("Please enter your password.");
       return;
     }
+    router.push("/dashboard");
   };
 
   return (

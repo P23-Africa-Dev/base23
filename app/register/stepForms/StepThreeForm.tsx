@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import images from "@/constants/image";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface StepThreeProps {
@@ -24,6 +25,7 @@ export default function StepThreeForm({
   defaultValues,
   onNext,
 }: StepThreeProps) {
+  const router = useRouter();
   const stepContainerRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToTop = useCallback(() => {
@@ -64,6 +66,7 @@ export default function StepThreeForm({
   const handleProceed = () => {
     scrollToTop();
     onNext({ great_at: greatAtSelected, can_help_with: helpWithSelected });
+    router.push("/dashboard");
   };
 
   return (
