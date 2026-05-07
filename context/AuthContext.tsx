@@ -40,23 +40,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     SharedData["subscription"] | null
   >(null);
   const [loading, setLoading] = useState(true);
-  const allowAnonymousFallback =
-    process.env.NODE_ENV !== "production" ||
-    process.env.NEXT_PUBLIC_ALLOW_ANONYMOUS === "true";
-
   const fetchAuth = async () => {
     try {
       const res = await axios.get("/api/me");
       setUser(res.data.user ?? null);
       setSubscription(res.data.subscription ?? null);
     } catch {
-      if (allowAnonymousFallback) {
-        setUser(guestUser);
-        setSubscription(null);
-      } else {
-        setUser(null);
-        setSubscription(null);
-      }
+      setUser(guestUser);
+      setSubscription(null);
     } finally {
       setLoading(false);
     }
