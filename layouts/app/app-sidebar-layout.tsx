@@ -39,7 +39,7 @@ export default function AppLayoutTemplate({ children }: { children: React.ReactN
                 <div className="flex w-full">
                     <AppSidebar />
                     <TooltipProvider delayDuration={100}>
-                        <AppContent>{children}</AppContent>
+                        <AppContent className="pt-16 lg:pt-0">{children}</AppContent>
                     </TooltipProvider>
                 </div>
 
