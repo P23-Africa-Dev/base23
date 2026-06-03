@@ -17,7 +17,7 @@ export const Checkbox = ({ className, ...props }: CheckboxProps) => {
           id="remember"
           name="remember"
           checked={props.checked}
-          onClick={() => props.onClick && props.onClick(!props.checked)}
+          onChange={() => props.onClick && props.onClick(!props.checked)}
           className={cn(
             "h-4.5 w-4.5 border-2 border-black accent-deepBlack dark:accent-white",
             className,
