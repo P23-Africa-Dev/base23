@@ -45,7 +45,7 @@ export default function DirectorPage() {
 
                                         <h2 className="hidden w-45 text-[19.5px] font-normal leading-6 text-gray-800 italic lg:block xl:w-67.5">
                                             Find your Next{' '}
-                                            <span className="block text-3xl font-extrabold leading-3 text-deepBlue">
+                                            <span className="block text-3xl font-extrabold leading-3 text-deepBlue mt-1">
                                                 Sales Rep
                                             </span>
                                         </h2>
@@ -80,22 +80,22 @@ export default function DirectorPage() {
 
                                 {/* Tabs */}
                                 <Tabs defaultValue="all" className="flex flex-col lg:flex-1 lg:overflow-hidden">
-                                    <TabsList className="mx-auto mb-4 no-scrollbar grid w-[95%] shrink-0 grid-cols-3 gap-5 overflow-x-auto rounded-full bg-[#F1EEEE] px-3 shadow-[0px_2px_5px_-1px_rgba(0,0,0,0.2)] md:overflow-hidden lg:mb-6 lg:flex lg:h-[46px] lg:w-full lg:max-w-[480px] lg:items-center lg:justify-center lg:gap-8 lg:rounded-[14px] lg:bg-white lg:px-3 lg:shadow-sm">
+                                    <TabsList className="mx-auto mb-4 no-scrollbar grid w-[95%] shrink-0 grid-cols-3 gap-5 overflow-x-auto rounded-full bg-[#F1EEEE] px-3 shadow-[0px_2px_5px_-1px_rgba(0,0,0,0.2)] md:overflow-hidden lg:mx-0 lg:mb-5 lg:flex lg:w-auto lg:gap-10 lg:rounded-none lg:bg-transparent lg:px-0 lg:shadow-none">
                                         <TabsTrigger
                                             value="all"
-                                            className="-mt-0.5 -ml-1 rounded-full px-10 py-2.25 text-[8px] font-normal text-deepBlue data-[state=active]:bg-[#A87EF7] data-[state=active]:font-bold data-[state=active]:text-darkBlue data-[state=active]:shadow-none md:text-[10px] lg:m-0 lg:rounded-none lg:border-b-[3px] lg:border-transparent lg:px-4 lg:py-[10px] lg:text-[13.5px] lg:font-medium lg:text-gray-500 lg:data-[state=active]:border-b-[#0B1727] lg:data-[state=active]:bg-transparent lg:data-[state=active]:font-bold lg:data-[state=active]:text-[#0B1727]"
+                                            className="-mt-0.5 -ml-1 rounded-full px-10 py-2.25 text-[8px] font-normal text-deepBlue data-[state=active]:bg-[#A87EF7] data-[state=active]:font-bold data-[state=active]:text-darkBlue data-[state=active]:shadow-none md:text-[10px] lg:m-0 lg:rounded-none lg:border-b-2 lg:border-transparent lg:px-0 lg:pb-2 lg:pt-0 lg:text-[14px] lg:font-normal lg:text-gray-400 lg:data-[state=active]:border-b-deepBlue lg:data-[state=active]:bg-transparent lg:data-[state=active]:font-bold lg:data-[state=active]:text-deepBlue"
                                         >
                                             All Directory
                                         </TabsTrigger>
                                         <TabsTrigger
                                             value="shortlisted"
-                                            className="-mx-2.5 -mt-0.5 rounded-full px-9.5 py-2.25 text-[8px] font-normal text-deepBlue data-[state=active]:bg-[#A87EF7] data-[state=active]:font-bold data-[state=active]:text-darkBlue data-[state=active]:shadow-none md:text-[10px] lg:m-0 lg:rounded-none lg:border-b-[3px] lg:border-transparent lg:px-4 lg:py-[10px] lg:text-[13.5px] lg:font-medium lg:text-gray-500 lg:data-[state=active]:border-b-[#0B1727] lg:data-[state=active]:bg-transparent lg:data-[state=active]:font-bold lg:data-[state=active]:text-[#0B1727]"
+                                            className="-mx-2.5 -mt-0.5 rounded-full px-9.5 py-2.25 text-[8px] font-normal text-deepBlue data-[state=active]:bg-[#A87EF7] data-[state=active]:font-bold data-[state=active]:text-darkBlue data-[state=active]:shadow-none md:text-[10px] lg:m-0 lg:rounded-none lg:border-b-2 lg:border-transparent lg:px-0 lg:pb-2 lg:pt-0 lg:text-[14px] lg:font-normal lg:text-gray-400 lg:data-[state=active]:border-b-deepBlue lg:data-[state=active]:bg-transparent lg:data-[state=active]:font-bold lg:data-[state=active]:text-deepBlue"
                                         >
                                             Shortlisted
                                         </TabsTrigger>
                                         <TabsTrigger
                                             value="pipeline"
-                                            className="-mx-2.5 -mt-0.5 rounded-full px-10.5 py-2.25 text-[8px] font-normal text-deepBlue data-[state=active]:bg-[#A87EF7] data-[state=active]:font-bold data-[state=active]:text-darkBlue data-[state=active]:shadow-none md:text-[10px] lg:m-0 lg:rounded-none lg:border-b-[3px] lg:border-transparent lg:px-4 lg:py-[10px] lg:text-[13.5px] lg:font-medium lg:text-gray-500 lg:data-[state=active]:border-b-[#0B1727] lg:data-[state=active]:bg-transparent lg:data-[state=active]:font-bold lg:data-[state=active]:text-[#0B1727]"
+                                            className="-mx-2.5 -mt-0.5 rounded-full px-10.5 py-2.25 text-[8px] font-normal text-deepBlue data-[state=active]:bg-[#A87EF7] data-[state=active]:font-bold data-[state=active]:text-darkBlue data-[state=active]:shadow-none md:text-[10px] lg:m-0 lg:rounded-none lg:border-b-2 lg:border-transparent lg:px-0 lg:pb-2 lg:pt-0 lg:text-[14px] lg:font-normal lg:text-gray-400 lg:data-[state=active]:border-b-deepBlue lg:data-[state=active]:bg-transparent lg:data-[state=active]:font-bold lg:data-[state=active]:text-deepBlue"
                                         >
                                             Hire Pipeline
                                         </TabsTrigger>
@@ -105,7 +105,7 @@ export default function DirectorPage() {
                                         <div className="space-y-4 pb-6 lg:space-y-5 lg:pb-10">
 
                                             {/* Leads grid — 2 cols mobile, 4 cols desktop */}
-                                            <div className="w-full grid grid-cols-2 gap-3 px-1 lg:grid-cols-4 lg:px-0">
+                                            <div className="grid grid-cols-2 gap-3 px-2 lg:grid-cols-4 lg:px-1">
                                                 {dummyDirectorLeads.map((user) => (
                                                     <div key={user.id} onClick={() => handleSelectUser(user)} className="cursor-pointer">
                                                         <DirectorLeadsCard user={user} isSelected={selectedUser.id === user.id} />
