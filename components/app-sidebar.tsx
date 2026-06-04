@@ -80,6 +80,7 @@ const NAV_ITEMS: NavItem[] = [
   { name: "Dashboard", icon: images.dashboardIcon, href: "/dashboard" },
   { name: "Match", icon: images.repeatIcon, href: "/referrals" },
   { name: "Messages", icon: images.bubbleChat1, href: "/message" },
+  { name: "Directory", icon: images.directoryIcon, href: "/director" },
 ];
 
 const userAccountItems: NavItem[] = [
