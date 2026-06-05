@@ -162,7 +162,7 @@ const FAQ_SECTIONS: FAQSection[] = [
 
 const QUICK_LINKS = [
     { label: 'Set up Smart Match Profile', href: '/referrals', icon: <Sparkles className="h-4 w-4" /> },
-    { label: 'Browse the Directory', href: '/director', icon: <Users className="h-4 w-4" /> },
+    { label: 'Browse the Directory', href: '/directory', icon: <Users className="h-4 w-4" /> },
     { label: 'Manage Subscription', href: '/profile?tab=subscription', icon: <CreditCard className="h-4 w-4" /> },
     { label: 'Account Settings', href: '/profile?tab=settings', icon: <Settings className="h-4 w-4" /> },
 ];

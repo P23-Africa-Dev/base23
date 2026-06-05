@@ -120,7 +120,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   // Loading state for filter submission
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
 
-  const isDirectoryPage = pathname.startsWith("/directory") || pathname.startsWith("/director");
+  const isDirectoryPage = pathname.startsWith("/directory");
 
   // Handle search/filter submission
   const handleSearch = () => {
