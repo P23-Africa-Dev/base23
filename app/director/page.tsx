@@ -12,6 +12,7 @@ import DirectorProfileSidebar from '@/components/sidebars/director-profile-sideb
 import DirectorListCard from '@/components/cards/directory/director-list-card';
 import { DirectorLeadsCard } from '@/components/cards/directory/director-leads-card';
 import { X } from 'lucide-react';
+import { FilterSidebar } from '@/components/sidebars/dashbord-filter';
 
 export default function DirectorPage() {
     const [selectedUser, setSelectedUser] = useState<DirectorUser>(dummyDirectorLeads[0]);
@@ -68,12 +69,7 @@ export default function DirectorPage() {
                                                     <img src={images.desktopSearch} className="h-5 w-5 lg:h-[22px] lg:w-[22px]" alt="Search" />
                                                 </button>
                                             </div>
-                                            <button className="hidden items-center justify-center p-2 lg:flex">
-                                                <img src={images.preferenceHorizontal} className="h-6 w-6 lg:h-7 lg:w-7" alt="Filter" />
-                                            </button>
-                                            <button className="hidden items-center justify-center rounded-full bg-[#0B1727] p-2 lg:flex lg:h-[50px] lg:w-[50px]">
-                                                <img src={images.refreshNew} className="h-4 w-4 lg:h-[22px] lg:w-[22px]" alt="Refresh" />
-                                            </button>
+                                            <FilterSidebar variant="all" />
                                         </div>
                                     </div>
                                 </div>

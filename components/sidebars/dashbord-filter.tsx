@@ -120,7 +120,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   // Loading state for filter submission
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
 
-  const isDirectoryPage = pathname.startsWith("/directory");
+  const isDirectoryPage = pathname.startsWith("/directory") || pathname.startsWith("/director");
 
   // Handle search/filter submission
   const handleSearch = () => {
@@ -132,7 +132,6 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       position: selectedPosition,
     };
 
-    // If callback is provided, use it
     if (onFilterChange) {
       onFilterChange(filters);
     }
@@ -141,7 +140,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     if (selectedCountry) params.set("country", selectedCountry);
     if (selectedIndustry) params.set("industry", selectedIndustry);
     if (selectedPosition) params.set("position", selectedPosition);
-    window.location.href = `/directory?${params.toString()}`;
+    window.location.href = `${pathname}?${params.toString()}`;
     setIsApplyingFilters(false);
     setIsSheetOpen(false);
   };
@@ -156,7 +155,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
     setSearchIndustry("");
     setSearchPosition("");
 
-    window.location.href = "/directory";
+    window.location.href = pathname;
     setIsApplyingFilters(false);
     setIsSheetOpen(false);
   };
