@@ -80,6 +80,7 @@ const NAV_ITEMS: NavItem[] = [
   { name: "Dashboard", icon: images.dashboardIcon, href: "/dashboard" },
   { name: "Match", icon: images.repeatIcon, href: "/referrals" },
   { name: "Messages", icon: images.bubbleChat1, href: "/message" },
+  { name: "Directory", icon: images.directoryIcon, href: "/directory" },
 ];
 
 const userAccountItems: NavItem[] = [
@@ -102,6 +103,13 @@ export const AppSidebar: React.FC = () => {
       : pathname.startsWith(href);
 
   const [profileOpen, setProfileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileOpen(false);
+    setMobileProfileOpen(false);
+  }, [pathname]);
   const totalUnreadMessages = 0;
   const totalUnreadNotifications = 0;
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -195,6 +203,230 @@ export const AppSidebar: React.FC = () => {
 
   return (
     <div className="">
+      {/* ─── Mobile Top Bar ──────────────────────────────────────────────── */}
+      <div className="fixed inset-x-0 top-0 z-30 flex h-16 items-center justify-between border-b border-white/5 bg-[#0B1727] px-5 lg:hidden">
+        <span className="text-2xl font-extrabold tracking-tight text-[#F3F0E9]">
+          BASE 23
+        </span>
+        <button
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open menu"
+          className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-xl bg-white/10 transition-colors hover:bg-white/20 active:scale-95"
+        >
+          <span className="h-0.5 w-5 rounded-full bg-[#F3F0E9]" />
+          <span className="h-0.5 w-5 rounded-full bg-[#F3F0E9]" />
+          <span className="h-0.5 w-3 self-end rounded-full bg-[#27E6A7]" />
+        </button>
+      </div>
+
+      {/* ─── Mobile Backdrop ─────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setMobileOpen(false)}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ─── Mobile Drawer ───────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.aside
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 260 }}
+            className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col overflow-y-auto bg-linear-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B] text-white lg:hidden"
+          >
+            {/* Teal accent edge */}
+            <div className="absolute inset-y-0 left-0 w-1 bg-[#27E6A7]" />
+
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-6 pb-5 pt-8">
+              <span className="text-3xl font-extrabold text-[#F3F0E9]">
+                BASE 23
+              </span>
+              <button
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-[#F3F0E9] transition-colors hover:bg-white/20"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* User Profile Row */}
+            <motion.button
+              initial={{ x: -24, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.05 }}
+              onClick={() => setMobileProfileOpen(!mobileProfileOpen)}
+              className="mx-4 mb-4 flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3 text-left transition-colors hover:bg-white/10"
+            >
+              <img
+                src={getProfilePicture()}
+                alt={authUser.name}
+                className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-[#27E6A7]/50"
+                onError={(e) => { e.currentTarget.src = profileImage; }}
+              />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-[#F3F0E9]">{authUser.name}</p>
+                <p className="truncate text-[11px] text-white/60">
+                  {authUser.position && authUser.company_name
+                    ? `${authUser.position} at ${authUser.company_name}`
+                    : authUser.position || authUser.company_name || "Member"}
+                </p>
+              </div>
+              <motion.svg
+                animate={{ rotate: mobileProfileOpen ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+                viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-white/40" fill="none" stroke="currentColor" strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </motion.svg>
+            </motion.button>
+
+            {/* Profile sub-items */}
+            <AnimatePresence initial={false}>
+              {mobileProfileOpen && (
+                <motion.ul
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="mx-4 mb-3 overflow-hidden rounded-2xl bg-white/5 px-2 py-1"
+                >
+                  {PROFILE_SHOWCASE_ITEMS.map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                      >
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/10 text-white/70">
+                          {item.icon}
+                        </div>
+                        <span className="text-[13px]">{item.name}</span>
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <button
+                      onClick={handleLogoutClick}
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                    >
+                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/10">
+                        <img src={images.logout} alt="" className="h-4 w-4" />
+                      </div>
+                      <span className="text-[13px]">Logout</span>
+                    </button>
+                  </li>
+                </motion.ul>
+              )}
+            </AnimatePresence>
+
+            {/* Divider */}
+            <div className="mx-6 mb-4 h-px bg-white/10" />
+
+            {/* Main Nav */}
+            <nav className="flex-1 px-4">
+              <p className="mb-3 px-2 text-[10px] font-semibold uppercase tracking-widest text-white/30">
+                Navigation
+              </p>
+              <ul className="space-y-1">
+                {NAV_ITEMS.map((item, index) => {
+                  const active = isActive(item.href);
+                  return (
+                    <motion.li
+                      key={item.name}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.1 + index * 0.06 }}
+                    >
+                      <Link
+                        href={item.href}
+                        className={`group relative flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors ${
+                          active
+                            ? "bg-[#F3F0E9] text-[#0B1727]"
+                            : "text-white/70 hover:bg-white/8 hover:text-white"
+                        }`}
+                      >
+                        <div
+                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${
+                            active ? "bg-[#0B1727]" : "bg-white/10 group-hover:bg-white/15"
+                          }`}
+                        >
+                          <img src={item.icon} alt="" className="h-5 w-5 object-contain" />
+                        </div>
+                        <span className="text-[15px] font-medium">{item.name}</span>
+                        {active && (
+                          <span className="ml-auto h-2 w-2 rounded-full bg-[#27E6A7]" />
+                        )}
+                      </Link>
+                    </motion.li>
+                  );
+                })}
+              </ul>
+
+              {/* Divider */}
+              <div className="my-4 h-px bg-white/10" />
+
+              <p className="mb-3 px-2 text-[10px] font-semibold uppercase tracking-widest text-white/30">
+                Account
+              </p>
+              <ul className="space-y-1">
+                {userAccountItems.map((item, index) => (
+                  <motion.li
+                    key={item.name}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.28 + index * 0.06 }}
+                  >
+                    {item.name === "Notifications" ? (
+                      <button
+                        onClick={() => { setShowNotifications(!showNotifications); setMobileOpen(false); }}
+                        className="group flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-white/70 transition-colors hover:bg-white/8 hover:text-white"
+                      >
+                        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 group-hover:bg-white/15">
+                          <img src={item.icon} alt="" className="h-5 w-5 object-contain" />
+                          {totalUnreadNotifications > 0 && (
+                            <div className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                              {totalUnreadNotifications > 99 ? "99+" : totalUnreadNotifications}
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-[15px] font-medium">{item.name}</span>
+                      </button>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="group flex items-center gap-3 rounded-2xl px-4 py-3 text-white/70 transition-colors hover:bg-white/8 hover:text-white"
+                      >
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 group-hover:bg-white/15">
+                          <img src={item.icon} alt="" className="h-5 w-5 object-contain" />
+                        </div>
+                        <span className="text-[15px] font-medium">{item.name}</span>
+                      </Link>
+                    )}
+                  </motion.li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* Drawer Footer */}
+            <div className="px-6 py-5">
+              <p className="text-center text-[10px] text-white/20 tracking-widest uppercase">Business Referral Network</p>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+
       {/* Desktop Navigation */}
       <aside className="sticky top-0 left-0 z-2 no-scrollbar hidden h-screen w-56 overflow-x-hidden overflow-y-auto text-white outline-none select-none lg:block bg-linear-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B]">
         <div className="flex h-full flex-col justify-between">
