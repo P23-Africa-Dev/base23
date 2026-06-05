@@ -1,65 +1,124 @@
+"use client";
+
+export const dynamic = "force-dynamic";
+
+import LeftDesktopContent from "@/components/auths/LeftDesktopContent";
+import AuthLayout from "@/layouts/auth-layout";
+import Link from "next/link";
+import ArrowRight from "@/public/assets/arrow-right.png";
+import Building from "@/public/assets/building-02.png";
+import AgentIcon from "@/public/assets/user-circle.png";
 import Image from "next/image";
 
-export default function Home() {
+const options = [
+  {
+    label: "Company",
+    title: "I'm Hiring",
+    description:
+      "Find verified sales agents ready to work in your target markets. Post roles, browse profiles, and hire with confidence.",
+    icon: (
+      <Image
+        src={Building}
+        alt=""
+        className="h-13.75 w-13.75 text-white mr-2"
+      />
+    ),
+    iconBg: "bg-[#CD3072]",
+    href: "/register",
+  },
+  {
+    label: "Agent",
+    title: "I'm a Sales Agent",
+    description:
+      "List your experience, get verified, and connect with companies hiring across Africa. Build your profile once and let opportunities find you.",
+    icon: (
+      <Image src={AgentIcon} alt="" className="h-13 w-13 text-white mr-2" />
+    ),
+    iconBg: "bg-[#5054D4]",
+    href: "/register",
+  },
+];
+
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <AuthLayout
+      title="Welcome to Base 23"
+      subtitle="To begin, select which best describes you."
+      LeftDesktopContent={
+        <LeftDesktopContent
+          topContentLayout={
+            <div className="max-w-77 mx-auto mt-[25%] w-fit pr-4">
+              <h2 className="text-[36px] font-extrabold text-[#F3F0E9]">
+                Base 23
+              </h2>
+              <p className="text-[13px] max-w-69.75 text-[#F3F0E9] mb-4.75 tracking-[0.5px]">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor
+              </p>
+            </div>
+          }
+          bottomContent={
+            <div className="w-fit text-base mx-auto my-[15%] pr-10">
+              <p className="mb-1 font-light">
+                Already have an account?{" "}
+                <Link href="/login" className="font-medium italic">
+                  Sign In
+                </Link>
+              </p>
+              <p>
+                <Link
+                  href="/help"
+                  className="font-medium italic hover:underline dark:text-deepBlack"
+                >
+                  Need Help?
+                </Link>
+              </p>
+            </div>
+          }
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      }
+    >
+      <div className="w-124.25 flex flex-col gap-5 mt-8">
+        {options.map((opt) => (
+          <Link
+            key={opt.title}
+            href={opt.href}
+            className="flex items-center gap-3.75 rounded-[20px] bg-[#0B1727] pr-8.25 pl-9 py-5 cursor-pointer hover:bg-[#0d1e35] transition-colors group"
           >
+            <div className="relative shrink-0">
+              <div
+                className={`flex h-27.5 w-25.25 items-center justify-center rounded-r-[50px] ${opt.iconBg}`}
+              >
+                {opt.icon}
+              </div>
+              <span
+                className="absolute -left-1.5 top-0 bottom-0 -translate-x-full flex items-center justify-center text-[12px] leading-6 font-light text-white/50 tracking-widest"
+                style={{
+                  writingMode: "vertical-rl",
+                  transform: "rotate(180deg)",
+                }}
+              >
+                {opt.label}
+              </span>
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] leading-6 font-semibold text-white mb-1">
+                {opt.title}
+              </p>
+              <p className="text-[12px] leading-4 text-[#F6F6F6]">
+                {opt.description}
+              </p>
+            </div>
+
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src={ArrowRight}
+              alt="Arrow Right"
+              className="shrink-0 self-baseline mt-1 h-5 w-5 text-[#F6F6F6] group-hover:text-white transition-colors"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          </Link>
+        ))}
+      </div>
+    </AuthLayout>
   );
 }
