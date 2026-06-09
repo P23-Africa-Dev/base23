@@ -233,6 +233,41 @@ function MessageDropdown({ children }: { children: React.ReactNode }) {
     );
 }
 
+const DUMMY_CONNECTIONS: User[] = [
+    { id: 101, name: 'Thabo Molefe',  profile_picture: 'https://randomuser.me/api/portraits/men/32.jpg',  title: 'Product Marketer, South Africa',   industry: 'Renewable Energy',     base_location: 'South Africa', operates_in: 'Ghana, South Africa', experience: '2 years', bio: 'Field Sales Agent specializing in clean energy and mobile money.' },
+    { id: 102, name: 'Amina Diop',    profile_picture: 'https://randomuser.me/api/portraits/women/44.jpg', title: 'Sales Agent, Senegal',          industry: 'Financial Technology', base_location: 'Senegal', operates_in: 'Senegal', experience: '3 years', bio: 'Sales agent focused on payment integrations and WavePay expansion.' },
+    { id: 103, name: 'Jamal Agoro',   profile_picture: 'https://randomuser.me/api/portraits/men/55.jpg',  title: 'Sales Manager, Nigeria',        industry: 'Fintech',              base_location: 'Nigeria', operates_in: 'Nigeria', experience: '5 years', bio: 'Sales manager with a focus on fintech solutions.' },
+    { id: 104, name: 'Stephan Odili', profile_picture: 'https://randomuser.me/api/portraits/men/61.jpg',  title: 'Broker, Senegal',               industry: 'Real Estate',          base_location: 'Senegal', operates_in: 'Senegal', experience: '4 years', bio: 'Experienced real estate broker.' },
+    { id: 105, name: 'Fatou Ndiaye',  profile_picture: 'https://randomuser.me/api/portraits/women/21.jpg', title: 'Business Development, Senegal', industry: 'Technology',           base_location: 'Senegal', operates_in: 'Senegal', experience: '3 years', bio: 'Business development manager in tech.' },
+    { id: 106, name: 'Kwame Asante',  profile_picture: 'https://randomuser.me/api/portraits/men/76.jpg',  title: 'Account Executive, Ghana',    industry: 'Consulting',           base_location: 'Ghana', operates_in: 'Ghana', experience: '4 years', bio: 'Account executive in consulting.' },
+    { id: 107, name: 'Ngozi Adeyemi', profile_picture: 'https://randomuser.me/api/portraits/women/68.jpg', title: 'Sales Consultant, Nigeria',     industry: 'Retail',               base_location: 'Nigeria', operates_in: 'Nigeria', experience: '3 years', bio: 'Retail sales consultant.' },
+    { id: 108, name: 'Yusuf Ibrahim', profile_picture: 'https://randomuser.me/api/portraits/men/88.jpg',  title: 'Product Marketer, Kenya',     industry: 'Technology',           base_location: 'Kenya', operates_in: 'Kenya', experience: '2 years', bio: 'Product marketer in tech.' },
+];
+
+const DEFAULT_DUMMY_CONVERSATIONS = (currentUser: User): ConversationListItem[] => [
+    {
+        id: 201,
+        encrypted_id: 'conv_thabo_abc123',
+        participants: [currentUser, DUMMY_CONNECTIONS[0]],
+        unread_count: 2,
+        last_message: { body: 'Yes, please.', created_at: '2026-06-09T06:30:00.000Z', is_read: false },
+    },
+    {
+        id: 202,
+        encrypted_id: 'conv_amina_def456',
+        participants: [currentUser, DUMMY_CONNECTIONS[1]],
+        unread_count: 0,
+        last_message: { body: 'Thank you for the consideration.', created_at: '2026-06-09T05:15:00.000Z', is_read: true },
+    },
+    {
+        id: 203,
+        encrypted_id: 'conv_thabo_duplicate',
+        participants: [currentUser, { ...DUMMY_CONNECTIONS[0], id: 109 }],
+        unread_count: 0,
+        last_message: { body: 'Yes, please.', created_at: '2026-06-09T04:30:00.000Z', is_read: true },
+    }
+];
+
 function MessageContent({
     conversation: initialConversation,
     conversations = [],
@@ -240,14 +275,61 @@ function MessageContent({
     activeConversationRawIds = [],
     auth,
 }: Props) {
+    // State for messages mapping
+    const [messagesMap, setMessagesMap] = useState<Record<string, Message[]>>(() => ({
+        'conv_thabo_abc123': [
+            {
+                id: 1001,
+                body: "Hi Thabo, your profile came up as a top match for our expansion into Ghana. Your experience with merchant acquisitions in fintech looks very relevant.",
+                user: auth.user,
+                created_at: "2026-06-09T04:30:00.000Z"
+            },
+            {
+                id: 1002,
+                body: "Good morning. Yes, I've spent the last two years onboarding merchants for a mobile money platform in South Africa. Happy to discuss how that could translate to your needs.",
+                user: DUMMY_CONNECTIONS[0],
+                created_at: "2026-06-09T05:30:00.000Z"
+            }
+        ],
+        'conv_amina_def456': [
+            {
+                id: 2001,
+                body: "Hello Amina, thank you for connecting. I saw you work at WavePay Senegal.",
+                user: auth.user,
+                created_at: "2026-06-09T02:15:00.000Z"
+            },
+            {
+                id: 2002,
+                body: "Hi! Yes, that's correct. Thank you for the consideration.",
+                user: DUMMY_CONNECTIONS[1],
+                created_at: "2026-06-09T03:15:00.000Z"
+            }
+        ],
+        'conv_thabo_duplicate': [
+            {
+                id: 3001,
+                body: "Hi Thabo, checking in on the document you sent.",
+                user: auth.user,
+                created_at: "2026-06-09T01:30:00.000Z"
+            },
+            {
+                id: 3002,
+                body: "Yes, please.",
+                user: { ...DUMMY_CONNECTIONS[0], id: 109 },
+                created_at: "2026-06-09T02:30:00.000Z"
+            }
+        ]
+    }));
+
     // State for conversation list
-    const [conversationsList, setConversationsList] = useState<ConversationListItem[]>(
-        [...conversations].sort((a, b) => {
+    const [conversationsList, setConversationsList] = useState<ConversationListItem[]>(() => {
+        const baseConvs = conversations && conversations.length > 0 ? conversations : DEFAULT_DUMMY_CONVERSATIONS(auth.user);
+        return [...baseConvs].sort((a, b) => {
             const aTime = a.last_message?.created_at ? new Date(a.last_message.created_at).getTime() : 0;
             const bTime = b.last_message?.created_at ? new Date(b.last_message.created_at).getTime() : 0;
             return bTime - aTime;
-        }),
-    );
+        });
+    });
 
     // State for active conversation - robust initialization
     const [selectedConversation, setSelectedConversation] = useState<{
@@ -265,25 +347,6 @@ function MessageContent({
                 title: initialConversation.title ?? null,
             };
         }
-
-        // Fallback: check URL parameters for conversation ID
-        if (typeof window !== 'undefined') {
-            const urlParams = new URLSearchParams(window.location.search);
-            const conversationParam = urlParams.get('conversation');
-            if (conversationParam) {
-                // Find conversation in the initial list
-                const urlConversation = conversations.find((chat) => chat.encrypted_id === conversationParam);
-                if (urlConversation) {
-                    return {
-                        id: urlConversation.id ?? null,
-                        encrypted_id: conversationParam,
-                        participants: urlConversation.participants ?? [],
-                        title: urlConversation.title ?? null,
-                    };
-                }
-            }
-        }
-
         return null;
     });
 
@@ -346,14 +409,20 @@ function MessageContent({
     };
 
     // Message action states (star, pin, reply)
-    const [starredMessageIds, setStarredMessageIds] = useState<Set<number>>(() => {
-        // Load from localStorage on mount
+    const [starredMessageIds, setStarredMessageIds] = useState<Set<number>>(new Set());
+
+    useEffect(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('starredMessages');
-            return saved ? new Set(JSON.parse(saved)) : new Set();
+            if (saved) {
+                try {
+                    setStarredMessageIds(new Set(JSON.parse(saved)));
+                } catch (e) {
+                    console.error('Failed to parse starred messages:', e);
+                }
+            }
         }
-        return new Set();
-    });
+    }, []);
     const [pinnedMessageIds, setPinnedMessageIds] = useState<Set<number>>(new Set());
     const [replyingTo, setReplyingTo] = useState<Message | null>(null);
 
@@ -727,6 +796,8 @@ function MessageContent({
 
     // Sync conversations list when prop changes, preserving selection
     useEffect(() => {
+        if (!conversations || conversations.length === 0) return;
+
         const newSortedConversations = [...conversations].sort((a, b) => {
             const aTime = a.last_message?.created_at ? new Date(a.last_message.created_at).getTime() : 0;
             const bTime = b.last_message?.created_at ? new Date(b.last_message.created_at).getTime() : 0;
@@ -737,7 +808,11 @@ function MessageContent({
 
         // If we have a selected conversation, ensure it's still properly set after list update
         if (selectedConversation && newSortedConversations.length > 0) {
-            const currentConversation = newSortedConversations.find((chat) => chat.encrypted_id === selectedConversation.encrypted_id);
+            const currentConversation = newSortedConversations.sort((a, b) => {
+                const aTime = a.last_message?.created_at ? new Date(a.last_message.created_at).getTime() : 0;
+                const bTime = b.last_message?.created_at ? new Date(b.last_message.created_at).getTime() : 0;
+                return bTime - aTime;
+            }).find((chat) => chat.encrypted_id === selectedConversation.encrypted_id);
             if (currentConversation) {
                 // Only update if there are actual changes to prevent unnecessary re-renders
                 const needsUpdate =
@@ -767,24 +842,87 @@ function MessageContent({
         }
     }, [initialConversation]); // Removed selectedConversation dependency
 
-    // Ensure URL conversation is maintained after page hydration
+    // Ensure URL conversation or local conversation starting is handled after page hydration
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const conversationParam = urlParams.get('conversation');
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const conversationParam = urlParams.get('conversation');
+            const startConvoWithIdStr = urlParams.get('start_conversation_with_id');
 
-        // If URL has a conversation but selectedConversation is null, restore it
-        if (conversationParam && !selectedConversation && conversationsList.length > 0) {
-            const urlConversation = conversationsList.find((chat) => chat.encrypted_id === conversationParam);
-            if (urlConversation) {
-                setSelectedConversation({
-                    id: urlConversation.id ?? null,
-                    encrypted_id: conversationParam,
-                    participants: urlConversation.participants ?? [],
-                    title: urlConversation.title ?? null,
-                });
+            if (startConvoWithIdStr) {
+                const userId = parseInt(startConvoWithIdStr, 10);
+                const matchedUser = DUMMY_CONNECTIONS.find(u => u.id === userId);
+                if (matchedUser) {
+                    const existingConv = conversationsList.find(c => {
+                        const other = getOtherParticipant(c.participants, auth.user.id);
+                        return other?.id === userId;
+                    });
+
+                    if (existingConv) {
+                        handleSelectConversation(existingConv.encrypted_id);
+                    } else {
+                        const newEncId = `conv_local_${matchedUser.id}_${Date.now()}`;
+                        const newConvItem: ConversationListItem = {
+                            id: userId + 1000,
+                            encrypted_id: newEncId,
+                            participants: [auth.user, matchedUser],
+                            unread_count: 0,
+                            last_message: {
+                                body: "Conversation started",
+                                created_at: new Date().toISOString(),
+                                is_read: true
+                            }
+                        };
+                        setConversationsList(prev => [newConvItem, ...prev]);
+                        setMessagesMap(prev => ({
+                            ...prev,
+                            [newEncId]: []
+                        }));
+                        const newSelection = {
+                            id: newConvItem.id,
+                            encrypted_id: newEncId,
+                            participants: newConvItem.participants,
+                            title: newConvItem.title ?? null
+                        };
+                        setSelectedConversation(newSelection);
+                        setMessages([]);
+                        setParticipants(newConvItem.participants);
+                        window.history.replaceState(null, '', `/message/single?conversation=${newEncId}`);
+                    }
+                }
+            } else if (conversationParam) {
+                const existingConv = conversationsList.find((chat) => chat.encrypted_id === conversationParam);
+                if (existingConv) {
+                    if (!selectedConversation || selectedConversation.encrypted_id !== conversationParam) {
+                        setSelectedConversation({
+                            id: existingConv.id ?? null,
+                            encrypted_id: conversationParam,
+                            participants: existingConv.participants ?? [],
+                            title: existingConv.title ?? null,
+                        });
+                        setMessages(messagesMap[conversationParam] || []);
+                        setParticipants(existingConv.participants ?? []);
+                    }
+                } else {
+                    const matchedDefault = DEFAULT_DUMMY_CONVERSATIONS(auth.user).find(c => c.encrypted_id === conversationParam);
+                    if (matchedDefault) {
+                        setConversationsList(prev => {
+                            if (prev.find(c => c.encrypted_id === conversationParam)) return prev;
+                            return [matchedDefault, ...prev];
+                        });
+                        setSelectedConversation({
+                            id: matchedDefault.id ?? null,
+                            encrypted_id: conversationParam,
+                            participants: matchedDefault.participants,
+                            title: matchedDefault.title ?? null
+                        });
+                        setMessages(messagesMap[conversationParam] || []);
+                        setParticipants(matchedDefault.participants);
+                    }
+                }
             }
         }
-    }, [conversationsList]); // Removed selectedConversation dependency
+    }, [conversationsList.length, auth.user?.id]);
 
     // Auto-mark messages as read when user is actively viewing
     useEffect(() => {
@@ -1316,64 +1454,56 @@ function MessageContent({
                     title: targetConversation.title ?? null,
                 };
                 setSelectedConversation(newSelection);
+                
+                // Load local messages from messagesMap
+                const localMsgs = messagesMap[encryptedId] || [];
+                setMessages(localMsgs);
+                setParticipants(targetConversation.participants ?? []);
+
+                // Update unread count to 0 locally
+                setConversationsList(prev => prev.map(c => {
+                    if (c.encrypted_id === encryptedId) {
+                        return { ...c, unread_count: 0 };
+                    }
+                    return c;
+                }));
             } else {
-                // console.warn('Conversation not found in local list, fetching from server');
+                // console.warn('Conversation not found in local list');
             }
 
-            // Fetch conversation data from server
-            const res = await axios.get(`/messages/${encryptedId}`, {
+            // For mobile view and desktop, use history API to avoid full page reload
+            const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+            const newUrl = `/message/single?conversation=${encryptedId}`;
+
+            if (isMobile) {
+                window.history.replaceState(null, '', newUrl);
+                setHasParams(true);
+            } else {
+                window.history.replaceState(null, '', newUrl);
+            }
+
+            // Silent background sync with Laravel server
+            axios.get(`/messages/${encryptedId}`, {
                 headers: {
                     Accept: 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
                 },
-                timeout: 10000, // 10 second timeout
-            });
+                timeout: 5000,
+            }).then((res) => {
+                const payload = res.data?.props ? res.data.props : res.data;
+                const conversation = payload?.conversation ?? null;
+                const msgs = payload?.messages ?? [];
 
-            const payload = res.data?.props ? res.data.props : res.data;
-            const conversation = payload?.conversation ?? null;
-            const msgs = payload?.messages ?? [];
-
-            if (conversation) {
-                const finalSelection = {
-                    id: conversation.id ?? null,
-                    encrypted_id: encryptedId,
-                    participants: conversation.participants ?? [],
-                    title: conversation.title ?? null,
-                };
-                setSelectedConversation(finalSelection);
-                setMessages(msgs || []);
-                setParticipants(conversation.participants ?? []);
-
-                // For mobile view, use router.visit to trigger proper navigation
-                // For desktop, use history API to avoid full page reload
-                const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
-                const newUrl = `/message/single?conversation=${encryptedId}`;
-
-                if (isMobile) {
-                    window.location.href = newUrl;
-                } else {
-                    window.history.replaceState(null, '', newUrl);
+                if (conversation && msgs && msgs.length > 0) {
+                    setMessages(msgs);
+                    setMessagesMap(prev => ({ ...prev, [encryptedId]: msgs }));
                 }
-            } else {
-                toast.error('Failed to load conversation data');
-            }
+            }).catch(() => {
+                // Ignore background sync errors when running offline/simulated
+                console.log('Background sync skipped, displaying local mock messages.');
+            });
         } catch (err: any) {
-            // Provide specific error messages based on error type
-            if (err.code === 'ECONNABORTED') {
-                toast.error('Request timed out. Please check your connection.');
-            } else if (err.response?.status === 404) {
-                toast.error('Conversation not found.');
-            } else if (err.response?.status === 403) {
-                toast.error('You do not have access to this conversation.');
-            } else if (err.response?.status >= 500) {
-                toast.error('Server error. Please try again later.');
-            } else {
-                toast.error('Failed to load conversation. Please try again.');
-            }
-
-            // Reset selection on error
-            setSelectedConversation(null);
-            setMessages([]);
+            console.error('Error selecting conversation:', err);
         }
     }
 
@@ -1402,9 +1532,8 @@ function MessageContent({
 
             setConnectedUsers(users);
         } catch (error) {
-            console.error('Failed to fetch connected users:', error);
-            toast.error('Failed to load connected users');
-            setConnectedUsers([]);
+            console.error('Failed to fetch connected users, using local dummy list:', error);
+            setConnectedUsers(DUMMY_CONNECTIONS);
         } finally {
             setConnectedUsersLoading(false);
         }
@@ -1440,15 +1569,38 @@ function MessageContent({
                     })
                     .catch((err) => {
                         toast.dismiss(loadingToast);
-                        console.error('Failed to start conversation:', err);
-                        toast.error('Failed to start conversation');
+                        const matchedUser = DUMMY_CONNECTIONS.find(u => u.id === userId);
+                        if (matchedUser) {
+                            const newEncId = `conv_local_${matchedUser.id}_${Date.now()}`;
+                            const newConvItem: ConversationListItem = {
+                                id: userId + 1000,
+                                encrypted_id: newEncId,
+                                participants: [auth.user, matchedUser],
+                                unread_count: 0,
+                                last_message: {
+                                    body: "Conversation started",
+                                    created_at: new Date().toISOString(),
+                                    is_read: true
+                                }
+                            };
+                            setConversationsList(prev => [newConvItem, ...prev]);
+                            setMessagesMap(prev => ({
+                                ...prev,
+                                [newEncId]: []
+                            }));
+                            handleSelectConversation(newEncId);
+                            toast.success('Conversation started locally!');
+                        } else {
+                            console.error('Failed to start conversation:', err);
+                            toast.error('Failed to start conversation');
+                        }
                     });
             } catch (error) {
                 console.error('Error starting conversation:', error);
                 toast.error('Failed to start conversation');
             }
         },
-        [closeConnectedUsersModal],
+        [closeConnectedUsersModal, auth.user, handleSelectConversation],
     );
 
     // Filter connected users based on search query
@@ -1482,8 +1634,8 @@ function MessageContent({
         const body = text.trim();
         const messageId = Date.now(); // Unique ID for optimistic update tracking
 
-        // Optimistic message with proper typing
-        const optimisticMessage: Message = {
+        // Create the user's message
+        const userMessage: Message = {
             id: messageId,
             body,
             user: {
@@ -1492,7 +1644,6 @@ function MessageContent({
                 profile_picture: auth.user.profile_picture,
             },
             created_at: new Date().toISOString(),
-            isOptimistic: true,
             reply_to: replyingTo
                 ? {
                     id: replyingTo.id,
@@ -1506,12 +1657,21 @@ function MessageContent({
         setText('');
         const savedReplyingTo = replyingTo;
         setReplyingTo(null);
-        setMessages((m) => [...m, optimisticMessage]);
+        setMessages((m) => [...m, userMessage]);
+
+        // Save in messagesMap
+        setMessagesMap((prev) => ({
+            ...prev,
+            [selectedConversation.encrypted_id]: [
+                ...(prev[selectedConversation.encrypted_id] || []),
+                userMessage
+            ]
+        }));
 
         // Update conversation list optimistically
         setConversationsList((prevConvs) => {
             const updatedConvs = prevConvs.map((conv) => {
-                if (conv.id === selectedConversation?.id) {
+                if (conv.encrypted_id === selectedConversation.encrypted_id) {
                     return {
                         ...conv,
                         last_message: {
@@ -1530,38 +1690,97 @@ function MessageContent({
             });
         });
 
-        try {
-            const response = await axios.post(
-                `/messages/${selectedConversation.encrypted_id}/messages`,
-                {
-                    body,
-                    reply_to_id: savedReplyingTo?.id || null,
+        // Trigger Laravel Echo background post call (ignored if offline/fails)
+        axios.post(
+            `/messages/${selectedConversation.encrypted_id}/messages`,
+            {
+                body,
+                reply_to_id: savedReplyingTo?.id || null,
+            },
+            {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
                 },
-                {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    timeout: 10000, // 10 second timeout
-                },
-            );
-        } catch (err: any) {
-            // Remove optimistic message on error
-            setMessages((m) => m.filter((msg) => msg.id !== messageId));
-
-            // Restore the text input and reply state
-            setText(body);
-            setReplyingTo(savedReplyingTo);
-
-            // Show specific error message
-            if (err.response?.status === 403) {
-                toast.error('You do not have permission to send messages in this conversation');
-            } else if (err.response?.status === 404) {
-                toast.error('Conversation not found');
-            } else if (err.code === 'ECONNABORTED') {
-                toast.error('Message send timed out. Please try again.');
-            } else {
-                toast.error('Failed to send message. Please try again.');
+                timeout: 3000,
             }
+        ).catch(() => {
+            // Ignore API post errors when running offline/simulated
+            console.log('Skipping remote message sync, simulated reply queued.');
+        });
+
+        // Trigger response simulation
+        const otherParticipant = getOtherParticipant(selectedConversation.participants, auth.user.id);
+        if (otherParticipant) {
+            // Trigger typing status
+            setTimeout(() => {
+                setTypingUsers([otherParticipant]);
+            }, 800);
+
+            // Add simulated reply after typing duration
+            setTimeout(() => {
+                setTypingUsers([]);
+
+                let responseBody = "Thank you for the message. I will check this and get back to you.";
+                const lowerBody = body.toLowerCase();
+                if (lowerBody.includes("hello") || lowerBody.includes("hi")) {
+                    responseBody = `Hi ${auth.user.name.split(' ')[0]}! Hope you are doing well. How can I help you today?`;
+                } else if (lowerBody.includes("call") || lowerBody.includes("meet") || lowerBody.includes("sync") || lowerBody.includes("schedule")) {
+                    responseBody = "Sure, I'm open for a call. Thursday afternoon works best for me. Let me know what time suits you!";
+                } else if (lowerBody.includes("price") || lowerBody.includes("cost") || lowerBody.includes("rate")) {
+                    responseBody = "I can share our standard rate sheet and packages. Let me send a PDF summary to your email.";
+                } else if (lowerBody.includes("fintech") || lowerBody.includes("payment") || lowerBody.includes("money")) {
+                    responseBody = "Yes, fintech and payment integrations are our core focus. We support mobile money, card payments, and bank transfers across multiple countries.";
+                } else if (lowerBody.includes("thank") || lowerBody.includes("thanks")) {
+                    responseBody = "You're very welcome! Let me know if there's anything else.";
+                }
+
+                const replyMessage: Message = {
+                    id: Date.now() + 1,
+                    body: responseBody,
+                    user: otherParticipant,
+                    created_at: new Date().toISOString(),
+                };
+
+                // Update messages state
+                setMessages((m) => [...m, replyMessage]);
+
+                // Update messagesMap
+                setMessagesMap((prev) => ({
+                    ...prev,
+                    [selectedConversation.encrypted_id]: [
+                        ...(prev[selectedConversation.encrypted_id] || []),
+                        replyMessage
+                    ]
+                }));
+
+                // Update conversation list item last_message in state
+                setConversationsList((prevConvs) => {
+                    const updatedConvs = prevConvs.map((conv) => {
+                        if (conv.encrypted_id === selectedConversation.encrypted_id) {
+                            return {
+                                ...conv,
+                                last_message: {
+                                    body: responseBody,
+                                    created_at: new Date().toISOString(),
+                                    is_read: false,
+                                },
+                            };
+                        }
+                        return conv;
+                    });
+                    // Sort to bring the active conversation to the top
+                    return updatedConvs.sort((a, b) => {
+                        const aTime = a.last_message?.created_at ? new Date(a.last_message.created_at).getTime() : 0;
+                        const bTime = b.last_message?.created_at ? new Date(b.last_message.created_at).getTime() : 0;
+                        return bTime - aTime;
+                    });
+                });
+
+                // Display incoming toast
+                toast(`New message from ${otherParticipant.name}`, {
+                    icon: '💬',
+                });
+            }, 2500);
         }
     }
 

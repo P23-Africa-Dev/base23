@@ -175,6 +175,10 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
     );
     const [messageStats, setMessageStats] = useState<MessageStats>(stats);
     const [currentTime, setCurrentTime] = useState(new Date()); // Add state for current time
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
     const dateInfo = getCurrentDateInfo();
 
     // Automatically request notification permission on first visit
@@ -336,7 +340,10 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
     const handleStartConversation = (userId: number) => {
         axios.post('/messages/start', { user_id: userId, redirect_to: 'message/single' })
             .then((res) => { router.push(res.data.redirect ?? '/message/single'); })
-            .catch((err) => console.error('Failed to start conversation:', err));
+            .catch((err) => {
+                console.error('Failed to start conversation:', err);
+                router.push(`/message/single?start_conversation_with_id=${userId}`);
+            });
     };
 
     // Mark conversation as read when opened
@@ -423,7 +430,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                         <div className="mt-3.5 w-[60%] text-secondaryWhite">
                                             <div className="leading-4">
                                                 <h2 className="text-[18px] font-bold">Hello, {getFirstName(auth.user?.name || '')}!</h2>
-                                                <h4 className="text-xs font-light">{getGreeting()}</h4>
+                                                <h4 className="text-xs font-light">{isMounted ? getGreeting() : 'Hello!'}</h4>
                                             </div>
                                         </div>
 
@@ -467,18 +474,18 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                                     <div className="flex items-center pt-5">
                                                         <div className="relative h-fit w-fit">
                                                             <p className="relative z-10 bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[40px] leading-none font-extrabold text-transparent">
-                                                                {dateInfo.day}
+                                                                {isMounted ? dateInfo.day : ''}
 
                                                             </p>
                                                         </div>
 
                                                         <div className="ml-1">
                                                             <p className="-mb-3 bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[11px] font-light">
-                                                                {dateInfo.dayName}
+                                                                {isMounted ? dateInfo.dayName : ''}
 
                                                             </p>
                                                             <p className="mt-2 bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[17px] font-bold">
-                                                                {dateInfo.monthName}
+                                                                {isMounted ? dateInfo.monthName : ''}
 
                                                             </p>
                                                         </div>
@@ -624,16 +631,16 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                         <div className="flex items-center">
                                             <div className="relative h-fit w-fit">
                                                 <p className="relative z-10 bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[50px] leading-none font-extrabold text-transparent">
-                                                    {dateInfo.day}
+                                                    {isMounted ? dateInfo.day : ''}
                                                 </p>
                                             </div>
 
                                             <div className="ml-1">
                                                 <p className="bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[14px]">
-                                                    {dateInfo.dayName}
+                                                    {isMounted ? dateInfo.dayName : ''}
                                                 </p>
                                                 <p className="bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-sm font-bold">
-                                                    {dateInfo.monthName}
+                                                    {isMounted ? dateInfo.monthName : ''}
                                                 </p>
                                             </div>
                                         </div>
