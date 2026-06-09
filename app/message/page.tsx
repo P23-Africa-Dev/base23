@@ -54,6 +54,64 @@ interface MessagePageProps {
     };
 }
 
+// ─── Dummy data ───────────────────────────────────────────────────────────────
+
+const DUMMY_CONNECTIONS: User[] = [
+    { id: 101, name: 'Thabo Molefe',  profile_picture: 'https://randomuser.me/api/portraits/men/32.jpg',  position: 'Field Sales Agent',   company_name: 'SolarWave Africa',   industry: 'Renewable Energy',     country: 'South Africa' },
+    { id: 102, name: 'Amina Diop',    profile_picture: 'https://randomuser.me/api/portraits/women/44.jpg', position: 'Sales Agent',          company_name: 'WavePay Senegal',    industry: 'Financial Technology', country: 'Senegal'      },
+    { id: 103, name: 'Jamal Agoro',   profile_picture: 'https://randomuser.me/api/portraits/men/55.jpg',  position: 'Sales Manager',        company_name: 'PaySwift Africa',    industry: 'Fintech',              country: 'Nigeria'      },
+    { id: 104, name: 'Stephan Odili', profile_picture: 'https://randomuser.me/api/portraits/men/61.jpg',  position: 'Broker',               company_name: 'AfricaRealty Group', industry: 'Real Estate',          country: 'Senegal'      },
+    { id: 105, name: 'Fatou Ndiaye',  profile_picture: 'https://randomuser.me/api/portraits/women/21.jpg', position: 'Business Development', company_name: 'AfroTech Ventures',  industry: 'Technology',           country: 'Senegal'      },
+    { id: 106, name: 'Kwame Asante',  profile_picture: 'https://randomuser.me/api/portraits/men/76.jpg',  position: 'Account Executive',    company_name: 'GoldCoast Partners', industry: 'Consulting',           country: 'Ghana'        },
+    { id: 107, name: 'Ngozi Adeyemi', profile_picture: 'https://randomuser.me/api/portraits/women/68.jpg', position: 'Sales Consultant',     company_name: 'Lagos Commerce Hub', industry: 'Retail',               country: 'Nigeria'      },
+    { id: 108, name: 'Yusuf Ibrahim', profile_picture: 'https://randomuser.me/api/portraits/men/88.jpg',  position: 'Product Marketer',     company_name: 'TechBridge Africa',  industry: 'Technology',           country: 'Kenya'        },
+];
+
+// Fixed past timestamps — far enough back that formatTimeAgo returns "Few hours ago"
+// on both server and client, avoiding hydration mismatches from Date.now() drift.
+const DUMMY_CONVERSATIONS: Conversation[] = [
+    {
+        id: 201,
+        encrypted_id: 'conv_thabo_abc123',
+        other_participant: DUMMY_CONNECTIONS[0],
+        participants: [DUMMY_CONNECTIONS[0]],
+        unread_count: 2,
+        last_message: { body: 'Yes, please.', created_at: '2026-06-09T06:30:00.000Z', is_read: false },
+    },
+    {
+        id: 202,
+        encrypted_id: 'conv_amina_def456',
+        other_participant: DUMMY_CONNECTIONS[1],
+        participants: [DUMMY_CONNECTIONS[1]],
+        unread_count: 0,
+        last_message: { body: 'Thank you for the consideration.', created_at: '2026-06-09T05:15:00.000Z', is_read: true },
+    },
+    {
+        id: 203,
+        encrypted_id: 'conv_jamal_ghi789',
+        other_participant: DUMMY_CONNECTIONS[2],
+        participants: [DUMMY_CONNECTIONS[2]],
+        unread_count: 1,
+        last_message: { body: 'I can set up the call for Thursday.', created_at: '2026-06-09T04:00:00.000Z', is_read: false },
+    },
+    {
+        id: 204,
+        encrypted_id: 'conv_stephan_jkl012',
+        other_participant: DUMMY_CONNECTIONS[3],
+        participants: [DUMMY_CONNECTIONS[3]],
+        unread_count: 0,
+        last_message: { body: 'Looking forward to connecting!', created_at: '2026-06-09T03:30:00.000Z', is_read: true },
+    },
+];
+
+const DUMMY_STATS: MessageStats = {
+    activeConversations: 525,
+    readMessages: 525,
+    unreadMessages: 525,
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 // Helper to format time ago
 function formatTimeAgo(dateString: string, currentTime?: Date): string {
     // Parse the ISO timestamp directly
@@ -101,7 +159,7 @@ function getFirstName(fullName: string): string {
     return fullName?.split(' ')[0] || 'User';
 }
 
-function Message({ connections = [], conversations = [], stats = { activeConversations: 0, readMessages: 0, unreadMessages: 0 } }: Partial<MessagePageProps>) {
+function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVERSATIONS, stats = DUMMY_STATS }: Partial<MessagePageProps>) {
     const { user: authUser } = useAuth();
     const auth = { user: authUser };
     const router = useRouter();
@@ -117,6 +175,10 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
     );
     const [messageStats, setMessageStats] = useState<MessageStats>(stats);
     const [currentTime, setCurrentTime] = useState(new Date()); // Add state for current time
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
     const dateInfo = getCurrentDateInfo();
 
     // Automatically request notification permission on first visit
@@ -278,7 +340,10 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
     const handleStartConversation = (userId: number) => {
         axios.post('/messages/start', { user_id: userId, redirect_to: 'message/single' })
             .then((res) => { router.push(res.data.redirect ?? '/message/single'); })
-            .catch((err) => console.error('Failed to start conversation:', err));
+            .catch((err) => {
+                console.error('Failed to start conversation:', err);
+                router.push(`/message/single?start_conversation_with_id=${userId}`);
+            });
     };
 
     // Mark conversation as read when opened
@@ -365,7 +430,7 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
                                         <div className="mt-3.5 w-[60%] text-secondaryWhite">
                                             <div className="leading-4">
                                                 <h2 className="text-[18px] font-bold">Hello, {getFirstName(auth.user?.name || '')}!</h2>
-                                                <h4 className="text-xs font-light">{getGreeting()}</h4>
+                                                <h4 className="text-xs font-light">{isMounted ? getGreeting() : 'Hello!'}</h4>
                                             </div>
                                         </div>
 
@@ -409,18 +474,18 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
                                                     <div className="flex items-center pt-5">
                                                         <div className="relative h-fit w-fit">
                                                             <p className="relative z-10 bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[40px] leading-none font-extrabold text-transparent">
-                                                                {dateInfo.day}
+                                                                {isMounted ? dateInfo.day : ''}
 
                                                             </p>
                                                         </div>
 
                                                         <div className="ml-1">
                                                             <p className="-mb-3 bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[11px] font-light">
-                                                                {dateInfo.dayName}
+                                                                {isMounted ? dateInfo.dayName : ''}
 
                                                             </p>
                                                             <p className="mt-2 bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[17px] font-bold">
-                                                                {dateInfo.monthName}
+                                                                {isMounted ? dateInfo.monthName : ''}
 
                                                             </p>
                                                         </div>
@@ -566,16 +631,16 @@ function Message({ connections = [], conversations = [], stats = { activeConvers
                                         <div className="flex items-center">
                                             <div className="relative h-fit w-fit">
                                                 <p className="relative z-10 bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[50px] leading-none font-extrabold text-transparent">
-                                                    {dateInfo.day}
+                                                    {isMounted ? dateInfo.day : ''}
                                                 </p>
                                             </div>
 
                                             <div className="ml-1">
                                                 <p className="bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-[14px]">
-                                                    {dateInfo.dayName}
+                                                    {isMounted ? dateInfo.dayName : ''}
                                                 </p>
                                                 <p className="bg-gradient-to-b from-[#121E2E] via-[#1B2C44] to-[#1B2F4B] bg-clip-text text-sm font-bold">
-                                                    {dateInfo.monthName}
+                                                    {isMounted ? dateInfo.monthName : ''}
                                                 </p>
                                             </div>
                                         </div>
