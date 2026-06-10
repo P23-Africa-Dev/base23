@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom';
 type Props = {
     isOpen: boolean;
     onClose: () => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user: any;
 };
 
@@ -89,7 +90,7 @@ export default function MessageProfileOverlay({ isOpen, onClose, user }: Props) 
                                     <p className="mt-1 text-[9.5px] font-medium">
                                         Seasoned renewable energy executive with 8 years of experience building solar infrastructure across East and
                                         West Africa. Founded GreenEnergy Africa in 2018, scaling to $5M annual revenue by establishing distribution
-                                        partnerships in 3 countries. Passionate about bridging Africa's energy gap while delivering investor returns.
+                                        partnerships in 3 countries. Passionate about bridging Africa&apos;s energy gap while delivering investor returns.
                                         Fluent in English and business-level French.
                                     </p>
                                     {/* <p className="mt-1 text-xs">{user.bio || 'No Bio Available'}</p> */}

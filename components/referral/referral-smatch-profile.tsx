@@ -67,6 +67,7 @@ export default function ReferralSmatchProfile({ open, onClose, onPreferencesSave
     const [hasExistingPreferences, setHasExistingPreferences] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
 
@@ -77,16 +78,8 @@ export default function ReferralSmatchProfile({ open, onClose, onPreferencesSave
         }
     }, [authUserId]);
 
-    // Fetch existing preferences when modal opens
-    useEffect(() => {
-        if (open) {
-            setStep('intro');
-            fetchExistingPreferences();
-        }
-    }, [open]);
-
     // Fetch user's existing preferences from backend
-    const fetchExistingPreferences = async () => {
+    async function fetchExistingPreferences() {
         setIsLoadingPreferences(true);
         try {
             const response = await SmartMatchService.getPreferences();
@@ -119,7 +112,16 @@ export default function ReferralSmatchProfile({ open, onClose, onPreferencesSave
         } finally {
             setIsLoadingPreferences(false);
         }
-    };
+    }
+
+    // Fetch existing preferences when modal opens
+    useEffect(() => {
+        if (open) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setStep('intro');
+            fetchExistingPreferences();
+        }
+    }, [open]);
 
     // Handle step progression with preference updates
     const handleStepNext = (stepNum: 1 | 2 | 3 | 4 | 5, data: Partial<SmartMatchPreferences>) => {

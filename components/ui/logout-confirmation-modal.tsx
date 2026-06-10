@@ -61,7 +61,7 @@ export const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = (
                             {/* Content */}
                             <div className="mb-6 text-center">
                                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                                    Are you sure you want to log out? You'll need to sign in again to access your account.
+                                    Are you sure you want to log out? You&apos;ll need to sign in again to access your account.
                                 </p>
                             </div>
 

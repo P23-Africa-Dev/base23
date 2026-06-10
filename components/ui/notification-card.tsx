@@ -205,6 +205,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
     // Reset expanded group when card closes
     useEffect(() => {
         if (!isOpen) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setExpandedGroup(null);
             setFilterType('all');
             setShowFilterDropdown(false);

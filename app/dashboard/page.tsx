@@ -50,6 +50,7 @@ type User = {
   goals?: string;
   similarity_score?: number;
   total_score?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   match_reasons?: any;
 };
 

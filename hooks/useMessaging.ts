@@ -55,6 +55,7 @@ export function useMessaging({
     const [currentTime, setCurrentTime] = useState(new Date());
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const messagesRef = useRef<Message[]>(messages);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const channelRef = useRef<any>(null);
 
     const [currentTab, setCurrentTab] = useState<'all' | 'active' | 'starred' | 'archive'>('all');
@@ -85,6 +86,7 @@ export function useMessaging({
     const [isSingleMessageRoute, setIsSingleMessageRoute] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setHasParams(window.location.search.length > 0);
         setIsSingleMessageRoute(window.location.pathname === '/message/single');
     }, []);
@@ -110,6 +112,7 @@ export function useMessaging({
     useEffect(() => {
         const saved = localStorage.getItem('starredMessages');
         if (saved) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             try { setStarredMessageIds(new Set(JSON.parse(saved))); } catch { /* noop */ }
         }
     }, []);
@@ -321,13 +324,16 @@ export function useMessaging({
     useEffect(() => {
         ChatNotifications.initialize();
         if (ChatNotifications.isSupported()) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, react-hooks/set-state-in-effect
             setNotificationPermission(ChatNotifications.getPermissionStatus() as any);
         } else {
             setNotificationPermission('unsupported');
         }
         if (navigator.mediaDevices) {
             navigator.permissions?.query({ name: 'microphone' as PermissionName }).then((result) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 setMicrophonePermission(result.state as any);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 result.onchange = () => setMicrophonePermission(result.state as any);
             }).catch(() => setMicrophonePermission('default'));
         } else {
@@ -340,6 +346,7 @@ export function useMessaging({
     useEffect(() => {
         const needsNotifications = ChatNotifications.needsPermission();
         const needsMic = microphonePermission === 'default';
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (showPermissionBanner && !needsNotifications && !needsMic) setShowPermissionBanner(false);
         else if (!showPermissionBanner && (needsNotifications || needsMic)) setShowPermissionBanner(true);
     }, [notificationPermission, microphonePermission, showPermissionBanner]);
@@ -370,7 +377,9 @@ export function useMessaging({
 
     // Check Echo is ready
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const win = window as any;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (win.Echo) { setEchoReady(true); return; }
         let attempts = 0;
         const interval = setInterval(() => {
@@ -389,6 +398,7 @@ export function useMessaging({
             const bTime = b.last_message?.created_at ? new Date(b.last_message.created_at).getTime() : 0;
             return bTime - aTime;
         });
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setConversationsList(sorted);
         if (selectedConversation) {
             const cur = sorted.find((c) => c.encrypted_id === selectedConversation.encrypted_id);
@@ -404,6 +414,7 @@ export function useMessaging({
     // Restore selected conversation from initial prop
     useEffect(() => {
         if (initialConversation && !selectedConversation) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setSelectedConversation({ id: initialConversation.id ?? null, encrypted_id: initialConversation.encrypted_id, participants: initialConversation.participants ?? [], title: initialConversation.title ?? null });
         }
     }, [initialConversation]);
@@ -433,6 +444,7 @@ export function useMessaging({
                         unread_count: 0,
                         last_message: { body: 'Conversation started', created_at: new Date().toISOString(), is_read: true },
                     };
+                    // eslint-disable-next-line react-hooks/set-state-in-effect
                     setConversationsList((prev) => [newConvItem, ...prev]);
                     setMessagesMap((prev) => ({ ...prev, [newEncId]: [] }));
                     setSelectedConversation({ id: newConvItem.id, encrypted_id: newEncId, participants: newConvItem.participants, title: newConvItem.title ?? null });
@@ -493,7 +505,9 @@ export function useMessaging({
                         if (msgReadStatus) {
                             const current = m.read_status || [];
                             if (msgReadStatus.length !== current.length) { hasUpdates = true; return { ...m, read_status: msgReadStatus }; }
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             const currentIds = new Set(current.map((r: any) => r.user_id));
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             const hasNew = msgReadStatus.some((r: any) => !currentIds.has(r.user_id));
                             if (hasNew) { hasUpdates = true; return { ...m, read_status: msgReadStatus }; }
                         }
@@ -516,8 +530,10 @@ export function useMessaging({
 
     // Global online presence tracking (non-active conversations)
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const win = window as any;
         if (!win.Echo || conversationsList.length === 0) return;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const channels: any[] = [];
         conversationsList.forEach((conv) => {
             if (conv.id && conv.id !== selectedConversation?.id) {
@@ -552,6 +568,7 @@ export function useMessaging({
     useEffect(() => {
         if (!selectedConversation?.id || !auth?.user?.id || !echoReady) return;
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const win = window as any;
         const conversationId = selectedConversation.id;
 
@@ -561,12 +578,14 @@ export function useMessaging({
         }
         if (!win.Echo) return;
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let chan: any;
         try {
             chan = win.Echo.join(`conversation.${conversationId}`)
                 .here((users: User[]) => { setParticipants(users); setOnlineUsers(new Set(users.map((u) => u.id))); setEchoConnected(true); setConnectionRetries(0); })
                 .joining((user: User) => { setParticipants((p) => [...p, user]); setOnlineUsers((prev) => new Set([...prev, user.id])); })
                 .leaving((user: User) => { setParticipants((p) => p.filter((u) => u.id !== user.id)); setOnlineUsers((prev) => { const s = new Set(prev); s.delete(user.id); return s; }); })
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .error((error: any) => {
                     setEchoConnected(false);
                     setConnectionRetries((p) => p + 1);
@@ -943,6 +962,7 @@ export function useMessaging({
             formData.append('body', fileType === 'image' ? '📷 Image' : fileType === 'voice' ? '🎤 Voice message' : `📄 ${file.name}`);
             await axios.post(`/messages/${selectedConversation.encrypted_id}/messages`, formData, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, timeout: 30000 });
             toast.success(`${fileType.charAt(0).toUpperCase() + fileType.slice(1)} uploaded successfully`);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             setMessages((m) => m.filter((msg) => msg.id !== uploadId));
             let errMsg = 'Failed to upload file. Please try again.';
@@ -997,6 +1017,7 @@ export function useMessaging({
             recorder.start();
             setMediaRecorder(recorder); setIsRecording(true); setRecordingTime(0); setShowUploadMenu(false);
             const timer = setInterval(() => { setRecordingTime((p) => { if (p >= 120) { stopRecording(); return p; } return p + 1; }); }, 1000);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (recorder as any).timer = timer;
         } catch (err) {
             if (err instanceof DOMException) {
@@ -1010,6 +1031,7 @@ export function useMessaging({
     function stopRecording() {
         if (mediaRecorder && isRecording) {
             recordingCancelledRef.current = false;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             clearInterval((mediaRecorder as any).timer);
             mediaRecorder.stop(); setMediaRecorder(null); setIsRecording(false); setRecordingTime(0);
         }
@@ -1018,6 +1040,7 @@ export function useMessaging({
     function cancelRecording() {
         if (mediaRecorder && isRecording) {
             setRecordingCancelled(true); recordingCancelledRef.current = true;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             clearInterval((mediaRecorder as any).timer);
             mediaRecorder.stop(); setMediaRecorder(null); setIsRecording(false); setRecordingTime(0);
             toast.success('Recording cancelled');
@@ -1113,6 +1136,7 @@ export function useMessaging({
                 setSelectedConversation(null); setMessages([]);
                 toast.success('User removed from conversation list');
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) { toast.error(err.response?.data?.message || 'Failed to remove user from list'); } finally { setRemovingFromList(false); }
     };
 
@@ -1123,6 +1147,7 @@ export function useMessaging({
             setClearingChat(true);
             const res = await axios.delete(`/conversations/${selectedConversation.encrypted_id}/clear`);
             if (res.status === 200) { setMessages([]); toast.success('Chat history cleared'); }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) { toast.error(err.response?.data?.message || 'Failed to clear chat'); } finally { setClearingChat(false); }
     };
 
@@ -1135,6 +1160,7 @@ export function useMessaging({
                 setConversationsList((prev) => prev.map((c) => c.encrypted_id === encryptedId ? { ...c, unread_count: (c.unread_count || 0) + 1 } : c));
                 toast.success('Conversation marked as unread');
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) { toast.error(err.response?.data?.message || 'Failed to mark as unread'); } finally { setMarkingUnread(false); setShowDropdown(null); }
     };
 
@@ -1151,6 +1177,7 @@ export function useMessaging({
                 if (selectedConversation?.encrypted_id === encryptedId) { setSelectedConversation(null); setMessages([]); }
                 toast.success(`${other?.name || 'User'} has been blocked`);
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) { toast.error(err.response?.data?.message || 'Failed to block user'); } finally { setBlockingUser(false); setShowDropdown(null); }
     };
 
@@ -1170,6 +1197,7 @@ export function useMessaging({
                 if (selectedConversation?.encrypted_id === encryptedId) { setSelectedConversation(null); setMessages([]); }
                 toast.success('Chat removed from list');
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) { toast.error(err.response?.data?.message || 'Failed to remove chat'); } finally { setRemovingFromList(false); setShowDropdown(null); }
     };
 
@@ -1183,6 +1211,7 @@ export function useMessaging({
                 setConversationsList((prev) => prev.map((c) => c.encrypted_id === encryptedId ? { ...c, last_message: null } : c));
                 toast.success('Chat history cleared');
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) { toast.error(err.response?.data?.message || 'Failed to clear chat'); } finally { setClearingChat(false); setShowDropdown(null); }
     };
 
@@ -1196,6 +1225,7 @@ export function useMessaging({
                 if (selectedConversation?.encrypted_id === encryptedId) { setSelectedConversation(null); setMessages([]); }
                 toast.success('Chat archived');
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) { toast.error(err.response?.data?.message || 'Failed to archive chat'); } finally { setArchivingChat(false); setShowDropdown(null); }
     };
 

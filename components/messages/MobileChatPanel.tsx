@@ -333,7 +333,7 @@ export function MobileChatPanel() {
                                                             {isMessagesLoading ? (
                                                                 <div className="w-full space-y-4 py-4">
                                                                     {Array.from({ length: 5 }).map((_, i) => (
-                                                                        <SkeletonMessage key={i} isOwner={Math.random() > 0.5} />
+                                                                        <SkeletonMessage key={i} isOwner={i % 2 === 0} />
                                                                     ))}
                                                                 </div>
                                                             ) : messages.length > 0 ? (

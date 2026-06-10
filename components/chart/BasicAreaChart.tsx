@@ -228,16 +228,19 @@ const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
           series: [
             {
               name: "Time Online",
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               data: (allZero ? generateDummyData() : chartDataPoints) as any,
             },
           ],
         }));
 
         setLoading(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         console.error("BasicAreaChart: Error fetching activity data:", error);
         setChartData((prev) => ({
           ...prev,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           series: [{ name: "Time Online", data: generateDummyData() as any }],
         }));
         setLoading(false);

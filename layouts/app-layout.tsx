@@ -9,7 +9,7 @@ interface AppLayoutProps {
     children: ReactNode;
 }
 
-export default ({ children }: AppLayoutProps) => {
+function AppLayout({ children }: AppLayoutProps) {
     const { user, subscription } = useAuth();
     const pathname = usePathname();
 
@@ -38,4 +38,6 @@ export default ({ children }: AppLayoutProps) => {
             {children}
         </AppLayoutTemplate>
     );
-};
+}
+
+export default AppLayout;

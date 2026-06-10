@@ -92,6 +92,7 @@ export const initializeCSRF = (): void => {
 export const isPostLoginState = (): boolean => {
     const referrer = document.referrer;
     const isFromLogin = referrer.includes('/login') || referrer.includes('/register');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const pageLoadTime = (window as any).__pageLoadTime || Date.now();
     const timeSinceLoad = Date.now() - pageLoadTime;
 

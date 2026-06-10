@@ -42,6 +42,7 @@ export default function NetworkStatusBanner({ onStatusChange }: NetworkStatusBan
         };
 
         // Initial check
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsOnline(checkOnlineStatus());
 
         // Listen for network changes
@@ -93,7 +94,7 @@ export default function NetworkStatusBanner({ onStatusChange }: NetworkStatusBan
                 ) : (
                     <>
                         <WifiOff className="h-5 w-5" />
-                        <span className="font-medium">You're offline. Please check your internet connection.</span>
+                        <span className="font-medium">You&apos;re offline. Please check your internet connection.</span>
                         <button
                             onClick={handleRetry}
                             className="ml-3 rounded-lg bg-white/20 px-3 py-1 text-sm font-medium hover:bg-white/30 transition-colors"

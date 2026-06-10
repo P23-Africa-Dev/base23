@@ -881,7 +881,7 @@ export function ConversationSidebar() {
             </h4>
           )}
 
-          <Tabs value={currentTab} onValueChange={(v: any) => setCurrentTab(v)}>
+          <Tabs value={currentTab} onValueChange={(v) => setCurrentTab(v as 'all' | 'active' | 'starred' | 'archive')}>
             <TabsList className="hidden" />
             {/* ALL MESSAGES TAB */}
             <TabsContent value="all">

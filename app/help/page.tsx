@@ -244,7 +244,7 @@ export default function HelpPage() {
                                     {filtered.length === 0 && (
                                         <div className="flex flex-col items-center gap-3 rounded-3xl bg-white py-16 text-center shadow-[0px_2px_12px_rgba(0,0,0,0.06)]">
                                             <BookOpen className="h-10 w-10 text-gray-200" />
-                                            <p className="text-sm font-semibold text-gray-400">No results for "{search}"</p>
+                                            <p className="text-sm font-semibold text-gray-400">No results for &ldquo;{search}&rdquo;</p>
                                             <p className="text-xs text-gray-300">Try a different keyword or browse below</p>
                                         </div>
                                     )}

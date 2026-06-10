@@ -136,9 +136,7 @@ export function SkeletonMessage({ isOwner = false, className = "" }: SkeletonLoa
     <div className={`flex ${isOwner ? 'justify-end' : 'justify-start'} ${className}`}>
       <div className={`max-w-xs space-y-2 ${isOwner ? 'items-end' : 'items-start'} flex flex-col`}>
         <Skeleton className={`h-8 ${isOwner ? 'w-32' : 'w-40'} rounded-full`} />
-        {Math.random() > 0.5 && (
-          <Skeleton className={`h-6 ${isOwner ? 'w-24' : 'w-28'} rounded-full`} />
-        )}
+        <Skeleton className={`h-6 ${isOwner ? 'w-24' : 'w-28'} rounded-full`} />
       </div>
     </div>
   );

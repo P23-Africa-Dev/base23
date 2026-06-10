@@ -88,6 +88,31 @@ export default function MobileReferralCardSlider({
     setPreviewUser(null);
   };
 
+  const activeUser = data[activeIndex];
+
+  /** Navigate to next card */
+  const goNext = useCallback(() => {
+    setDirection(1);
+    setActiveIndex((i) => (i + 1) % data.length);
+  }, [data.length]);
+
+  /** Navigate to previous card */
+  const goPrev = useCallback(() => {
+    setDirection(-1);
+    setActiveIndex((i) => (i === 0 ? data.length - 1 : i - 1));
+  }, [data.length]);
+
+  const handleDragEnd = (_: unknown, info: { velocity: { x: number }; offset: { x: number } }) => {
+    const velocity = info.velocity.x;
+    const offset = info.offset.x;
+    if (velocity < -300 || offset < -DRAG_THRESHOLD) {
+      goNext();
+    } else if (velocity > 300 || offset > DRAG_THRESHOLD) {
+      goPrev();
+    }
+    isDragging.current = false;
+  };
+
   // If no data and showEmpty is true, render empty state cards
   if (!data || data.length === 0) {
     if (showEmpty) {
@@ -118,6 +143,7 @@ export default function MobileReferralCardSlider({
           <div className="absolute -bottom-20 left-1/2 -translate-y-[4px]">
             <button
               disabled
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               className="rounded-full bg-gray-300 px-8 py-3.5 text-[12px] font-semibold text-gray-500 cursor-not-allowed shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.2),-2px_3px_5px_-1px_rgba(0,0,0,0.2)]"
             >
               Match us!
@@ -129,33 +155,7 @@ export default function MobileReferralCardSlider({
     return null;
   }
 
-  const activeUser = data[activeIndex];
 
-  /** Navigate to next card */
-  const goNext = useCallback(() => {
-    setDirection(1);
-    setActiveIndex((i) => (i + 1) % data.length);
-  }, [data.length]);
-
-  /** Navigate to previous card */
-  const goPrev = useCallback(() => {
-    setDirection(-1);
-    setActiveIndex((i) => (i === 0 ? data.length - 1 : i - 1));
-  }, [data.length]);
-
-  const handleDragEnd = (_: any, info: any) => {
-    const velocity = info.velocity.x;
-    const offset = info.offset.x;
-
-    // Use velocity for quick swipes, offset for slow drags
-    if (velocity < -300 || offset < -DRAG_THRESHOLD) {
-      goNext();
-    } else if (velocity > 300 || offset > DRAG_THRESHOLD) {
-      goPrev();
-    }
-
-    isDragging.current = false;
-  };
 
   return (
     <div className="relative h-[365px] w-[250px]">

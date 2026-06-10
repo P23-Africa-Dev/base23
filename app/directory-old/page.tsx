@@ -269,67 +269,8 @@ function DirectoryContent({
     const [showAIAnimation, setShowAIAnimation] = useState(false);
     const [loadingConnectionId, setLoadingConnectionId] = useState<number | null>(null);
 
-    // Initialize search if coming from dashboard
-    useEffect(() => {
-        if (search && search.trim()) {
-            setSearchQuery(search);
-            setIsSearchMode(true);
-            performSearch(search);
-        }
-    }, [search]);
-
-    // Connection action handlers
-    const handleConnectionAction = (userId: number, action: 'accept' | 'reject') => {
-        setLoadingConnectionId(userId);
-        const url = action === 'accept' ? '/connections/accept' : '/connections/reject';
-
-        axios.post(url, { user_id: userId })
-            .then(() => window.location.reload())
-            .catch((err) => console.error('Connection action failed:', err))
-            .finally(() => setLoadingConnectionId(null));
-    };
-
-    const handleConnect = (userId: number) => {
-        setLoadingConnectionId(userId);
-        axios.post('/connections/send', { connected_user_id: userId })
-            .then(() => {
-                if (savedUserIds.includes(userId)) {
-                    axios.post('/saved-users/remove', { user_id: userId });
-                }
-                window.location.reload();
-            })
-            .catch((err) => console.error('Connection failed:', err))
-            .finally(() => setLoadingConnectionId(null));
-    };
-
-    // Save user for later
-    const handleSaveUser = (userId: number) => {
-        setLoadingConnectionId(userId);
-        axios.post('/saved-users/save', { user_id: userId })
-            .then(() => window.location.reload())
-            .catch((err) => console.error('Save user failed:', err))
-            .finally(() => setLoadingConnectionId(null));
-    };
-
-    // Remove saved user
-    const handleRemoveSavedUser = (userId: number) => {
-        setLoadingConnectionId(userId);
-        axios.post('/saved-users/remove', { user_id: userId })
-            .then(() => window.location.reload())
-            .catch((err) => console.error('Remove saved user failed:', err))
-            .finally(() => setLoadingConnectionId(null));
-    };
-
-    const handleStartConversation = (userId: number) => {
-        setLoadingConnectionId(userId);
-        axios.post('/messages/start', { user_id: userId, redirect_to: 'message/single' })
-            .then((res) => { window.location.href = res.data.redirect ?? '/message/single'; })
-            .catch((err) => console.error('Failed to start conversation:', err))
-            .finally(() => setLoadingConnectionId(null));
-    };
-
     // Search function with caching
-    const performSearch = async (query: string) => {
+    async function performSearch(query: string) {
         if (!query.trim()) {
             setIsSearchMode(false);
             setSearchResults([]);
@@ -436,6 +377,66 @@ function DirectoryContent({
         } finally {
             setIsSearching(false);
         }
+    }
+
+    // Initialize search if coming from dashboard
+    useEffect(() => {
+        if (search && search.trim()) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setSearchQuery(search);
+            setIsSearchMode(true);
+            performSearch(search);
+        }
+    }, [search]);
+
+    // Connection action handlers
+    const handleConnectionAction = (userId: number, action: 'accept' | 'reject') => {
+        setLoadingConnectionId(userId);
+        const url = action === 'accept' ? '/connections/accept' : '/connections/reject';
+
+        axios.post(url, { user_id: userId })
+            .then(() => window.location.reload())
+            .catch((err) => console.error('Connection action failed:', err))
+            .finally(() => setLoadingConnectionId(null));
+    };
+
+    const handleConnect = (userId: number) => {
+        setLoadingConnectionId(userId);
+        axios.post('/connections/send', { connected_user_id: userId })
+            .then(() => {
+                if (savedUserIds.includes(userId)) {
+                    axios.post('/saved-users/remove', { user_id: userId });
+                }
+                window.location.reload();
+            })
+            .catch((err) => console.error('Connection failed:', err))
+            .finally(() => setLoadingConnectionId(null));
+    };
+
+    // Save user for later
+    const handleSaveUser = (userId: number) => {
+        setLoadingConnectionId(userId);
+        axios.post('/saved-users/save', { user_id: userId })
+            .then(() => window.location.reload())
+            .catch((err) => console.error('Save user failed:', err))
+            .finally(() => setLoadingConnectionId(null));
+    };
+
+    // Remove saved user
+    const handleRemoveSavedUser = (userId: number) => {
+        setLoadingConnectionId(userId);
+        axios.post('/saved-users/remove', { user_id: userId })
+            .then(() => window.location.reload())
+            .catch((err) => console.error('Remove saved user failed:', err))
+            .finally(() => setLoadingConnectionId(null));
+    };
+
+    const handleStartConversation = (userId: number) => {
+        setLoadingConnectionId(userId);
+        axios.post('/messages/start', { user_id: userId, redirect_to: 'message/single' })
+            .then((res) => { window.location.href = res.data.redirect ?? '/message/single'; })
+            .catch((err) => console.error('Failed to start conversation:', err))
+            .finally(() => setLoadingConnectionId(null));
     };
 
     // Handle search input - only update query, no auto-search
@@ -688,7 +689,7 @@ function DirectoryContent({
                                             <div className="mt-1">
                                                 <p className="text-sm text-blue-700">
                                                     <span className="font-semibold">{searchInfo.totalFound}</span> users found for
-                                                    <span className="font-medium"> "{searchInfo.queryProcessed}"</span>
+                                                    <span className="font-medium"> &ldquo;{searchInfo.queryProcessed}&rdquo;</span>
                                                     <span className="ml-2 text-xs text-deepBlue">
                                                         ({searchInfo.searchTime.toFixed(0)}ms)
                                                         {searchInfo.fallbackUsed && ' • Basic Search'}

@@ -42,6 +42,7 @@ export const dummyConversations = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const dummyMessagesByConversation: Record<string, any[]> = {
   'conv-101': [
     {

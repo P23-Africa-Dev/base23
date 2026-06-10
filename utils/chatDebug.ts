@@ -5,6 +5,7 @@
 export class ChatDebugger {
     private static instance: ChatDebugger;
     private isEnabled: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private logs: Array<{ timestamp: string; level: string; message: string; data?: any }> = [];
 
     private constructor() {
@@ -18,6 +19,7 @@ export class ChatDebugger {
         return ChatDebugger.instance;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public log(level: 'info' | 'warn' | 'error' | 'debug', message: string, data?: any) {
         const timestamp = new Date().toISOString();
         const logEntry = { timestamp, level, message, data };
@@ -56,18 +58,22 @@ export class ChatDebugger {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public info(message: string, data?: any) {
         this.log('info', message, data);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public warn(message: string, data?: any) {
         this.log('warn', message, data);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public error(message: string, data?: any) {
         this.log('error', message, data);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public debug(message: string, data?: any) {
         this.log('debug', message, data);
     }
@@ -85,14 +91,17 @@ export class ChatDebugger {
     }
 
     // Conversation debugging helpers
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public logConversationState(conversationId: string, state: any) {
         this.debug(`Conversation ${conversationId} state:`, state);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public logMessageEvent(eventType: string, messageId: number, data?: any) {
         this.info(`Message event: ${eventType}`, { messageId, ...data });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public logEchoEvent(eventName: string, channelName: string, data?: any) {
         this.debug(`Echo event: ${eventName} on ${channelName}`, data);
     }
@@ -112,8 +121,10 @@ export const chatDebugger = ChatDebugger.getInstance();
 
 // Conversation state tracker
 export class ConversationTracker {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private static conversations = new Map<string, any>();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public static updateConversation(encryptedId: string, data: any) {
         this.conversations.set(encryptedId, {
             ...this.conversations.get(encryptedId),

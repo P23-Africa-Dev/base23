@@ -48,6 +48,7 @@ export type Message = {
 };
 
 export type ConversationListItem = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     id?: any;
     encrypted_id: string;
     title?: string | null;

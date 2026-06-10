@@ -107,6 +107,7 @@ export const AppSidebar: React.FC = () => {
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
     setMobileProfileOpen(false);
   }, [pathname]);
@@ -117,10 +118,12 @@ export const AppSidebar: React.FC = () => {
 
   const [showDealCardModal, setShowDealCardModal] = useState(false);
   const [selectedDealCardForModal, setSelectedDealCardForModal] =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     useState<any>(null);
 
   const [showDealCardPopup, setShowDealCardPopup] = useState(false);
   const [singleDealCardForPopup, setSingleDealCardForPopup] =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     useState<any>(null);
   const [singleDealCardStatus, setSingleDealCardStatus] = useState<
     "pending" | "viewed" | "accepted" | "rejected"
@@ -168,6 +171,7 @@ export const AppSidebar: React.FC = () => {
   };
 
   // Handle sent deal card notification click - opens full info modal
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSentDealCardClick = (dealCardData: any) => {
     if (dealCardData) {
       setSelectedDealCardForModal(dealCardData);
@@ -177,6 +181,7 @@ export const AppSidebar: React.FC = () => {
 
   // Handle received deal card notification click - opens popup
   const handleReceivedDealCardClick = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dealCardData: any,
     status: "pending" | "viewed" | "accepted" | "rejected",
   ) => {

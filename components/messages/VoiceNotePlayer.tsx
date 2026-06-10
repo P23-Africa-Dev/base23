@@ -63,10 +63,11 @@ export default function VoiceNotePlayer({ messageId, audioUrl, isOwner, playingA
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
+    const WAVEFORM_HEIGHTS = [8,14,10,18,12,6,16,10,14,8,20,12,16,8,12,18,10,14,8,16,12,10,18,8,14];
     const generateWaveform = () => {
         const bars = [];
         for (let i = 0; i < 25; i++) {
-            const height = Math.random() * 16 + 4;
+            const height = WAVEFORM_HEIGHTS[i];
             const progress = duration > 0 ? currentTime / duration : 0;
             const isActive = i / 25 <= progress;
             bars.push(

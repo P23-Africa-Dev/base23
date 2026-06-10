@@ -177,6 +177,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
     const [currentTime, setCurrentTime] = useState(new Date()); // Add state for current time
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true);
     }, []);
     const dateInfo = getCurrentDateInfo();
@@ -215,12 +216,15 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
 // Track online users and real-time message updates
     useEffect(() => {
         // Join all conversation channels to track presence and messages
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (!(window as any).Echo || conversationsList.length === 0) return;
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const channels: any[] = [];
 
         conversationsList.forEach((conv) => {
             if (conv.id) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const chan = (window as any).Echo.join(`conversation.${conv.id}`)
                     .here((users: User[]) => {
                         setOnlineUsers((prev) => {
@@ -239,6 +243,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                             return newSet;
                         });
                     })
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     .listen('MessageSent', (event: { message: any }) => {
                         const message = event.message;
                         if (!message || !message.user) return;
@@ -311,6 +316,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
         return () => {
             channels.forEach(({ id }) => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     (window as any).Echo?.leave(`conversation.${id}`);
                 } catch (err) {
                     console.warn('Error leaving channel:', err);
