@@ -28,7 +28,7 @@ export default function AuthSimpleLayout({
           style={{
             backgroundImage: `url(${images.formBG})`,
           }}
-          className={`relative z-10 mx-auto flex flex-col justify-center items-center w-full bg-white md:h-screen md:w-2/4 lg:justify-end xl:w-full xl:justify-center dark:bg-gray-900 ${
+          className={`relative z-10 mx-auto flex flex-col justify-center items-center w-full bg-cover bg-top bg-no-repeat bg-white md:h-screen md:w-2/4 lg:justify-end xl:w-full xl:justify-center dark:bg-gray-900 ${
             mobileTopContent
               ? "min-h-[calc(100svh-260px)] md:min-h-0"
               : "min-h-svh md:min-h-0"
@@ -36,7 +36,7 @@ export default function AuthSimpleLayout({
         >
           <div className="w-full lg:w-auto lg:min-w-116.5">
             {(title || subtitle) && (
-              <div className="px-5 pt-8 md:px-0 md:pt-0">
+              <div className="px-5 pt-8 md:px-8 md:pt-0">
                 <h2 className="text-2xl sm:text-3xl lg:text-[36px] font-extrabold text-[#0B1727]">
                   {title}
                 </h2>

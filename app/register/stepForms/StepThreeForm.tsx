@@ -68,10 +68,10 @@ export default function StepThreeForm({
 
   return (
     <>
-      <div className="overflow-hidden w-full ">
+      <div className="overflow-hidden w-full relative min-h-[50vh]">
         <div
           ref={stepContainerRef}
-          className="relative z-7 mt-6 w-full p-5 pb-48 md:overflow-y-auto md:pb-5 md:mt-5 md:h-217.5 lg:h-full lg:mt-0"
+          className="relative z-7 mt-6 w-full p-5 pb-32 md:overflow-y-auto md:pb-5 md:mt-5 md:h-217.5 lg:h-full lg:mt-0"
         >
           <div className="relative  mx-auto max-w-md xl:max-w-162.5">
             {/* Heading */}
@@ -161,12 +161,6 @@ export default function StepThreeForm({
           </div>
         </div>
 
-        <Image
-          src={images.bottomFormBgP}
-          fill
-          className="absolute md:hidden  top-[60%] z-2 h-auto w-full object-cover"
-          alt=""
-        />
       </div>
     </>
   );

@@ -99,10 +99,10 @@ export default function CompanyStepOneForm({
   };
 
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full relative overflow-x-hidden min-h-[50vh]">
       <div
         ref={stepContainerRef}
-        className="relative z-7 mt-6 w-full overflow-x-hidden p-5 pb-48 md:mt-11 md:h-167.5 md:overflow-y-auto md:pb-5 lg:mt-3 lg:h-auto"
+        className="relative z-7 mt-6 w-full overflow-x-hidden p-5 pb-32 md:mt-11 md:h-167.5 md:overflow-y-auto md:pb-5 lg:mt-3 lg:h-auto"
       >
         <div className="mx-auto max-w-md">
           {/* Heading */}
@@ -319,12 +319,6 @@ export default function CompanyStepOneForm({
         </div>
       </div>
 
-      <Image
-        src={images.bottomFormBgP}
-        className="absolute top-[5%] z-2 h-auto w-full object-cover md:hidden"
-        fill
-        alt=""
-      />
     </div>
   );
 }

@@ -82,7 +82,7 @@ export default function LandingPage() {
         />
       }
     >
-      <div className="w-full max-w-124.25 px-5 md:px-0 flex flex-col gap-4 sm:gap-5 mt-6 sm:mt-8">
+      <div className="w-full max-w-124.25 px-5 md:px-8 flex flex-col gap-4 sm:gap-5 mt-6 sm:mt-8">
         {options.map((opt) => (
           <Link
             key={opt.title}

@@ -213,10 +213,10 @@ export default function StepTwoForm({
   };
 
   return (
-    <div className="overflow-hidden w-full">
+    <div className="overflow-hidden w-full relative min-h-[50vh]">
       <div
         ref={stepContainerRef}
-        className="relative z-7 mt-8 h-[1200px]  w-full overflow-hidden p-5 md:mt-5 md:h-[570px] md:overflow-y-auto lg:mt-0 lg:h-auto"
+        className="relative z-7 mt-8 h-auto w-full p-5 pb-32 md:mt-5 md:h-[570px] md:overflow-y-auto lg:mt-0 lg:h-auto"
       >
         <div className="mx-auto max-w-[650px]">
           {/* Heading */}
@@ -526,11 +526,6 @@ export default function StepTwoForm({
         </div>
       </div>
 
-      <img
-        src={images.bottomFormBgP}
-        className="absolute md:hidden top-[58%] z-2 h-auto w-full object-cover"
-        alt=""
-      />
     </div>
   );
 }
