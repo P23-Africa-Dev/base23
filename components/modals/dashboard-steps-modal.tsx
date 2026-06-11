@@ -37,6 +37,7 @@ function SuccessToast({ show, onComplete, isSkipped }: { show: boolean; onComple
                 clearTimeout(completeTimer);
             };
         } else {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsVisible(false);
             setIsExiting(false);
         }
@@ -237,6 +238,7 @@ function StripePaymentForm({
 
             console.log('Subscription created successfully! Calling onSuccess...');
             onSuccess();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error('Payment error:', error);
             console.error('Error response:', error.response?.data);
@@ -339,6 +341,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
                 console.log('Verification status:', data);
 
                 // Helper function to check if LinkedIn value is valid
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const hasValidLinkedIn = (linkedin: any): boolean => {
                     if (!linkedin || typeof linkedin !== 'string') return false;
                     const trimmed = linkedin.trim();
@@ -383,6 +386,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
                 } else {
                     setStripeError('Stripe public key not configured');
                 }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 console.error('Failed to load Stripe key:', error);
                 setStripeError(error.response?.data?.message || 'Failed to load payment form');
@@ -409,6 +413,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
     const [file, setFile] = useState<File | null>(null);
     const [progress, setProgress] = useState(0);
     const [isPreviewOpen, setPreviewOpen] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [uploadedDoc, setUploadedDoc] = useState<any>(null);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -457,6 +462,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
             } else {
                 throw new Error(response.data.error || 'Upload failed');
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             toast.error(error.response?.data?.error || error.message || 'Failed to upload document');
             setFile(null);
@@ -645,7 +651,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
                                                 <div className="flex flex-col gap-1">
                                                     <h4 className="text-lg font-bold text-deepBlack">Verified CEO</h4>
                                                     <p className="max-w-[200px] text-[13px] leading-[17px] text-deepBlack lg:max-w-full lg:text-[12px]">
-                                                        Verify your company's legitimacy and activates full access to the CEO Network.
+                                                        Verify your company&apos;s legitimacy and activates full access to the CEO Network.
                                                     </p>
                                                 </div>
                                             </div>
@@ -759,7 +765,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
                                     >
                                         <div className="flex w-full gap-3 py-20 lg:mt-10 lg:py-0">
                                             <Button className="w-full rounded-full border border-[#3DAAB2] bg-transparent px-8 py-3 text-[10px] font-light text-[#3DAAB2] hover:bg-transparent lg:px-0 lg:py-5 lg:text-base">
-                                                Why It's Needed
+                                                Why It&apos;s Needed
                                             </Button>
                                             <Button
                                                 onClick={nextStep}
@@ -817,7 +823,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
                                     <div className="px-5 pb-6">
                                         <div className="flex flex-col gap-6 md:gap-14 lg:max-w-[830px] lg:flex-row">
                                             <div className="h-fit w-full rounded-4xl bg-white px-6 pt-4 pb-7 lg:w-auto lg:max-w-[348px]">
-                                                <h2 className="mb-2 text-[13.5px] font-semibold text-[#1B252B] lg:text-base">What you'll get.</h2>
+                                                <h2 className="mb-2 text-[13.5px] font-semibold text-[#1B252B] lg:text-base">What you&apos;ll get.</h2>
                                                 <div className="space-y-6">
                                                     <div>
                                                         <p className="text-[13px] font-semibold text-[#2ABFBB] lg:text-sm">
@@ -829,7 +835,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
                                                     </div>
                                                     <div>
                                                         <p className="text-[13px] font-semibold text-[#2ABFBB] lg:text-sm">
-                                                            2. See Your Network's Real Value
+                                                            2. See Your Network&apos;s Real Value
                                                         </p>
                                                         <p className="mt-1 ml-3 text-[10px] font-light text-[#8A9399] lg:text-xs">
                                                             Track which connections actually lead to closed business.
@@ -879,7 +885,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
                                                         </p> */}
                                                         <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
                                                             <p className="text-[10px] font-medium text-amber-800 lg:text-[11px]">
-                                                                🔒 A temporary <strong>£1.00</strong> verification charge will be applied to confirm your card is valid. This will be <strong>refunded immediately</strong>. You won't be billed until the trial ends.
+                                                                🔒 A temporary <strong>£1.00</strong> verification charge will be applied to confirm your card is valid. This will be <strong>refunded immediately</strong>. You won&apos;t be billed until the trial ends.
                                                             </p>
                                                         </div>
                                                         <p className="mt-3 text-left text-[10px] text-gray-500 lg:mt-2 lg:text-[11px]">

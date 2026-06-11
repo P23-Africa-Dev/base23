@@ -126,6 +126,7 @@ function TooltipWrapper({
 }
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ActionRow({ icon, label, onClick }: any) {
     return (
         <div
@@ -138,6 +139,7 @@ function ActionRow({ icon, label, onClick }: any) {
     );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function IconButton({ icon, onClick }: any) {
     return (
         <div

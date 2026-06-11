@@ -247,7 +247,7 @@ export default function SmartMatchPreviewPopup({
                                                 className="font-montserrat text-[12px] font-semibold leading-[14px] tracking-[0px]"
                                                 style={{ color: '#193E47' }}
                                             >
-                                                Skills They're Looking For
+                                                Skills They&apos;re Looking For
                                             </p>
                                         </div>
                                         <div className="flex flex-wrap gap-2">
@@ -271,7 +271,7 @@ export default function SmartMatchPreviewPopup({
                                             className="font-montserrat text-[14px] font-bold leading-[17px] tracking-[0px]"
                                             style={{ color: '#193E47' }}
                                         >
-                                            Why You're a Good Match
+                                            Why You&apos;re a Good Match
                                         </p>
                                     </div>
 

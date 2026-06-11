@@ -13,7 +13,7 @@ interface DashboardLoaderProps {
 
 export default function DashboardLoader({ duration = 6000, onComplete }: DashboardLoaderProps) {
     const [progress, setProgress] = useState(0);
-    const startTimeRef = useRef<number>(Date.now());
+    const startTimeRef = useRef<number>(0);
     const animationFrameRef = useRef<number | null>(null);
     const hasCompletedRef = useRef(false);
 

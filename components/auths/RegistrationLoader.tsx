@@ -38,7 +38,7 @@ export default function RegistrationLoader({
     onComplete
 }: RegistrationLoaderProps) {
     const [progress, setProgress] = useState(0);
-    const startTimeRef = useRef<number>(Date.now());
+    const startTimeRef = useRef<number>(0);
     const animationFrameRef = useRef<number | null>(null);
     const hasCompletedRef = useRef(false);
 
@@ -46,6 +46,7 @@ export default function RegistrationLoader({
     useEffect(() => {
         if (status === 'uploading') {
             // During upload, progress is based on actual upload progress (0-50%)
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setProgress(Math.min(uploadProgress * 0.5, 50));
         } else if (status === 'processing') {
             // During processing, animate from 50% to 90%
@@ -145,7 +146,7 @@ export default function RegistrationLoader({
                     </h3>
 
                     <p className="mb-2 text-xs font-light text-deepBlue">
-                        (Please don't close this window)
+                        (Please don&apos;t close this window)
                     </p>
 
                     <p className="mx-auto max-w-md px-10 mt-2 leading-3.5 text-center text-[12px] text-deepBlue/90">

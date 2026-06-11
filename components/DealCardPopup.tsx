@@ -99,6 +99,7 @@ export default function DealCardPopup({
                 const dismissedTime = parseInt(dismissedUntil, 10);
                 // If dismissed less than 24 hours ago, stay dismissed
                 if (Date.now() - dismissedTime < 24 * 60 * 60 * 1000) {
+                    // eslint-disable-next-line react-hooks/set-state-in-effect
                     setIsDismissed(true);
                     return;
                 } else {
@@ -127,6 +128,7 @@ export default function DealCardPopup({
     // Update minimized count when cards change
     useEffect(() => {
         if (isMinimized) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setMinimizedCount(dealCards.length);
         }
     }, [dealCards.length, isMinimized]);

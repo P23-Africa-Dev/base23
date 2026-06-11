@@ -38,6 +38,7 @@ function ForgotPassword() {
     try {
       await axios.post("/forgot-password", { email });
       window.location.href = `/forgot-password?status=We+have+emailed+your+password+reset+link`;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.response?.data?.errors?.email || "Something went wrong.");
     } finally {

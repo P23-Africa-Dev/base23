@@ -172,6 +172,7 @@ function ProfileInner() {
    PERSONAL PROFILE TAB
 ═══════════════════════════════════════════════════════════════════════════ */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function PersonalTab({ user }: { user: any }) {
     const [editing, setEditing] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -280,6 +281,7 @@ function PersonalTab({ user }: { user: any }) {
    COMPANY PROFILE TAB
 ═══════════════════════════════════════════════════════════════════════════ */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CompanyTab({ user }: { user: any }) {
     const [editing, setEditing] = useState(false);
 
@@ -385,6 +387,7 @@ const PLAN_FEATURES = {
     pro: ['Unlimited Smart Matches', 'Full Directory Access', 'Priority Messaging', 'Deal Cards', 'Smart Match Profile', 'Dedicated Support', 'Advanced Analytics', 'Export Reports'],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SubscriptionTab({ subscription }: { subscription: any }) {
     const isPro = subscription?.is_active && !subscription?.on_trial;
     const isTrial = subscription?.on_trial;
@@ -492,6 +495,7 @@ function SubscriptionTab({ subscription }: { subscription: any }) {
    SETTINGS TAB
 ═══════════════════════════════════════════════════════════════════════════ */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SettingsTab({ user }: { user: any }) {
     const [showPass, setShowPass] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
@@ -739,6 +743,7 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
     );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function calcCompleteness(user: any): number {
     if (!user) return 10;
     const fields = ['name', 'email', 'phone', 'country', 'position', 'company_name', 'industry', 'company_description', 'linkedin', 'goals'];

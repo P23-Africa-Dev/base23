@@ -163,6 +163,7 @@ function TextInputStep({ initialValue, onNext, onBack, step, totalSteps }: TextI
     const [value, setValue] = useState(initialValue);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setValue(initialValue);
     }, [initialValue]);
 
@@ -206,6 +207,7 @@ function SingleSelectIndustryStep({ initialValue, onNext, onBack, step, totalSte
     const [selected, setSelected] = useState<PreferredIndustry | null>(initialValue);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelected(initialValue);
     }, [initialValue]);
 
@@ -266,6 +268,7 @@ function SingleSelectStep({ initialValue, options, onNext, onBack, step, totalSt
     const [selected, setSelected] = useState<BusinessLevel | null>(initialValue);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelected(initialValue);
     }, [initialValue]);
 
@@ -343,6 +346,7 @@ function TagSelectStep({ initialValue, selectedIndustry, onNext, onBack, step, t
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelectedTags(initialValue);
     }, [initialValue]);
 
@@ -590,7 +594,7 @@ function SummaryStep({ preferences, onNext, onBack, step, totalSteps, isSaving }
             </div>
 
             <p className="mt-3 text-center text-xs text-white/60">
-                Click "Finish" to save your preferences and find your best matches!
+                Click &ldquo;Finish&rdquo; to save your preferences and find your best matches!
             </p>
 
             <StepActions

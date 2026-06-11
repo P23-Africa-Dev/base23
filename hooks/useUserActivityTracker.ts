@@ -17,7 +17,7 @@ export const useUserActivityTracker = ({
 }: UseUserActivityTrackerProps = {}) => {
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const initialTimerRef = useRef<NodeJS.Timeout | null>(null);
-    const lastActivityRef = useRef<number>(Date.now());
+    const lastActivityRef = useRef<number>(0);
     const isActiveRef = useRef<boolean>(true);
     const isMountedRef = useRef<boolean>(true);
 
@@ -32,9 +32,9 @@ export const useUserActivityTracker = ({
 
             await axios.post('/api/user-activity');
             console.log('User activity updated successfully');
-        } catch (error: any) {
+        } catch (error) {
             // Don't log 419 errors as they're handled by the interceptor
-            if (error?.response?.status !== 419) {
+            if ((error as { response?: { status?: number } })?.response?.status !== 419) {
                 console.error('Failed to update user activity:', error);
             }
         }
