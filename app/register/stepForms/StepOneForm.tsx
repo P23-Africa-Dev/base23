@@ -96,7 +96,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
     <div className="w-full overflow-x-hidden">
       <div
         ref={stepContainerRef}
-        className="relative z-7 mt-11 h-[800px] w-full overflow-x-hidden p-5 md:h-[670px] lg:mt-3 lg:h-auto"
+        className="relative z-7 mt-6 w-full overflow-x-hidden p-5 pb-48 md:mt-11 md:h-167.5 md:overflow-y-auto md:pb-5 lg:mt-3 lg:h-auto"
       >
         <div className="mx-auto max-w-md">
           {/* Heading */}
@@ -111,7 +111,10 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-7">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-7 md:mr-6"
+          >
             {/* Name */}
             <div>
               <InputWithLabel
@@ -129,7 +132,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-5.75">
+            <div className="grid grid-cols-1 gap-5.75 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
               <div>
                 <InputWithLabel
                   label="Full Name"
@@ -288,7 +291,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
           </form>
 
           {/* Login/Signups */}
-          <div className="mt-10 -ml-12 w-100 px-4 text-left md:hidden lg:px-0">
+          <div className="mt-10 w-full px-4 text-left md:hidden lg:px-0">
             <p className="mb-1 pl-10 text-base font-extralight">
               Already have an account?{" "}
               <a

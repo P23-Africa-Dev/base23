@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import images from "@/constants/image";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface StepThreeProps {
@@ -25,7 +24,6 @@ export default function StepThreeForm({
   defaultValues,
   onNext,
 }: StepThreeProps) {
-  const router = useRouter();
   const stepContainerRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToTop = useCallback(() => {
@@ -66,7 +64,6 @@ export default function StepThreeForm({
   const handleProceed = () => {
     scrollToTop();
     onNext({ great_at: greatAtSelected, can_help_with: helpWithSelected });
-    router.push("/dashboard");
   };
 
   return (
@@ -74,7 +71,7 @@ export default function StepThreeForm({
       <div className="overflow-hidden w-full ">
         <div
           ref={stepContainerRef}
-          className="relative z-7 mt-8 h-300 w-full overflow-hidden md:overflow-y-auto p-5 md:mt-5 md:h-217.5 lg:h-full lg:mt-0 "
+          className="relative z-7 mt-6 w-full p-5 pb-48 md:overflow-y-auto md:pb-5 md:mt-5 md:h-217.5 lg:h-full lg:mt-0"
         >
           <div className="relative  mx-auto max-w-md xl:max-w-162.5">
             {/* Heading */}
@@ -88,7 +85,7 @@ export default function StepThreeForm({
             </div>
 
             <div className="w-full xl:max-w-147.5">
-              <div className="mr-6 space-y-6 lg:mr-0">
+              <div className="space-y-6 md:mr-6 lg:mr-0">
                 {/* I'm great at */}
                 <div className="space-y-3 py-2">
                   <h4 className="mb-2 text-base font-bold dark:text-black">

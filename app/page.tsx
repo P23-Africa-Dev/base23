@@ -20,11 +20,11 @@ const options = [
       <Image
         src={Building}
         alt=""
-        className="h-13.75 w-13.75 text-white mr-2"
+        className="h-10 w-10 sm:h-13.75 sm:w-13.75 text-white mr-2"
       />
     ),
     iconBg: "bg-[#CD3072]",
-    href: "/register",
+    href: "/register?type=company",
   },
   {
     label: "Agent",
@@ -32,10 +32,14 @@ const options = [
     description:
       "List your experience, get verified, and connect with companies hiring across Africa. Build your profile once and let opportunities find you.",
     icon: (
-      <Image src={AgentIcon} alt="" className="h-13 w-13 text-white mr-2" />
+      <Image
+        src={AgentIcon}
+        alt=""
+        className="h-10 w-10 sm:h-13 sm:w-13 text-white mr-2"
+      />
     ),
     iconBg: "bg-[#5054D4]",
-    href: "/register",
+    href: "/register?type=agent",
   },
 ];
 
@@ -78,21 +82,21 @@ export default function LandingPage() {
         />
       }
     >
-      <div className="w-124.25 flex flex-col gap-5 mt-8">
+      <div className="w-full max-w-124.25 px-5 md:px-0 flex flex-col gap-4 sm:gap-5 mt-6 sm:mt-8">
         {options.map((opt) => (
           <Link
             key={opt.title}
             href={opt.href}
-            className="flex items-center gap-3.75 rounded-[20px] bg-[#0B1727] pr-8.25 pl-9 py-5 cursor-pointer hover:bg-[#0d1e35] transition-colors group"
+            className="flex items-center gap-3 sm:gap-3.75 rounded-[20px] bg-[#0B1727] pr-4 sm:pr-8.25 pl-9 py-4 sm:py-5 cursor-pointer hover:bg-[#0d1e35] transition-colors group"
           >
             <div className="relative shrink-0">
               <div
-                className={`flex h-27.5 w-25.25 items-center justify-center rounded-r-[50px] ${opt.iconBg}`}
+                className={`flex h-20 w-18 sm:h-27.5 sm:w-25.25 items-center justify-center rounded-r-[50px] ${opt.iconBg}`}
               >
                 {opt.icon}
               </div>
               <span
-                className="absolute -left-1.5 top-0 bottom-0 -translate-x-full flex items-center justify-center text-[12px] leading-6 font-light text-white/50 tracking-widest"
+                className="absolute -left-1.5 top-0 bottom-0 -translate-x-full flex items-center justify-center text-[10px] sm:text-[12px] leading-6 font-light text-white/50 tracking-widest"
                 style={{
                   writingMode: "vertical-rl",
                   transform: "rotate(180deg)",
