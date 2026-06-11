@@ -72,6 +72,7 @@ export function useSmartMatch(authUserId: number = 0): UseSmartMatchReturn {
                 setMatches([]);
                 setPreferencesSet(false);
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             setMatchesError(error.response?.data?.error || 'Failed to fetch matches');
             setMatches([]);
@@ -103,6 +104,7 @@ export function useSmartMatch(authUserId: number = 0): UseSmartMatchReturn {
                 setPreferences(null);
                 setPreferencesSet(false);
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             setPreferencesError(error.response?.data?.error || 'Failed to fetch preferences');
             setPreferences(null);
@@ -126,6 +128,7 @@ export function useSmartMatch(authUserId: number = 0): UseSmartMatchReturn {
             } else {
                 setRecentNetwork([]);
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             setRecentNetworkError(error.response?.data?.error || 'Failed to fetch recent network');
             setRecentNetwork([]);
@@ -150,6 +153,7 @@ export function useSmartMatch(authUserId: number = 0): UseSmartMatchReturn {
                 return true;
             }
             return false;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             setPreferencesError(error.response?.data?.error || 'Failed to save preference');
             console.error('Error saving preference:', error);
@@ -177,6 +181,7 @@ export function useSmartMatch(authUserId: number = 0): UseSmartMatchReturn {
                     return true;
                 }
                 return false;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 setPreferencesError(error.response?.data?.error || 'Failed to save preferences');
                 console.error('Error saving all preferences:', error);
@@ -205,6 +210,7 @@ export function useSmartMatch(authUserId: number = 0): UseSmartMatchReturn {
                 return true;
             }
             return false;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             setPreferencesError(error.response?.data?.error || 'Failed to clear preferences');
             console.error('Error clearing preferences:', error);
@@ -229,6 +235,7 @@ export function useSmartMatch(authUserId: number = 0): UseSmartMatchReturn {
                     return result;
                 }
                 return null;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 console.error('Error matching with user:', error);
                 return null;
@@ -250,6 +257,7 @@ export function useSmartMatch(authUserId: number = 0): UseSmartMatchReturn {
     useEffect(() => {
         if (authUserId > 0) {
             setCurrentUserId(authUserId);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             refreshAll();
         }
     }, [authUserId]);

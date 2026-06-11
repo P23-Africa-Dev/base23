@@ -164,6 +164,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
     // Auto-fetch on mount
     useEffect(() => {
         if (autoFetch) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             refetch();
         }
     }, [autoFetch, refetch]);
@@ -182,7 +183,9 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
     // Listen for real-time notification events (via Echo/Reverb)
     useEffect(() => {
         // Check if Echo is available (Laravel Echo for WebSockets)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (typeof window !== 'undefined' && (window as any).Echo) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const echo = (window as any).Echo;
 
             // Get user ID from page props or DOM

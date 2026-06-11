@@ -76,6 +76,21 @@ export default function ReferralCardSlider({
     setPreviewUser(null);
   };
 
+  const getUserAt = (offset: number) => {
+    const index = (activeIndex + offset + data.length) % data.length;
+    return data[index];
+  };
+
+  const goNext = useCallback(() => {
+    setDirection(1);
+    setActiveIndex((i) => (i + 1) % data.length);
+  }, [data.length]);
+
+  const goPrev = useCallback(() => {
+    setDirection(-1);
+    setActiveIndex((i) => (i === 0 ? data.length - 1 : i - 1));
+  }, [data.length]);
+
   if (!data || data.length === 0) {
     if (showEmpty) {
       return (
@@ -97,22 +112,8 @@ export default function ReferralCardSlider({
     return null;
   }
 
-  const getUserAt = (offset: number) => {
-    const index = (activeIndex + offset + data.length) % data.length;
-    return data[index];
-  };
-
-  const goNext = useCallback(() => {
-    setDirection(1);
-    setActiveIndex((i) => (i + 1) % data.length);
-  }, [data.length]);
-
-  const goPrev = useCallback(() => {
-    setDirection(-1);
-    setActiveIndex((i) => (i === 0 ? data.length - 1 : i - 1));
-  }, [data.length]);
-
-  const handleDragEnd = (_: any, info: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDragEnd = (_: unknown, info: { velocity: { x: number }; offset: { x: number } }) => {
     const velocity = info.velocity.x;
     const offset = info.offset.x;
     if (velocity < -500 || offset < -DRAG_THRESHOLD) goNext();

@@ -139,9 +139,8 @@ export const DirectoryLeads: React.FC<DirectoryLeadsProps> = ({
     return (
         <>
             {matches.map((match, index) => (
-                <div className="w-full">
+                <div key={index} className="w-full">
                     <Card
-                        key={index}
                         className="relative  flex h-[302px] w-full max-w-[250px] flex-col justify-end overflow-hidden rounded-xl px-[0.35px] shadow-[-2px_-6px_5px_-3px_rgba(0,0,0,0.1),-5px_10px_5px_-3px_rgba(0,0,0,0.1)]"
                     >
                         {/* Background image */}

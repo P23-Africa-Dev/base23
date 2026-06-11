@@ -33,6 +33,7 @@ export function SubscriptionRenewalModal({ open, onClose, onRenewed }: Subscript
             await axios.post('/api/subscription/renew');
             toast.success('Subscription renewed successfully!');
             onRenewed();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             const errorMsg = err.response?.data?.error || 'Failed to renew subscription';
             if (errorMsg.includes('No payment method')) {

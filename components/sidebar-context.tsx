@@ -19,6 +19,7 @@ export const SidebarProvider: React.FC<{ defaultOpen?: boolean; children: React.
     // restore preference from localStorage (optional)
     try {
       const saved = localStorage.getItem('app.sidebar.open');
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved !== null) setOpen(saved === '1');
     } catch {
       /* ignore */

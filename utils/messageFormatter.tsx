@@ -32,7 +32,7 @@ export function parseMessageText(text: string): FormattedPart[] {
     if (!text) return [];
 
     const parts: FormattedPart[] = [];
-    let remaining = text;
+    const remaining = text;
 
     // Process line by line to handle lists
     const lines = remaining.split('\n');
@@ -74,7 +74,7 @@ export function parseMessageText(text: string): FormattedPart[] {
  */
 function parseInlineFormatting(text: string): FormattedPart[] {
     const parts: FormattedPart[] = [];
-    let remaining = text;
+    const remaining = text;
 
     // Combined regex for all inline patterns
     const patterns = [

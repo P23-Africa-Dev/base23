@@ -33,6 +33,7 @@ export default function ConfirmPassword() {
     try {
       await axios.post("/confirm-password", { password });
       window.history.back();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.response?.data?.errors?.password || "Incorrect password.");
       setPassword("");

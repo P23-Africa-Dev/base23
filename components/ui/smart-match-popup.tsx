@@ -223,7 +223,7 @@ export default function SmartMatchPopup({
                                                 className="font-montserrat text-[12px] font-semibold leading-[14px] tracking-[0px]"
                                                 style={{ color: '#193E47' }}
                                             >
-                                                Skills You're Looking For
+                                                Skills You&apos;re Looking For
                                             </p>
                                         </div>
                                         <div className="flex flex-wrap gap-2">
@@ -283,7 +283,7 @@ export default function SmartMatchPopup({
                                             Smart Match Connection
                                         </p>
                                         <p className="font-montserrat text-[10px] font-light text-purple-600">
-                                            Clicking "Match us Now" will start a Smart Match conversation with {data.sender_name}
+                                            Clicking &ldquo;Match us Now&rdquo; will start a Smart Match conversation with {data.sender_name}
                                         </p>
                                     </div>
                                 </div>

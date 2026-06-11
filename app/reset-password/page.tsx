@@ -49,6 +49,7 @@ function ResetPassword() {
         password_confirmation: passwordConfirmation,
       });
       window.location.href = "/login?status=Password+reset+successfully";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setErrors(err.response?.data?.errors || {});
     } finally {

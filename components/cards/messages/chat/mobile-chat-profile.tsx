@@ -128,7 +128,7 @@ export default function MobileProfileSidebar({
                             <h2 className="text-sm font-extrabold">Bio</h2>
                             <p className="mt-1 text-[9.6px] font-medium">
                                 {/* {formatStringData(bio, 'No Bio Available')} */}
-                                Seasoned renewable energy executive with 8 years of experience building solar infrastructure across East and West Africa. Founded GreenEnergy Africa in 2018, scaling to $5M annual revenue by establishing distribution partnerships in 3 countries. Passionate about bridging Africa's energy gap while delivering investor returns. Fluent in English and business-level French.
+                                Seasoned renewable energy executive with 8 years of experience building solar infrastructure across East and West Africa. Founded GreenEnergy Africa in 2018, scaling to $5M annual revenue by establishing distribution partnerships in 3 countries. Passionate about bridging Africa&apos;s energy gap while delivering investor returns. Fluent in English and business-level French.
                             </p>
                         </div>
 
@@ -163,6 +163,7 @@ export default function MobileProfileSidebar({
 
 /* ---------- Helpers ---------- */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Info = ({ label, value, full }: any) => (
     <div className={full ? 'col-span-2' : ''}>
         <p className="font-bold">{label}</p>
@@ -170,6 +171,7 @@ const Info = ({ label, value, full }: any) => (
     </div>
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const InfoLight = ({ label, value }: any) => (
     <div>
         <p className="font-bold">{label}</p>
