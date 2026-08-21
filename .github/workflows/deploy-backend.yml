@@ -71,6 +71,10 @@ jobs:
 
       - name: Prepare test environment
         run: |
+          if [ ! -f .env.example ]; then
+            echo "Missing backend/.env.example — ensure it is committed (not ignored by .env*)"
+            exit 1
+          fi
           cp .env.example .env
           php artisan key:generate
           sed -i 's/^APP_ENV=.*/APP_ENV=testing/' .env
