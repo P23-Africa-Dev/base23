@@ -2,7 +2,7 @@ import AppLogoIcon from "@/components/app-logo-icon";
 import Link from "next/link";
 import { type PropsWithChildren } from "react";
 
-const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "NOEL";
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Base23";
 
 interface AuthLayoutProps {
   title?: string;

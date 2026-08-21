@@ -58,6 +58,7 @@ export interface User {
     can_help_with?: string[];
     email_verified_at: string | null;
     is_admin?: boolean;
+    account_type?: 'company' | 'agent';
     created_at: string;
     updated_at: string;
     [key: string]: unknown;

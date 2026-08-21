@@ -49,8 +49,8 @@ export class ChatNotifications {
 
             const notification = new Notification(`New message from ${senderName}`, {
                 body: truncatedMessage,
-                icon: senderProfilePicture || '/images/favicon-noel-white.png',
-                badge: '/images/favicon-noel-white.png',
+                icon: senderProfilePicture || '/images/favicon-base23-white.png',
+                badge: '/images/favicon-base23-white.png',
                 tag: `chat-message-${senderName}`,
                 requireInteraction: false,
                 silent: false,

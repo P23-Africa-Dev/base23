@@ -7,7 +7,7 @@ import MobileTopContent from "@/components/auths/MobileContent";
 import StepTopContent from "@/components/auths/StepTopContent";
 import { Button } from "@/components/ui/button";
 import AuthLayout from "@/layouts/auth-layout";
-import axios from "axios";
+import axios from "@/lib/axios-config";
 import { LoaderCircle } from "lucide-react";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";

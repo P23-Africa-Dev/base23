@@ -139,7 +139,7 @@ function Dashboard() {
       localStorage.removeItem("subscription_success");
 
       toast.success(
-        "🎉 Welcome to NOEL! Your subscription is now active. Enjoy your 14-day free trial!",
+        "🎉 Welcome to Base23! Your subscription is now active. Enjoy your 14-day free trial!",
         {
           duration: 6000,
           style: {

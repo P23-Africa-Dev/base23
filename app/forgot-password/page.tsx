@@ -11,7 +11,7 @@ import StepTopContent from "@/components/auths/StepTopContent";
 import { Button } from "@/components/ui/button";
 import AuthLayout from "@/layouts/auth-layout";
 import { LoaderCircle } from "lucide-react";
-import axios from "axios";
+import axios from "@/lib/axios-config";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 

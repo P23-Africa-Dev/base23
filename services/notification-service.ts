@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '@/lib/axios-config';
 
 // Notification API base URL (Laravel backend)
 const NOTIFICATION_API_BASE = '/api/notifications';

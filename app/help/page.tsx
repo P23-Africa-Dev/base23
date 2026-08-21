@@ -35,8 +35,8 @@ const FAQ_SECTIONS: FAQSection[] = [
         title: 'Getting Started',
         items: [
             {
-                q: 'What is NOEL (BASE 23)?',
-                a: 'NOEL is a business referral network that intelligently connects professionals, sales reps, and business owners. It uses Smart Match technology to surface the right people for the right opportunities — saving you hours of irrelevant networking.',
+                q: 'What is Base23?',
+                a: 'Base23 is a business referral network that intelligently connects professionals, sales reps, and business owners. It uses Smart Match technology to surface the right people for the right opportunities — saving you hours of irrelevant networking.',
             },
             {
                 q: 'How do I set up my Smart Match profile?',
@@ -150,7 +150,7 @@ const FAQ_SECTIONS: FAQSection[] = [
         items: [
             {
                 q: 'Who can see my profile?',
-                a: 'By default, your profile is visible to all NOEL members. You can control your visibility under Profile → Settings → Privacy & Account → Privacy Settings.',
+                a: 'By default, your profile is visible to all Base23 members. You can control your visibility under Profile → Settings → Privacy & Account → Privacy Settings.',
             },
             {
                 q: 'Is my payment information safe?',

@@ -15,6 +15,9 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import axios from "@/lib/axios-config";
+import { useAuth } from "@/context/AuthContext";
+import { LoaderCircle } from "lucide-react";
 
 const loginMobileContent = {
   title: "We're glad to have you back.",
@@ -28,16 +31,18 @@ function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const status = searchParams.get("status") || "";
+  const { refresh } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (status) toast.success(status, { duration: 4000 });
   }, [status]);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) {
       toast.error("Please enter your email address.");
@@ -51,7 +56,25 @@ function Login() {
       toast.error("Please enter your password.");
       return;
     }
-    router.push("/dashboard");
+    
+    setLoading(true);
+    try {
+      await axios.post("/login", {
+        email: email.trim(),
+        password,
+        remember,
+      });
+      await refresh();
+      toast.success("Successfully logged in.");
+      const redirectPath = searchParams.get("redirect") || "/dashboard";
+      router.push(redirectPath);
+    } catch (err: any) {
+      console.error("Login error:", err);
+      const errorMessage = err.response?.data?.message || err.response?.data?.error || "Invalid credentials. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -139,14 +162,16 @@ function Login() {
               type="submit"
               className="mt-10 mb-2 leading-6 w-full rounded-2xl text-[20px] bg-pinkLight py-[27px] text-lg font-semibold text-white hover:bg-pinkLight/90 dark:bg-blue-600 dark:hover:bg-blue-700"
               tabIndex={4}
+              disabled={loading}
             >
+              {loading && <LoaderCircle className="h-5 w-5 animate-spin mr-2" />}
               Log in
             </Button>
 
             <div className="mt-0 flex justify-center">
               <p className="text-base font-light text-primary dark:text-gray-300">
                 Don&apos;t have an account?{" "}
-                <TextLink tabIndex={5} href="https://p23africa.com/brn-form">
+                <TextLink tabIndex={5} href="/register">
                   Sign up
                 </TextLink>
               </p>

@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import axios from "@/lib/axios-config";
 import { format, subDays } from "date-fns";
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
@@ -80,7 +80,7 @@ interface ChartState {
     };
     tooltip?: {
       enabled: boolean;
-      theme: string;
+      theme: "dark" | "light";
       x?: { format: string };
       y?: { formatter: (value: number) => string };
     };

@@ -94,7 +94,7 @@ const images = {
     dashboardAiSearch: '/assets/desktop-ai-search.png',
     sahreIcon: '/assets/share.png',
     phone: '/assets/phone.png',
-    logo: '/assets/noel-logo.png',
+    logo: '/assets/base23-logo.png',
     messagePattern: '/assets/message-pattern.png',
     noMessage: '/assets/no-message-icon.png',
     audio: '/assets/audio.png',
