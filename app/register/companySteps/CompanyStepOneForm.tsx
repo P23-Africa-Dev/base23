@@ -3,7 +3,7 @@
 import InputWithLabel from "@/components/input/InputWithLabel";
 import { Button } from "@/components/ui/button";
 import images from "@/constants/image";
-import { Plus } from "lucide-react";
+import { Eye, EyeOff, Plus } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,8 @@ export type CompanyStepOneData = {
   position: string;
   email: string;
   phone: string;
+  password: string;
+  password_confirmation: string;
   countries_of_operation: string[];
 };
 
@@ -30,6 +32,8 @@ type CompanyStepOneProps = {
     position?: string;
     email?: string;
     phone?: string;
+    password?: string;
+    password_confirmation?: string;
     countries_of_operation?: string[];
   };
   onNext: (data: CompanyStepOneData) => void;
@@ -48,10 +52,14 @@ export default function CompanyStepOneForm({
   );
   const [addingCountry, setAddingCountry] = useState(false);
   const [newCountry, setNewCountry] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [meterVisible, setMeterVisible] = useState(false);
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<Omit<CompanyStepOneData, "countries_of_operation">>({
     defaultValues: {
@@ -63,9 +71,41 @@ export default function CompanyStepOneForm({
       position: defaultValues.position || "",
       email: defaultValues.email || "",
       phone: defaultValues.phone || "",
+      password: defaultValues.password || "",
+      password_confirmation: defaultValues.password_confirmation || "",
     },
     mode: "onBlur",
   });
+
+  const password = watch("password");
+
+  const passwordRules = {
+    uppercase: /[A-Z]/,
+    lowercase: /[a-z]/,
+    number: /[0-9]/,
+    special: /[#?!@$%^&*-]/,
+    length: /.{8,}/,
+  };
+
+  const getPasswordRules = (value: string) => [
+    {
+      label: "One uppercase letter",
+      valid: passwordRules.uppercase.test(value),
+    },
+    {
+      label: "One lowercase letter",
+      valid: passwordRules.lowercase.test(value),
+    },
+    { label: "One number", valid: passwordRules.number.test(value) },
+    {
+      label: "One special character",
+      valid: passwordRules.special.test(value),
+    },
+    {
+      label: "At least 8 characters",
+      valid: passwordRules.length.test(value),
+    },
+  ];
 
   const scrollToTop = useCallback(() => {
     if (stepContainerRef.current) {
@@ -111,8 +151,8 @@ export default function CompanyStepOneForm({
               First, Account Setup
             </h2>
             <p className="max-w-sm pr-20 text-[16px] font-normal text-primary lg:pr-5 lg:text-[17px]">
-              Setup the account to gain endless smart matches with suitable
-              professionals.
+              Set up your hiring account to find verified sales agents and post
+              roles with confidence.
             </p>
           </div>
 
@@ -229,6 +269,110 @@ export default function CompanyStepOneForm({
               </div>
             </div>
 
+            <div className="relative">
+              <div className="relative">
+                <InputWithLabel
+                  label="Password"
+                  htmlFor="password"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                    validate: (value) => {
+                      const rules = getPasswordRules(value);
+                      const allValid = rules.every((r) => r.valid);
+                      return (
+                        allValid ||
+                        "Password must meet all strength requirements"
+                      );
+                    },
+                  })}
+                  onFocus={() => setMeterVisible(true)}
+                  onBlur={() => setMeterVisible(false)}
+                  inputClassName="pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-4 flex items-center text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="mt-1 ml-3 text-xs text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
+              {meterVisible && password && (
+                <div className="absolute z-10 h-[160px] w-full space-y-2 rounded-2xl bg-white px-5 py-4 shadow-2xl">
+                  <div className="h-2 w-full rounded bg-gray-200">
+                    <div
+                      className={`h-full rounded transition-all duration-300 ${
+                        [
+                          "w-1/5 bg-red-500",
+                          "w-2/5 bg-orange-500",
+                          "w-3/5 bg-yellow-500",
+                          "w-4/5 bg-blue-500",
+                          "w-full bg-green-500",
+                        ][
+                          getPasswordRules(password).filter((r) => r.valid)
+                            .length
+                        ]
+                      }`}
+                    ></div>
+                  </div>
+                  <ul className="space-y-1 text-sm">
+                    {getPasswordRules(password).map((rule, i) => (
+                      <li
+                        key={i}
+                        className={`flex items-center gap-2 ${rule.valid ? "text-green-600" : "text-gray-500"}`}
+                      >
+                        {rule.valid ? "✅" : "❌"} {rule.label}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <InputWithLabel
+                label="Confirm Password"
+                htmlFor="password_confirmation"
+                type={showConfirmPassword ? "text" : "password"}
+                {...register("password_confirmation", {
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                })}
+                inputClassName="pr-12"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-4 flex items-center text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+              {errors.password_confirmation && (
+                <p className="mt-1 ml-3 text-xs text-red-500">
+                  {errors.password_confirmation.message}
+                </p>
+              )}
+            </div>
+
             {/* Country of Operation */}
             <div className="space-y-3 px-4">
               <h4 className="text-base font-semibold text-primary dark:text-black">
@@ -301,7 +445,7 @@ export default function CompanyStepOneForm({
             <p className="mb-1 pl-10 text-base font-extralight">
               Already have an account?{" "}
               <a
-                href="/login"
+                href="/login?type=company"
                 className="font-semibold text-deepBlack italic hover:underline dark:text-deepBlack"
               >
                 Sign In

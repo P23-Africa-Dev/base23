@@ -43,7 +43,12 @@ apiClient.interceptors.response.use(
                 document.cookie = 'base23_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                 
                 const path = window.location.pathname;
-                const isAuthPage = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/confirm-password'].includes(path);
+                const isAuthPage =
+                    path === '/login' ||
+                    path.startsWith('/login/') ||
+                    ['/register', '/forgot-password', '/reset-password', '/verify-email', '/confirm-password'].some(
+                        (p) => path === p || path.startsWith(p + '/')
+                    );
                 if (!isAuthPage) {
                     window.location.href = '/login?session_expired=true';
                 }
