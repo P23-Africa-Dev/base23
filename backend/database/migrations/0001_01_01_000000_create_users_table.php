@@ -17,6 +17,33 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // Rebrand / Profile Fields
+            $table->string('account_type')->default('agent');
+            $table->string('company_name')->nullable();
+            $table->text('company_description')->nullable();
+            $table->string('website')->nullable();
+            $table->string('industry')->nullable();
+            $table->json('categories')->nullable();
+            $table->json('great_at')->nullable();
+            $table->json('can_help_with')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('country')->nullable();
+            $table->json('countries_of_operation')->nullable();
+            $table->string('position')->nullable();
+            $table->string('role')->nullable();
+            $table->string('years_of_operation')->nullable();
+            $table->string('number_of_employees')->nullable();
+            $table->string('business_based')->nullable();
+            $table->string('hiring_field_sales')->nullable();
+            $table->string('budget_per_hire')->nullable();
+            $table->string('selected_outcome')->nullable();
+            $table->text('goals')->nullable();
+            $table->string('year_established')->nullable();
+            $table->string('tier')->nullable();
+            $table->string('profile_picture')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

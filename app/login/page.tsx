@@ -171,7 +171,7 @@ function Login() {
             <div className="mt-0 flex justify-center">
               <p className="text-base font-light text-primary dark:text-gray-300">
                 Don&apos;t have an account?{" "}
-                <TextLink tabIndex={5} href="https://p23africa.com/brn-form">
+                <TextLink tabIndex={5} href="/register">
                   Sign up
                 </TextLink>
               </p>
