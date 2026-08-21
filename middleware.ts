@@ -1,22 +1,28 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { resolveApiUrl } from "@/lib/resolve-api-url";
+
+const AUTH_POST_PATHS = new Set([
+  "/login",
+  "/register",
+  "/logout",
+  "/forgot-password",
+  "/reset-password",
+]);
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  const API_URL = resolveApiUrl();
 
-  // Proxy POST authentication requests to the backend
-  if (
-    request.method === "POST" &&
-    ["/login", "/register", "/logout", "/forgot-password", "/reset-password"].includes(pathname)
-  ) {
-    return NextResponse.rewrite(new URL(`${API_URL}${pathname}`, request.url));
+  // Proxy auth POSTs to Laravel (pages stay on Next.js for GET)
+  if (request.method === "POST" && AUTH_POST_PATHS.has(pathname)) {
+    const destination = new URL(`${API_URL}${pathname}`);
+    destination.search = request.nextUrl.search;
+    return NextResponse.rewrite(destination);
   }
 
-  // Check if the auth cookie exists
   const isAuthenticated = request.cookies.has("base23_authenticated");
 
-  // Define path matches
   const isAuthPage = [
     "/login",
     "/register",
@@ -58,4 +64,3 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|assets|fonts|images).*)",
   ],
 };
-

@@ -150,10 +150,13 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
               </div>
               <div>
                 <InputWithLabel
-                  label="Role"
+                  label="Job Title"
                   htmlFor="role"
                   type="text"
-                  {...register("role", { required: "Role is required" })}
+                  placeholder="e.g. Field Sales Agent"
+                  {...register("role", {
+                    required: "Job title is required",
+                  })}
                 />
                 {errors.role && (
                   <p className="mt-1 ml-3 text-sm text-red-500">

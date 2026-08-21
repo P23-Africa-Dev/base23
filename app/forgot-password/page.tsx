@@ -42,7 +42,7 @@ function ForgotPassword() {
     setProcessing(true);
     setError("");
     try {
-      await axios.post("/forgot-password", { email });
+      await axios.post("/api/auth/forgot-password", { email });
       const params = new URLSearchParams({
         status: "We have emailed your password reset link",
       });

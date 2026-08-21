@@ -45,7 +45,7 @@ function ResetPassword() {
     setProcessing(true);
     setErrors({});
     try {
-      await axios.post("/reset-password", {
+      await axios.post("/api/auth/reset-password", {
         token,
         email,
         password,

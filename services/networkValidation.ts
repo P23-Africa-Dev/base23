@@ -223,6 +223,26 @@ function parseError(error: any): NetworkValidationResult {
         
         const { status, data } = axiosError.response;
         
+        // Vercel rewrite / missing upstream often returns this shape
+        if (
+            status === 404 &&
+            (data?.error?.message || data?.message || '')
+                .toString()
+                .toLowerCase()
+                .includes('could not be found')
+        ) {
+            return {
+                success: false,
+                error: {
+                    type: 'server',
+                    message:
+                        'Registration service is temporarily unreachable. Please try again in a moment.',
+                    details: data,
+                    retryable: true,
+                },
+            };
+        }
+        
         // Validation errors (422)
         if (status === 422) {
             return {
@@ -352,7 +372,10 @@ export async function submitRegistration(
     
     return makeRequestWithRetry(
         async () => {
-            const response = await axios.post('/register', formData, {
+            const response = await axios.post(
+                '/api/auth/register',
+                formData,
+                {
                 timeout: options.timeout ?? 60000, // 60 seconds for file upload
                 headers: {
                     'Accept': 'application/json',

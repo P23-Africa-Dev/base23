@@ -30,7 +30,10 @@ apiClient.interceptors.request.use(async (config) => {
 apiClient.interceptors.response.use(
     (response) => {
         // Clear the auth cookie on successful logout
-        if (typeof window !== 'undefined' && response.config.url === '/logout') {
+        if (typeof window !== 'undefined' && (
+            response.config.url === '/logout' ||
+            response.config.url === '/api/auth/logout'
+        )) {
             document.cookie = 'base23_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         }
         return response;
