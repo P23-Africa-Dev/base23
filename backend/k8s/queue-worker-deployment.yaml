@@ -1,0 +1,74 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Queue Worker — database driver
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-worker
+  namespace: base23
+  labels:
+    app.kubernetes.io/name: queue-worker
+    app.kubernetes.io/component: worker
+    app.kubernetes.io/part-of: base23
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue-worker
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: queue-worker
+        app.kubernetes.io/name: queue-worker
+        app.kubernetes.io/component: worker
+    spec:
+      terminationGracePeriodSeconds: 120
+      imagePullSecrets:
+        - name: do-registry
+      containers:
+        - name: queue-worker
+          image: registry.digitalocean.com/con-reg/base23:v2-php84-202608211213
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              mkdir -p /var/www/html/storage/framework/cache/data \
+                       /var/www/html/storage/framework/sessions \
+                       /var/www/html/storage/framework/views \
+                       /var/www/html/storage/logs
+              php artisan config:clear
+              php artisan config:cache
+              exec php artisan queue:work database \
+                --queue=default \
+                --sleep=3 \
+                --tries=3 \
+                --max-time=3600 \
+                --timeout=180
+          envFrom:
+            - configMapRef:
+                name: base23-config
+            - secretRef:
+                name: base23-secret
+          resources:
+            requests:
+              cpu: "25m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          livenessProbe:
+            exec:
+              command: ["/bin/sh", "-c", "php -r 'exit(0);'"]
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 15
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false

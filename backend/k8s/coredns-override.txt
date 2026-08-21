@@ -1,0 +1,6 @@
+hosts {
+  10.108.53.190 api.thefactory23.com
+  10.108.53.190 api.ajoflow.noel54.com
+  10.108.53.190 api.noel54.com
+  fallthrough
+}

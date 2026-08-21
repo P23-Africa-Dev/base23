@@ -1,0 +1,233 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Base23 — Production Deploy Workflow (DigitalOcean DOKS)
+#
+# Triggers:
+#   push to `main` (backend changes) → test → build+push → deploy
+#   pull_request to `main` (backend) → test only
+#   workflow_dispatch → full deploy
+#
+# Required GitHub Secret (Settings → Secrets and variables → Actions):
+#   DO_ACCESS_TOKEN   DigitalOcean personal access token (registry + DOKS)
+#
+# NOTE: Application secrets (APP_KEY, DB_PASSWORD, AWS_*) live in-cluster as
+#       `base23-secret`. This workflow never touches them. Update manually:
+#         kubectl apply -f backend/k8s/secret.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+name: Deploy Backend to Production
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch:
+
+env:
+  REGISTRY: registry.digitalocean.com/con-reg
+  IMAGE_NAME: registry.digitalocean.com/con-reg/base23
+  DOKS_CLUSTER_ID: 8236d5b0-a49e-4ed8-9310-b432b7e3e2d2
+  K8S_NAMESPACE: base23
+
+jobs:
+  # ── Job 1: Lint & Test ──────────────────────────────────────────────────────
+  test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo_mysql, pdo_sqlite, mbstring, bcmath, gd, zip, pcntl, exif, intl
+          coverage: none
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: backend/vendor
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: composer-
+
+      - name: Install PHP dependencies
+        run: composer install --optimize-autoloader --prefer-dist --no-interaction
+
+      - name: Install & build frontend assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare test environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          sed -i 's/^APP_ENV=.*/APP_ENV=testing/' .env
+
+      - name: PHP syntax check
+        run: find app config routes database -name "*.php" -print0 | xargs -0 -n1 php -l > /dev/null
+
+      - name: Run tests
+        run: php artisan test --stop-on-failure
+
+  # ── Job 2: Build & Push image ───────────────────────────────────────────────
+  build:
+    name: Build & Push
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name != 'pull_request'
+    outputs:
+      image_tag: ${{ steps.tag.outputs.SHA_TAG }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
+
+      - name: Login to DO Container Registry
+        run: doctl registry login --expiry-seconds 1200
+
+      - name: Compute short SHA tag
+        id: tag
+        run: echo "SHA_TAG=$(echo ${{ github.sha }} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: backend
+          file: backend/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.SHA_TAG }}
+            ${{ env.IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
+          platforms: linux/amd64
+
+  # ── Job 3: Deploy to Production ─────────────────────────────────────────────
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name != 'pull_request'
+    concurrency:
+      group: base23-production-deploy
+      cancel-in-progress: false
+    environment:
+      name: production
+      url: https://api.noel54.com/up
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
+
+      - name: Configure kubectl
+        run: doctl kubernetes cluster kubeconfig save ${{ env.DOKS_CLUSTER_ID }}
+
+      - name: Set image reference
+        id: img
+        run: echo "NEW_IMAGE=${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }}" >> "$GITHUB_OUTPUT"
+
+      - name: Pin new image tag into manifests
+        run: |
+          NEW_IMAGE="${{ steps.img.outputs.NEW_IMAGE }}"
+          echo "Deploying image: $NEW_IMAGE"
+          sed -i "s|${{ env.IMAGE_NAME }}:[^ \"]*|$NEW_IMAGE|g" \
+            backend/k8s/backend-deployment.yaml \
+            backend/k8s/queue-worker-deployment.yaml \
+            backend/k8s/scheduler-deployment.yaml \
+            backend/k8s/migrate-job.yaml
+
+      - name: Apply config & policies (never secrets)
+        run: |
+          kubectl apply -f backend/k8s/configmap.yaml
+          kubectl apply -f backend/k8s/nginx-configmap.yaml
+          kubectl apply -f backend/k8s/network-policy.yaml
+          kubectl apply -f backend/k8s/backend-service.yaml
+          kubectl apply -f backend/k8s/certificate.yaml
+          kubectl apply -f backend/k8s/ingress.yaml
+
+      - name: Run database migrations
+        run: |
+          kubectl delete job laravel-migrate -n ${{ env.K8S_NAMESPACE }} --ignore-not-found=true
+          kubectl apply -f backend/k8s/migrate-job.yaml
+          if ! kubectl wait --for=condition=complete job/laravel-migrate \
+            -n ${{ env.K8S_NAMESPACE }} --timeout=420s; then
+            echo "=== Migration failed or timed out ==="
+            kubectl describe job/laravel-migrate -n ${{ env.K8S_NAMESPACE }} || true
+            kubectl logs -n ${{ env.K8S_NAMESPACE }} -l app=laravel-migrate --tail=200 || true
+            exit 1
+          fi
+          echo "Migrations complete"
+
+      - name: Deploy workloads (rolling, in-place)
+        run: |
+          kubectl apply -f backend/k8s/backend-deployment.yaml
+          kubectl apply -f backend/k8s/queue-worker-deployment.yaml
+          kubectl apply -f backend/k8s/scheduler-deployment.yaml
+
+      - name: Wait for rollout
+        run: |
+          rollout_failed=0
+          if ! kubectl rollout status deployment/backend \
+            -n ${{ env.K8S_NAMESPACE }} --timeout=420s; then
+            rollout_failed=1
+            kubectl get pods -n ${{ env.K8S_NAMESPACE }} -l app=backend -o wide || true
+            kubectl describe pods -n ${{ env.K8S_NAMESPACE }} -l app=backend || true
+            for pod in $(kubectl get pods -n ${{ env.K8S_NAMESPACE }} -l app=backend \
+              -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}'); do
+              kubectl logs -n ${{ env.K8S_NAMESPACE }} "$pod" -c init-app --tail=80 || true
+              kubectl logs -n ${{ env.K8S_NAMESPACE }} "$pod" -c php-fpm --tail=80 || true
+            done
+          fi
+          kubectl rollout status deployment/queue-worker \
+            -n ${{ env.K8S_NAMESPACE }} --timeout=180s || rollout_failed=1
+          kubectl rollout status deployment/scheduler \
+            -n ${{ env.K8S_NAMESPACE }} --timeout=180s || rollout_failed=1
+          [ "$rollout_failed" -eq 0 ]
+
+      - name: Smoke test — /up returns 200
+        run: |
+          kubectl wait --for=condition=available deployment/backend \
+            -n ${{ env.K8S_NAMESPACE }} --timeout=150s
+          STATUS=$(kubectl exec -n ${{ env.K8S_NAMESPACE }} deployment/backend -c nginx -- \
+            wget -qO /dev/null --server-response http://127.0.0.1/up 2>&1 \
+            | grep -E '^  HTTP/' | awk '{print $2}' | tail -1)
+          echo "Health status: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "SMOKE TEST FAILED — rolling back"
+            kubectl rollout undo deployment/backend -n ${{ env.K8S_NAMESPACE }}
+            exit 1
+          fi
+          echo "SMOKE TEST PASSED"
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "=== Pods ==="
+          kubectl get pods -n ${{ env.K8S_NAMESPACE }} -l "app in (backend,queue-worker,scheduler)" || true
+          echo "=== Recent events ==="
+          kubectl get events -n ${{ env.K8S_NAMESPACE }} --sort-by='.lastTimestamp' | tail -10 || true

@@ -19,6 +19,9 @@
 /storage/*.key
 /storage/pail
 /vendor
+/k8s/secret.yaml
+/k8s/.image-tag
+base23-context.tar.gz
 _ide_helper.php
 Homestead.json
 Homestead.yaml

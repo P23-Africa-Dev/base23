@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: api-noel54-com-tls
+  namespace: base23
+  labels:
+    app.kubernetes.io/name: base23
+    app.kubernetes.io/component: tls
+spec:
+  secretName: api-noel54-com-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+  dnsNames:
+    - api.noel54.com
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  renewBefore: 720h

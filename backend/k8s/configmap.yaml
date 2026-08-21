@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: base23-config
+  namespace: base23
+  labels:
+    app.kubernetes.io/name: base23
+    app.kubernetes.io/component: config
+data:
+  APP_NAME: "NOEL"
+  APP_ENV: "production"
+  APP_DEBUG: "false"
+  APP_URL: "https://api.noel54.com"
+  APP_LOCALE: "en"
+  APP_FALLBACK_LOCALE: "en"
+  APP_FAKER_LOCALE: "en_US"
+  APP_MAINTENANCE_DRIVER: "file"
+
+  LOG_CHANNEL: "stderr"
+  LOG_STACK: "single"
+  LOG_LEVEL: "warning"
+  LOG_DEPRECATIONS_CHANNEL: "null"
+
+  DB_CONNECTION: "mysql"
+  DB_HOST: "db-mysql-lon1-fac23-do-user-25707955-0.e.db.ondigitalocean.com"
+  DB_PORT: "25060"
+  DB_DATABASE: "base23-db"
+  DB_USERNAME: "base23-user"
+  DB_CHARSET: "utf8mb4"
+  DB_COLLATION: "utf8mb4_unicode_ci"
+
+  CACHE_STORE: "database"
+  CACHE_PREFIX: "base23_cache"
+  QUEUE_CONNECTION: "database"
+  QUEUE_FAILED_DRIVER: "database-uuids"
+  DB_QUEUE_TABLE: "jobs"
+  DB_QUEUE: "default"
+  DB_QUEUE_RETRY_AFTER: "90"
+  SESSION_DRIVER: "database"
+  SESSION_LIFETIME: "120"
+  SESSION_ENCRYPT: "false"
+  SESSION_PATH: "/"
+  SESSION_SECURE_COOKIE: "true"
+  SESSION_SAME_SITE: "lax"
+  SESSION_HTTP_ONLY: "true"
+  SESSION_COOKIE: "base23-session"
+  # Empty = host-only cookie; Next.js rewrites proxy so browser stays on frontend origin
+  SESSION_DOMAIN: ""
+
+  BROADCAST_CONNECTION: "log"
+  FILESYSTEM_DISK: "s3"
+
+  FRONTEND_URL: "https://www.noel54.com"
+  SANCTUM_STATEFUL_DOMAINS: "www.noel54.com,noel54.com,base23.vercel.app,api.noel54.com,localhost:3000"
+  SANCTUM_TOKEN_PREFIX: "base23_"
+
+  AWS_DEFAULT_REGION: "lon1"
+  AWS_BUCKET: "base23-storage"
+  AWS_ENDPOINT: "https://lon1.digitaloceanspaces.com"
+  AWS_URL: "https://base23-storage.lon1.digitaloceanspaces.com"
+  AWS_USE_PATH_STYLE_ENDPOINT: "false"
+
+  MAIL_MAILER: "log"
+  MAIL_FROM_ADDRESS: "noreply@noel54.com"
+  MAIL_FROM_NAME: "NOEL"
+
+  BCRYPT_ROUNDS: "12"
+  VIEW_COMPILED_PATH: "/var/www/html/storage/framework/views"

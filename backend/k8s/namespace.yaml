@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: base23
+  labels:
+    name: base23
+    app.kubernetes.io/name: base23
+    environment: production
