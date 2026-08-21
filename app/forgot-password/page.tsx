@@ -11,14 +11,14 @@ import StepTopContent from "@/components/auths/StepTopContent";
 import { Button } from "@/components/ui/button";
 import AuthLayout from "@/layouts/auth-layout";
 import { LoaderCircle } from "lucide-react";
-import axios from "axios";
+import axios from "@/lib/axios-config";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 const forgotMobileContent = {
   title: "Forgot your Password",
   description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+    "Enter your email and we'll send a link to reset your password.",
   headingClassName: "text-3xl font-bold text-white",
   paragraphClassName: "max-w-sm pr-5 text-[17px] font-light text-white",
 };
@@ -26,6 +26,12 @@ const forgotMobileContent = {
 function ForgotPassword() {
   const searchParams = useSearchParams();
   const status = searchParams.get("status") || "";
+  const typeParam = searchParams.get("type");
+  const accountType =
+    typeParam === "company" || typeParam === "agent" ? typeParam : null;
+  const loginHref = accountType
+    ? `/login?type=${accountType}`
+    : "/login";
 
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -37,7 +43,11 @@ function ForgotPassword() {
     setError("");
     try {
       await axios.post("/forgot-password", { email });
-      window.location.href = `/forgot-password?status=We+have+emailed+your+password+reset+link`;
+      const params = new URLSearchParams({
+        status: "We have emailed your password reset link",
+      });
+      if (accountType) params.set("type", accountType);
+      window.location.href = `/forgot-password?${params.toString()}`;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.response?.data?.errors?.email || "Something went wrong.");
@@ -54,7 +64,7 @@ function ForgotPassword() {
           topContentLayout={
             <StepTopContent
               title="Forgot your Password ?"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+              description="Enter your email and we'll send a secure link to reset your password."
               headingClassName="max-w-[100px] lg:max-w-[300px]"
             />
           }
@@ -86,7 +96,7 @@ function ForgotPassword() {
 
           <div className="w-full text-center">
             <span>Or, return to</span>
-            <TextLink className="ml-2" href="/login">
+            <TextLink className="ml-2" href={loginHref}>
               log in
             </TextLink>
           </div>

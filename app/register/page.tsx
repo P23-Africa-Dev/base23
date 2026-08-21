@@ -11,6 +11,10 @@ import CompanyStepOneForm from "./companySteps/CompanyStepOneForm";
 import CompanyStepTwoForm from "./companySteps/CompanyStepTwoForm";
 import StepOneForm from "./stepForms/StepOneForm";
 import StepThreeForm from "./stepForms/StepThreeForm";
+import { submitRegistration } from "@/services/networkValidation";
+import RegistrationLoader from "@/components/auths/RegistrationLoader";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 type RegisterForm = {
   name: string;
@@ -70,25 +74,25 @@ const MOBILE_CONTENT: Record<
 > = {
   account: {
     title: "First, the essential",
-    description: "This helps members recognise and trust you.",
+    description: "This helps companies recognise and trust you as an agent.",
     headingClassName: "text-3xl font-bold text-white",
     paragraphClassName: "max-w-sm pr-20 text-[14px] font-light text-white",
   },
   interests: {
-    title: "What is your secret sauce",
-    description: "Members will search for this skills!",
+    title: "What markets do you cover?",
+    description: "Companies search for agents by industry and strengths.",
     headingClassName: "text-2xl leading-6 pr-10 font-bold text-white",
     paragraphClassName: "max-w-sm  text-[14px]! font-light text-gray-300",
   },
   companyAccount: {
     title: "First, the essential",
-    description: "This helps members recognise and trust you.",
+    description: "Tell us about your company so agents can trust you.",
     headingClassName: "text-3xl font-bold text-white",
     paragraphClassName: "max-w-sm pr-20 text-[14px] font-light text-white",
   },
   questions: {
-    title: "Provide response appropriately",
-    description: "Answer a few quick questions to stand out.",
+    title: "A few hiring details",
+    description: "Help us match you with the right sales agents.",
     headingClassName: "text-2xl leading-6 pr-10 font-bold text-white",
     paragraphClassName: "max-w-sm  text-[14px]! font-light text-gray-300",
   },
@@ -99,16 +103,23 @@ const DESKTOP_HEADINGS: Record<StepKey, React.ReactNode> = {
   interests: (
     <>
       <div className="font-light">Almost There!</div>
-      <div>Superpowers</div>
+      <div>Your strengths</div>
     </>
   ),
   companyAccount: <>Let&apos;s get you started! </>,
   questions: (
     <>
       <div className="font-light">Almost There!</div>
-      <div>Standout!</div>
+      <div>Hiring details</div>
     </>
   ),
+};
+
+const DESKTOP_DESCRIPTIONS: Record<AccountType, string> = {
+  agent:
+    "Create your sales agent profile to get matched with companies hiring across Africa.",
+  company:
+    "Create your hiring account to find verified sales agents ready for your markets.",
 };
 
 function RegisterInner() {
@@ -120,6 +131,9 @@ function RegisterInner() {
   const step = Number(searchParams.get("step") || 1);
 
   const [formData, setFormData] = useState<Partial<RegisterForm>>({});
+  const { refresh } = useAuth();
+  const [registerStatus, setRegisterStatus] = useState<'idle' | 'uploading' | 'processing' | 'success' | 'error'>('idle');
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const flow = FLOWS[accountType];
   const stepKey: StepKey = flow[step - 1] ?? flow[0];
@@ -129,14 +143,74 @@ function RegisterInner() {
     router.push(`/register?type=${accountType}&step=${newStep}`);
   };
 
-  const nextStep = (data: Partial<RegisterForm>) => {
-    setFormData((prev) => ({ ...prev, ...data }));
+  const nextStep = async (data: Partial<RegisterForm>) => {
+    const updatedData = { ...formData, ...data };
+    setFormData(updatedData);
+
     if (step >= flow.length) {
-      router.push(accountType === "company" ? "/login" : "/dashboard");
+      setRegisterStatus('uploading');
+      
+      const fd = new FormData();
+      Object.entries(updatedData).forEach(([key, val]) => {
+        if (val === undefined || val === null) return;
+        if (val instanceof File) {
+          fd.append(key, val);
+        } else if (Array.isArray(val)) {
+          val.forEach((item) => fd.append(`${key}[]`, String(item)));
+        } else if (typeof val === 'object') {
+          fd.append(key, JSON.stringify(val));
+        } else {
+          fd.append(key, String(val));
+        }
+      });
+      
+      fd.append('account_type', accountType);
+
+      try {
+        const response = await submitRegistration(fd, {
+          onProgress: (progress) => {
+            setUploadProgress(progress);
+            if (progress >= 100) {
+              setRegisterStatus('processing');
+            }
+          },
+        });
+
+        if (response.success) {
+          setRegisterStatus('success');
+        } else {
+          setRegisterStatus('error');
+          toast.error(response.error?.message || 'Registration failed. Please try again.');
+          setTimeout(() => setRegisterStatus('idle'), 3000);
+        }
+      } catch (err: any) {
+        setRegisterStatus('error');
+        toast.error(err.message || 'An unexpected error occurred.');
+        setTimeout(() => setRegisterStatus('idle'), 3000);
+      }
     } else {
       goToStep(step + 1);
     }
   };
+
+  const handleComplete = async () => {
+    try {
+      await refresh();
+    } catch (err) {
+      console.error('Session refresh failed after registration:', err);
+    }
+    router.push('/dashboard');
+  };
+
+  if (registerStatus !== 'idle') {
+    return (
+      <RegistrationLoader
+        status={registerStatus}
+        uploadProgress={uploadProgress}
+        onComplete={handleComplete}
+      />
+    );
+  }
 
   return (
     <>
@@ -156,8 +230,7 @@ function RegisterInner() {
                   {DESKTOP_HEADINGS[stepKey]}
                 </h2>
                 <p className="text-[13px] max-w-69.75 text-[#F3F0E9] mb-4.75 tracking-[0.5px]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor
+                  {DESKTOP_DESCRIPTIONS[accountType]}
                 </p>
               </div>
             }
@@ -165,7 +238,10 @@ function RegisterInner() {
               <div className="w-fit text-base mx-auto  my-[15%] pr-10">
                 <p className="mb-1 font-light">
                   Already have an account?{" "}
-                  <a href="/login" className="font-medium italic">
+                  <a
+                    href={`/login?type=${accountType}`}
+                    className="font-medium italic"
+                  >
                     Sign In
                   </a>
                 </p>
@@ -217,6 +293,8 @@ function RegisterInner() {
               position: formData.position,
               email: formData.email,
               phone: formData.phone,
+              password: formData.password,
+              password_confirmation: formData.password_confirmation,
               countries_of_operation: formData.countries_of_operation,
             }}
             onNext={(data) => nextStep(data)}

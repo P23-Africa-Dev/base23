@@ -13,7 +13,7 @@ type OnboardingContextType = {
 
 const OnboardingContext = createContext<OnboardingContextType | null>(null);
 
-const STORAGE_KEY = 'noel:onboarding:completed';
+const STORAGE_KEY = 'base23:onboarding:completed';
 
 export function OnboardingProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);

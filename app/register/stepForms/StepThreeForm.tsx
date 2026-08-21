@@ -77,10 +77,10 @@ export default function StepThreeForm({
             {/* Heading */}
             <div className="mb-4">
               <h2 className="mb-1 text-2xl font-extrabold text-primary lg:text-3xl dark:text-black">
-                Industry of operations
+                Your strengths
               </h2>
               <p className="pr-6 text-[14px] font-normal text-primary lg:text-[17px] dark:text-black">
-                We’ll use this to find your ideal candidate.
+                Select up to 3 strengths so companies can find the right agent.
               </p>
             </div>
 
@@ -89,7 +89,7 @@ export default function StepThreeForm({
                 {/* I'm great at */}
                 <div className="space-y-3 py-2">
                   <h4 className="mb-2 text-base font-bold dark:text-black">
-                    Select Industry
+                    Select Strengths
                   </h4>
 
                   <div className="-ml-1.5 no-scrollbar flex max-h-[40vh] flex-wrap gap-3 overflow-y-auto py-2">
@@ -140,7 +140,7 @@ export default function StepThreeForm({
                     <p className="text-sm">
                       Already have an account?{" "}
                       <a
-                        href="/login"
+                        href="/login?type=agent"
                         className="font-bold text-primary italic hover:underline"
                       >
                         Sign In

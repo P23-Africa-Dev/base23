@@ -1,4 +1,4 @@
-# BASE 23 — NOEL Frontend Codebase Audit
+# BASE 23 Frontend Codebase Audit
 
 **Date:** 2026-06-03  
 **Audited by:** Claude Code (claude-sonnet-4-6)  
@@ -22,7 +22,7 @@
 
 ## 1. Executive Summary
 
-BASE 23 is a Next.js 16 (App Router) frontend for a business referral network called **NOEL**. The UI and component architecture are well-built and visually polished. However, the **core functional systems — authentication, user roles, and API connections — are either stubbed, hardcoded, or non-functional**.
+BASE 23 is a Next.js 16 (App Router) frontend for a business referral network called **Base23**. The UI and component architecture are well-built and visually polished. However, the **core functional systems — authentication, user roles, and API connections — are either stubbed, hardcoded, or non-functional**.
 
 ### Status at a Glance
 

@@ -4,7 +4,8 @@
  * timeout handling, and offline detection.
  */
 
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios from '@/lib/axios-config';
+import { AxiosError, AxiosRequestConfig, isAxiosError } from 'axios';
 
 // Configuration
 const CONFIG = {
@@ -165,7 +166,7 @@ export async function makeRequestWithRetry<T>(
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isRetryableError(error: any): boolean {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
         const axiosError = error as AxiosError;
         
         // Network errors are retryable
@@ -193,7 +194,7 @@ function isRetryableError(error: any): boolean {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function parseError(error: any): NetworkValidationResult {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const axiosError = error as AxiosError<any>;
         

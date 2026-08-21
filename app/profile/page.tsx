@@ -8,6 +8,7 @@ import images from '@/constants/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Suspense, useState } from 'react';
+import axios from '@/lib/axios-config';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
     Camera,
@@ -174,42 +175,56 @@ function ProfileInner() {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function PersonalTab({ user }: { user: any }) {
+    const { refresh } = useAuth();
     const [editing, setEditing] = useState(false);
     const [saved, setSaved] = useState(false);
+    const [saving, setSaving] = useState(false);
 
-    const handleSave = () => {
-        setSaved(true);
-        setEditing(false);
-        setTimeout(() => setSaved(false), 2000);
+    const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setSaving(true);
+        const formData = new FormData(e.currentTarget);
+        const data = Object.fromEntries(formData.entries());
+        try {
+            await axios.put('/api/user', data);
+            await refresh();
+            setSaved(true);
+            setEditing(false);
+            setTimeout(() => setSaved(false), 2000);
+        } catch (err) {
+            console.error('Failed to save personal profile:', err);
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (
         <div className="grid grid-cols-1 gap-4 pb-10 lg:grid-cols-[1fr_320px]">
             {/* LEFT */}
-            <div className="flex flex-col gap-4">
+            <form onSubmit={handleSave} className="flex flex-col gap-4">
                 {/* Basic info */}
                 <Section
                     title="Basic Information"
                     action={
                         editing ? (
-                            <button onClick={handleSave} className="flex items-center gap-1.5 rounded-full bg-darkGreen px-4 py-1.5 text-xs font-bold text-deepBlack transition hover:opacity-90">
+                            <button type="submit" disabled={saving} className="flex items-center gap-1.5 rounded-full bg-darkGreen px-4 py-1.5 text-xs font-bold text-deepBlack transition hover:opacity-90 disabled:opacity-50">
                                 {saved ? <Check className="h-3.5 w-3.5" /> : null}
-                                {saved ? 'Saved!' : 'Save Changes'}
+                                {saved ? 'Saved!' : saving ? 'Saving...' : 'Save Changes'}
                             </button>
                         ) : (
-                            <button onClick={() => setEditing(true)} className="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-600 transition hover:border-deepBlack hover:text-deepBlack">
+                            <button type="button" onClick={() => setEditing(true)} className="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-600 transition hover:border-deepBlack hover:text-deepBlack">
                                 Edit
                             </button>
                         )
                     }
                 >
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <Field label="Full Name" value={user?.name} icon={<IoPerson className="h-4 w-4" />} editing={editing} />
-                        <Field label="Email Address" value={user?.email} icon={<Mail className="h-4 w-4" />} editing={editing} type="email" />
-                        <Field label="Phone Number" value={user?.phone} icon={<Phone className="h-4 w-4" />} editing={editing} type="tel" />
-                        <Field label="Country" value={user?.country} icon={<Globe className="h-4 w-4" />} editing={editing} />
-                        <Field label="Position / Role" value={user?.position} icon={<Briefcase className="h-4 w-4" />} editing={editing} />
-                        <Field label="LinkedIn URL" value={user?.linkedin} icon={<Link2 className="h-4 w-4" />} editing={editing} type="url" />
+                        <Field name="name" label="Full Name" value={user?.name} icon={<IoPerson className="h-4 w-4" />} editing={editing} />
+                        <Field name="email" label="Email Address" value={user?.email} icon={<Mail className="h-4 w-4" />} editing={editing} type="email" />
+                        <Field name="phone" label="Phone Number" value={user?.phone} icon={<Phone className="h-4 w-4" />} editing={editing} type="tel" />
+                        <Field name="country" label="Country" value={user?.country} icon={<Globe className="h-4 w-4" />} editing={editing} />
+                        <Field name="position" label="Position / Role" value={user?.position} icon={<Briefcase className="h-4 w-4" />} editing={editing} />
+                        <Field name="linkedin" label="LinkedIn URL" value={user?.linkedin} icon={<Link2 className="h-4 w-4" />} editing={editing} type="url" />
                     </div>
                 </Section>
 
@@ -219,6 +234,7 @@ function PersonalTab({ user }: { user: any }) {
                         <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">What are your goals?</label>
                         {editing ? (
                             <textarea
+                                name="goals"
                                 defaultValue={user?.goals ?? ''}
                                 rows={3}
                                 className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-700 outline-none focus:border-darkBlue focus:ring-1 focus:ring-darkBlue"
@@ -230,7 +246,7 @@ function PersonalTab({ user }: { user: any }) {
                         )}
                     </div>
                 </Section>
-            </div>
+            </form>
 
             {/* RIGHT */}
             <div className="flex flex-col gap-4">
@@ -283,12 +299,33 @@ function PersonalTab({ user }: { user: any }) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CompanyTab({ user }: { user: any }) {
+    const { refresh } = useAuth();
     const [editing, setEditing] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [saved, setSaved] = useState(false);
+
+    const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setSaving(true);
+        const formData = new FormData(e.currentTarget);
+        const data = Object.fromEntries(formData.entries());
+        try {
+            await axios.put('/api/user', data);
+            await refresh();
+            setSaved(true);
+            setEditing(false);
+            setTimeout(() => setSaved(false), 2000);
+        } catch (err) {
+            console.error('Failed to save company profile:', err);
+        } finally {
+            setSaving(false);
+        }
+    };
 
     return (
         <div className="grid grid-cols-1 gap-4 pb-10 lg:grid-cols-[1fr_300px]">
             {/* LEFT */}
-            <div className="flex flex-col gap-4">
+            <form onSubmit={handleSave} className="flex flex-col gap-4">
                 {/* Company header card */}
                 <div className="relative overflow-hidden rounded-3xl bg-darkBlue px-6 py-8">
                     <div className="pointer-events-none absolute right-0 top-0 h-full w-48 opacity-10"
@@ -309,28 +346,29 @@ function CompanyTab({ user }: { user: any }) {
                 <Section
                     title="Company Details"
                     action={
-                        <button
-                            onClick={() => setEditing(!editing)}
-                            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
-                                editing
-                                    ? 'bg-darkGreen text-deepBlack'
-                                    : 'border border-gray-200 text-gray-600 hover:border-deepBlack hover:text-deepBlack'
-                            }`}
-                        >
-                            {editing ? 'Save Changes' : 'Edit'}
-                        </button>
+                        editing ? (
+                            <button type="submit" disabled={saving} className="flex items-center gap-1.5 rounded-full bg-darkGreen px-4 py-1.5 text-xs font-bold text-deepBlack transition hover:opacity-90 disabled:opacity-50">
+                                {saved ? <Check className="h-3.5 w-3.5" /> : null}
+                                {saved ? 'Saved!' : saving ? 'Saving...' : 'Save Changes'}
+                            </button>
+                        ) : (
+                            <button type="button" onClick={() => setEditing(true)} className="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-600 transition hover:border-deepBlack hover:text-deepBlack">
+                                Edit
+                            </button>
+                        )
                     }
                 >
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <Field label="Company Name" value={user?.company_name} icon={<Building2 className="h-4 w-4" />} editing={editing} />
-                        <Field label="Industry" value={user?.industry} icon={<Briefcase className="h-4 w-4" />} editing={editing} />
-                        <Field label="Years in Operation" value={user?.years_of_operation} icon={<CalendarDays className="h-4 w-4" />} editing={editing} />
-                        <Field label="Number of Employees" value={user?.number_of_employees} icon={<Users className="h-4 w-4" />} editing={editing} />
+                        <Field name="company_name" label="Company Name" value={user?.company_name} icon={<Building2 className="h-4 w-4" />} editing={editing} />
+                        <Field name="industry" label="Industry" value={user?.industry} icon={<Briefcase className="h-4 w-4" />} editing={editing} />
+                        <Field name="years_of_operation" label="Years in Operation" value={user?.years_of_operation} icon={<CalendarDays className="h-4 w-4" />} editing={editing} />
+                        <Field name="number_of_employees" label="Number of Employees" value={user?.number_of_employees} icon={<Users className="h-4 w-4" />} editing={editing} />
                     </div>
                     <div className="mt-4">
                         <label className="mb-1.5 block text-xs font-semibold text-gray-500 uppercase tracking-wide">Company Description</label>
                         {editing ? (
                             <textarea
+                                name="company_description"
                                 defaultValue={user?.company_description ?? ''}
                                 rows={4}
                                 className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-700 outline-none focus:border-darkBlue focus:ring-1 focus:ring-darkBlue"
@@ -342,7 +380,7 @@ function CompanyTab({ user }: { user: any }) {
                         )}
                     </div>
                 </Section>
-            </div>
+            </form>
 
             {/* RIGHT */}
             <div className="flex flex-col gap-4">
@@ -411,7 +449,7 @@ function SubscriptionTab({ subscription }: { subscription: any }) {
                             </span>
                         </div>
                         <h2 className="text-2xl font-extrabold text-white">
-                            {isPro ? 'NOEL Pro' : isTrial ? 'Free Trial' : 'Free Member'}
+                            {isPro ? 'Base23 Pro' : isTrial ? 'Free Trial' : 'Free Member'}
                         </h2>
                         {isTrial && subscription?.trial_days_remaining != null && (
                             <p className="mt-1 text-sm text-yellow-300/80">
@@ -503,36 +541,89 @@ function SettingsTab({ user }: { user: any }) {
     const [notifMsg, setNotifMsg] = useState(true);
     const [notifDeals, setNotifDeals] = useState(false);
 
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const [savingPass, setSavingPass] = useState(false);
+    const [passError, setPassError] = useState('');
+    const [passSuccess, setPassSuccess] = useState('');
+
+    const handleUpdatePassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!currentPassword || !password || !passwordConfirmation) {
+            setPassError('All fields are required.');
+            return;
+        }
+        if (password !== passwordConfirmation) {
+            setPassError('Passwords do not match.');
+            return;
+        }
+        setSavingPass(true);
+        setPassError('');
+        setPassSuccess('');
+        try {
+            await axios.put('/api/user/password', {
+                current_password: currentPassword,
+                password: password,
+                password_confirmation: passwordConfirmation
+            });
+            setPassSuccess('Password updated successfully!');
+            setCurrentPassword('');
+            setPassword('');
+            setPasswordConfirmation('');
+        } catch (err: any) {
+            setPassError(err.response?.data?.message || err.response?.data?.error || 'Failed to update password.');
+        } finally {
+            setSavingPass(false);
+        }
+    };
+
     return (
         <div className="grid grid-cols-1 gap-4 pb-10 lg:grid-cols-2">
             {/* Password & Security */}
             <Section title="Password & Security" icon={<Lock className="h-4 w-4 text-darkGreen" />}>
-                <div className="space-y-3">
+                <form onSubmit={handleUpdatePassword} className="space-y-3">
+                    {passError && <p className="text-xs text-red-500">{passError}</p>}
+                    {passSuccess && <p className="text-xs text-green-600">{passSuccess}</p>}
                     <div className="relative">
                         <label className="mb-1 block text-xs font-semibold text-gray-500">Current Password</label>
                         <div className="relative">
                             <input
                                 type={showPass ? 'text' : 'password'}
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
                                 placeholder="••••••••"
                                 className="w-full rounded-xl border border-gray-200 px-4 py-2.5 pr-10 text-sm outline-none focus:border-darkBlue focus:ring-1 focus:ring-darkBlue"
                             />
-                            <button onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                                 {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                             </button>
                         </div>
                     </div>
                     <div>
                         <label className="mb-1 block text-xs font-semibold text-gray-500">New Password</label>
-                        <input type="password" placeholder="••••••••" className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-darkBlue focus:ring-1 focus:ring-darkBlue" />
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-darkBlue focus:ring-1 focus:ring-darkBlue"
+                        />
                     </div>
                     <div>
                         <label className="mb-1 block text-xs font-semibold text-gray-500">Confirm New Password</label>
-                        <input type="password" placeholder="••••••••" className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-darkBlue focus:ring-1 focus:ring-darkBlue" />
+                        <input
+                            type="password"
+                            value={passwordConfirmation}
+                            onChange={(e) => setPasswordConfirmation(e.target.value)}
+                            placeholder="••••••••"
+                            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-darkBlue focus:ring-1 focus:ring-darkBlue"
+                        />
                     </div>
-                    <button className="mt-1 w-full rounded-full bg-deepBlack py-2.5 text-sm font-bold text-white transition hover:bg-darkBlue">
-                        Update Password
+                    <button type="submit" disabled={savingPass} className="mt-1 w-full rounded-full bg-deepBlack py-2.5 text-sm font-bold text-white transition hover:bg-darkBlue disabled:opacity-50">
+                        {savingPass ? 'Updating...' : 'Update Password'}
                     </button>
-                </div>
+                </form>
             </Section>
 
             {/* Notifications */}
@@ -633,8 +724,9 @@ function Section({ title, children, action, icon }: {
     );
 }
 
-function Field({ label, value, icon, editing, type = 'text' }: {
+function Field({ label, name, value, icon, editing, type = 'text' }: {
     label: string;
+    name: string;
     value?: string | null;
     icon: React.ReactNode;
     editing: boolean;
@@ -646,6 +738,7 @@ function Field({ label, value, icon, editing, type = 'text' }: {
             {editing ? (
                 <input
                     type={type}
+                    name={name}
                     defaultValue={value ?? ''}
                     placeholder={`Enter ${label.toLowerCase()}`}
                     className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-700 outline-none focus:border-darkBlue focus:ring-1 focus:ring-darkBlue"

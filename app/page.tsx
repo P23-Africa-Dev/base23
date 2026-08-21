@@ -56,8 +56,8 @@ export default function LandingPage() {
                 Base 23
               </h2>
               <p className="text-[13px] max-w-69.75 text-[#F3F0E9] mb-4.75 tracking-[0.5px]">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor
+                The referral network connecting hiring companies with verified
+                sales agents across Africa.
               </p>
             </div>
           }

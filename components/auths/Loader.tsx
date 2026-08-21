@@ -63,7 +63,7 @@ export default function DashboardLoader({ duration = 6000, onComplete }: Dashboa
                 {/* Logo */}
                 <div className="mb-3 lg:mb-6 w-[200px] lg:w-[310px] h-20 relative ">
 
-                    <img src={images.logo} alt="NOEL Logo" width={310} height={80} className="select-none object-cover absolute" />
+                    <img src={images.logo} alt="Base23 Logo" width={310} height={80} className="select-none object-cover absolute" />
                 </div>
 
                 {/* Loader Bar */}
