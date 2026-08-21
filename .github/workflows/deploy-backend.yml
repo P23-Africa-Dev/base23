@@ -8,6 +8,10 @@
 #
 # Required GitHub Secret (Settings → Secrets and variables → Actions):
 #   DO_ACCESS_TOKEN   DigitalOcean personal access token (registry + DOKS)
+#   (DIGITALOCEAN_ACCESS_TOKEN is also accepted as an alias)
+#
+# IMPORTANT: Add it as a Repository secret (not only an Environment secret).
+# The Build job needs it before the production environment runs.
 #
 # NOTE: Application secrets (APP_KEY, DB_PASSWORD, AWS_*) live in-cluster as
 #       `base23-secret`. This workflow never touches them. Update manually:
@@ -98,10 +102,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify DigitalOcean token secret
+        env:
+          DO_TOKEN: ${{ secrets.DO_ACCESS_TOKEN || secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: |
+          if [ -z "$DO_TOKEN" ]; then
+            echo "::error::Missing GitHub Actions repository secret DO_ACCESS_TOKEN (or DIGITALOCEAN_ACCESS_TOKEN)."
+            echo "Add it at: https://github.com/${{ github.repository }}/settings/secrets/actions"
+            echo "Name must be exactly: DO_ACCESS_TOKEN"
+            echo "It must be a Repository secret (Actions tab), not only an Environment secret."
+            exit 1
+          fi
+
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DO_ACCESS_TOKEN }}
+          token: ${{ secrets.DO_ACCESS_TOKEN || secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Login to DO Container Registry
         run: doctl registry login --expiry-seconds 1200
@@ -146,7 +162,7 @@ jobs:
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DO_ACCESS_TOKEN }}
+          token: ${{ secrets.DO_ACCESS_TOKEN || secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Configure kubectl
         run: doctl kubernetes cluster kubeconfig save ${{ env.DOKS_CLUSTER_ID }}
