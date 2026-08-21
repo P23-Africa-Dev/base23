@@ -121,8 +121,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                 label="Company Name"
                 htmlFor="company_name"
                 type="text"
-                value={defaultValues.company_name}
-                disabled
                 {...register("company_name")}
               />
               {errors.company_name && (
@@ -138,8 +136,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                   label="Full Name"
                   htmlFor="name"
                   type="text"
-                  value={defaultValues.name}
-                  disabled
                   {...register("name")}
                 />
                 {errors.name && (
@@ -153,8 +149,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                   label="Role"
                   htmlFor="role"
                   type="text"
-                  value={defaultValues.role}
-                  disabled
                   {...register("role")}
                 />
                 {errors.role && (
@@ -171,8 +165,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                 label="Email"
                 htmlFor="email"
                 type="email"
-                value={defaultValues.email}
-                readOnly
                 {...register("email")}
                 onFocus={(e) => {
                   const el = e.currentTarget;
