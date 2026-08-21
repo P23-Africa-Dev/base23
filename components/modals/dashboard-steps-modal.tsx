@@ -74,7 +74,7 @@ function SuccessToast({ show, onComplete, isSkipped }: { show: boolean; onComple
                             className={`flex-1 transition-all delay-200 duration-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
                                 }`}
                         >
-                            <h3 className="mb-1 text-lg font-bold text-white">Welcome to NOEL! 🎉</h3>
+                            <h3 className="mb-1 text-lg font-bold text-white">Welcome to Base23! 🎉</h3>
                             <p className="text-sm text-gray-200">
                                 {isSkipped ? (
                                     <>
@@ -880,7 +880,7 @@ export function StepModal({ open, onClose }: StepModalProps) {
                                                 <div>
                                                     <div className="px-4 lg:px-10">
                                                         {/* <p className="text-[11px] font-medium text-[#84949E] lg:pr-7 lg:text-[13px]">
-                                                            Enjoy NOEL Premium free for 14 days. Your plan will auto-renew at {subscriptionPrice ?? '...'}/month after the trial.
+                                                            Enjoy Base23 Premium free for 14 days. Your plan will auto-renew at {subscriptionPrice ?? '...'}/month after the trial.
                                                             Cancel anytime.
                                                         </p> */}
                                                         <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">

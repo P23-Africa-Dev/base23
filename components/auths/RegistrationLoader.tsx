@@ -23,7 +23,7 @@ const statusMessages = {
         description: 'Setting up your personalized dashboard...',
     },
     success: {
-        title: 'Welcome to NOEL!',
+        title: 'Welcome to Base23!',
         description: 'Your account has been created successfully.',
     },
     error: {
@@ -117,7 +117,7 @@ export default function RegistrationLoader({
                 <div className="mb-3 lg:mb-6 w-[200px] lg:w-[310px] h-20 relative">
                     <img
                         src={images.logo}
-                        alt="NOEL Logo"
+                        alt="Base23 Logo"
                         width={310}
                         height={80}
                         className="select-none object-cover absolute"

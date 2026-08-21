@@ -78,7 +78,7 @@ export function SubscriptionRenewalModal({ open, onClose, onRenewed }: Subscript
                 {/* Body */}
                 <div className="px-6 py-5 space-y-4">
                     <p className="text-sm text-gray-700">
-                        Your subscription has expired. To continue enjoying full access to NOEL features including Smart Matching, Directory, and Leads, please renew your subscription.
+                        Your subscription has expired. To continue enjoying full access to Base23 features including Smart Matching, Directory, and Leads, please renew your subscription.
                     </p>
 
                     {priceFormatted && (

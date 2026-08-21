@@ -411,7 +411,7 @@ function SubscriptionTab({ subscription }: { subscription: any }) {
                             </span>
                         </div>
                         <h2 className="text-2xl font-extrabold text-white">
-                            {isPro ? 'NOEL Pro' : isTrial ? 'Free Trial' : 'Free Member'}
+                            {isPro ? 'Base23 Pro' : isTrial ? 'Free Trial' : 'Free Member'}
                         </h2>
                         {isTrial && subscription?.trial_days_remaining != null && (
                             <p className="mt-1 text-sm text-yellow-300/80">

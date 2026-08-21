@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Check if the auth cookie exists
-  const isAuthenticated = request.cookies.has("noel_authenticated");
+  const isAuthenticated = request.cookies.has("base23_authenticated");
 
   // Define path matches
   const isAuthPage = [

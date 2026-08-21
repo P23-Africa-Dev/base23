@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       // Set Edge authentication helper cookie
       if (typeof window !== "undefined") {
-        document.cookie = "noel_authenticated=true; path=/; max-age=2592000; SameSite=Lax; Secure";
+        document.cookie = "base23_authenticated=true; path=/; max-age=2592000; SameSite=Lax; Secure";
       }
     } catch (err) {
       setUser(null);
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       // Clear Edge authentication helper cookie
       if (typeof window !== "undefined") {
-        document.cookie = "noel_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "base23_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       }
     } finally {
       setLoading(false);

@@ -12,7 +12,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "NOEL",
+  title: "Base23",
   description: "Business Referral Network",
 };
 

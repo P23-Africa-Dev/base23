@@ -31,7 +31,7 @@ apiClient.interceptors.response.use(
     (response) => {
         // Clear the auth cookie on successful logout
         if (typeof window !== 'undefined' && response.config.url === '/logout') {
-            document.cookie = 'noel_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            document.cookie = 'base23_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         }
         return response;
     },
@@ -40,7 +40,7 @@ apiClient.interceptors.response.use(
             const status = error.response.status;
             if (status === 401 || status === 419) {
                 // Clear Edge authentication helper cookie on authorization failure
-                document.cookie = 'noel_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'base23_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                 
                 const path = window.location.pathname;
                 const isAuthPage = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/confirm-password'].includes(path);

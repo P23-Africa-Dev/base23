@@ -1,6 +1,6 @@
 @AGENTS.md
 
-## Project: NOEL — Business Referral Network
+## Project: Base23 — Business Referral Network
 
 Next.js 16.2.4 frontend. Laravel backend at `NEXT_PUBLIC_API_URL` (default `http://localhost:8000`). All API calls proxied via `next.config.ts` rewrites — no direct backend URLs in components.
 
