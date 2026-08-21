@@ -22,6 +22,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email',
             'password' => 'required|string',
+            'account_type' => 'nullable|string|in:agent,company',
         ]);
 
         if ($validator->fails()) {
@@ -34,14 +35,35 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
+        $expectedAccountType = $request->input('account_type');
 
         if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+            $actualAccountType = $user->account_type ?: 'agent';
+
+            if ($expectedAccountType && $expectedAccountType !== $actualAccountType) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                $message = $actualAccountType === 'agent'
+                    ? 'This account is registered as a Sales Agent account. Please sign in on the agent login.'
+                    : 'This account is registered as a Hiring (company) account. Please sign in on the hiring login.';
+
+                return response()->json([
+                    'success' => false,
+                    'message' => $message,
+                    'expected_account_type' => $expectedAccountType,
+                    'actual_account_type' => $actualAccountType,
+                ], 403);
+            }
+
             $request->session()->regenerate();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Logged in successfully.',
-                'user' => Auth::user(),
+                'user' => $user,
             ]);
         }
 

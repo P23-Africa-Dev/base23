@@ -1,0 +1,68 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Laravel Migration Job
+#   kubectl delete job laravel-migrate -n base23 --ignore-not-found
+#   kubectl apply -f k8s/migrate-job.yaml
+#   kubectl wait --for=condition=complete job/laravel-migrate -n base23 --timeout=300s
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: laravel-migrate
+  namespace: base23
+  labels:
+    app.kubernetes.io/name: laravel-migrate
+    app.kubernetes.io/component: migration
+    app.kubernetes.io/part-of: base23
+spec:
+  ttlSecondsAfterFinished: 86400
+  backoffLimit: 3
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app: laravel-migrate
+        app.kubernetes.io/name: laravel-migrate
+        app.kubernetes.io/component: migration
+    spec:
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: do-registry
+      containers:
+        - name: migrate
+          image: registry.digitalocean.com/con-reg/base23:v2-php84-202608211213
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              mkdir -p storage/framework/cache/data \
+                       storage/framework/sessions \
+                       storage/framework/views \
+                       storage/logs
+              php artisan config:clear
+              php artisan config:cache
+              php artisan migrate --force --no-interaction
+          env:
+            - name: CACHE_STORE
+              value: array
+            - name: SESSION_DRIVER
+              value: array
+            - name: QUEUE_CONNECTION
+              value: sync
+            - name: LOG_CHANNEL
+              value: stderr
+          envFrom:
+            - configMapRef:
+                name: base23-config
+            - secretRef:
+                name: base23-secret
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "96Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          securityContext:
+            allowPrivilegeEscalation: false

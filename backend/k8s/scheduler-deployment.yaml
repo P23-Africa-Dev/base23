@@ -1,0 +1,64 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Scheduler — MUST remain 1 replica
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler
+  namespace: base23
+  labels:
+    app.kubernetes.io/name: scheduler
+    app.kubernetes.io/component: scheduler
+    app.kubernetes.io/part-of: base23
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scheduler
+  template:
+    metadata:
+      labels:
+        app: scheduler
+        app.kubernetes.io/name: scheduler
+        app.kubernetes.io/component: scheduler
+    spec:
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: do-registry
+      containers:
+        - name: scheduler
+          image: registry.digitalocean.com/con-reg/base23:v2-php84-202608211213
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              mkdir -p /var/www/html/storage/framework/cache/data \
+                       /var/www/html/storage/framework/sessions \
+                       /var/www/html/storage/framework/views \
+                       /var/www/html/storage/logs
+              php artisan config:clear
+              php artisan config:cache
+              exec php artisan schedule:work
+          envFrom:
+            - configMapRef:
+                name: base23-config
+            - secretRef:
+                name: base23-secret
+          resources:
+            requests:
+              cpu: "15m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "192Mi"
+          livenessProbe:
+            exec:
+              command: ["/bin/sh", "-c", "php -r 'exit(0);'"]
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 15
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false

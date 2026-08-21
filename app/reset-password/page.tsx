@@ -17,7 +17,7 @@ import { useSearchParams } from "next/navigation";
 const resetMobileContent = {
   title: "Reset your Password",
   description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+    "Choose a new password to get back into your Base 23 account.",
   headingClassName: "text-3xl font-bold text-white",
   paragraphClassName: "max-w-sm pr-5 text-[17px] font-light text-white",
 };
@@ -26,6 +26,9 @@ function ResetPassword() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token") || "";
   const emailParam = searchParams.get("email") || "";
+  const typeParam = searchParams.get("type");
+  const accountType =
+    typeParam === "company" || typeParam === "agent" ? typeParam : null;
 
   const [email, setEmail] = useState(emailParam);
   const [password, setPassword] = useState("");
@@ -48,7 +51,11 @@ function ResetPassword() {
         password,
         password_confirmation: passwordConfirmation,
       });
-      window.location.href = "/login?status=Password+reset+successfully";
+      const params = new URLSearchParams({
+        status: "Password reset successfully",
+      });
+      if (accountType) params.set("type", accountType);
+      window.location.href = `/login?${params.toString()}`;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setErrors(err.response?.data?.errors || {});
@@ -67,7 +74,7 @@ function ResetPassword() {
           topContentLayout={
             <StepTopContent
               title="Reset your Password"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+              description="Choose a new password to get back into your Base 23 account."
               headingClassName="max-w-[100px] lg:max-w-[300px]"
             />
           }

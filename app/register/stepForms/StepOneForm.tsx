@@ -2,9 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import InputWithLabel from "@/components/input/InputWithLabel";
-import images from "@/constants/image";
 import { Eye, EyeOff } from "lucide-react";
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -42,7 +40,14 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
     watch,
     formState: { errors },
   } = useForm<Step1FormData>({
-    defaultValues,
+    defaultValues: {
+      company_name: defaultValues.company_name || "",
+      name: defaultValues.name || "",
+      email: defaultValues.email || "",
+      password: defaultValues.password || "",
+      password_confirmation: defaultValues.password_confirmation || "",
+      role: defaultValues.role || "",
+    },
     mode: "onBlur",
   });
 
@@ -72,23 +77,23 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
     length: /.{8,}/,
   };
 
-  const getPasswordRules = (password: string) => [
+  const getPasswordRules = (value: string) => [
     {
       label: "One uppercase letter",
-      valid: passwordRules.uppercase.test(password),
+      valid: passwordRules.uppercase.test(value),
     },
     {
       label: "One lowercase letter",
-      valid: passwordRules.lowercase.test(password),
+      valid: passwordRules.lowercase.test(value),
     },
-    { label: "One number", valid: passwordRules.number.test(password) },
+    { label: "One number", valid: passwordRules.number.test(value) },
     {
       label: "One special character",
-      valid: passwordRules.special.test(password),
+      valid: passwordRules.special.test(value),
     },
     {
       label: "At least 8 characters",
-      valid: passwordRules.length.test(password),
+      valid: passwordRules.length.test(value),
     },
   ];
 
@@ -99,29 +104,28 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
         className="relative z-7 mt-6 w-full overflow-x-hidden p-5 pb-32 md:mt-11 md:h-167.5 md:overflow-y-auto md:pb-5 lg:mt-3 lg:h-auto"
       >
         <div className="mx-auto max-w-md">
-          {/* Heading */}
           <div className="mb-10">
             <h2 className="mb-1 text-2xl font-extrabold text-primary lg:text-3xl dark:text-black">
               First, Account Setup
             </h2>
             <p className="max-w-sm pr-20 text-[16px] font-normal text-primary lg:pr-5 lg:text-[17px]">
-              Setup the account to gain endless smart matches with suitable
-              professionals.
+              Set up your sales agent account to get matched with companies
+              hiring across Africa.
             </p>
           </div>
 
-          {/* Form */}
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-7 md:mr-6"
           >
-            {/* Name */}
             <div>
               <InputWithLabel
                 label="Company Name"
                 htmlFor="company_name"
                 type="text"
-                {...register("company_name")}
+                {...register("company_name", {
+                  required: "Company name is required",
+                })}
               />
               {errors.company_name && (
                 <p className="mt-1 ml-3 text-sm text-red-500">
@@ -136,7 +140,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                   label="Full Name"
                   htmlFor="name"
                   type="text"
-                  {...register("name")}
+                  {...register("name", { required: "Full name is required" })}
                 />
                 {errors.name && (
                   <p className="mt-1 ml-3 text-sm text-red-500">
@@ -149,7 +153,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                   label="Role"
                   htmlFor="role"
                   type="text"
-                  {...register("role")}
+                  {...register("role", { required: "Role is required" })}
                 />
                 {errors.role && (
                   <p className="mt-1 ml-3 text-sm text-red-500">
@@ -159,19 +163,18 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
               </div>
             </div>
 
-            {/* Email */}
             <div>
               <InputWithLabel
                 label="Email"
                 htmlFor="email"
                 type="email"
-                {...register("email")}
-                onFocus={(e) => {
-                  const el = e.currentTarget;
-                  requestAnimationFrame(() => {
-                    el.scrollLeft = el.scrollWidth;
-                  });
-                }}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Enter a valid email",
+                  },
+                })}
               />
               {errors.email && (
                 <p className="mt-1 ml-3 text-sm text-red-500">
@@ -180,14 +183,27 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
               )}
             </div>
 
-            {/* Password */}
             <div className="relative">
               <div className="relative">
                 <InputWithLabel
                   label="Password"
                   htmlFor="password"
                   type={showPassword ? "text" : "password"}
-                  {...register("password")}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                    validate: (value) => {
+                      const rules = getPasswordRules(value);
+                      const allValid = rules.every((r) => r.valid);
+                      return (
+                        allValid ||
+                        "Password must meet all strength requirements"
+                      );
+                    },
+                  })}
                   onFocus={() => setMeterVisible(true)}
                   onBlur={() => setMeterVisible(false)}
                   inputClassName="pr-12"
@@ -211,7 +227,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                 </p>
               )}
 
-              {/* Password strength meter */}
               {meterVisible && password && (
                 <div className="absolute z-10 h-[160px] w-full space-y-2 rounded-2xl bg-white px-5 py-4 shadow-2xl">
                   <div className="h-2 w-full rounded bg-gray-200">
@@ -244,13 +259,16 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
               )}
             </div>
 
-            {/* Confirm Password */}
             <div className="relative">
               <InputWithLabel
                 label="Confirm Password"
                 htmlFor="password_confirmation"
                 type={showConfirmPassword ? "text" : "password"}
-                {...register("password_confirmation")}
+                {...register("password_confirmation", {
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                })}
                 inputClassName="pr-12"
               />
               <button
@@ -271,7 +289,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
               )}
             </div>
 
-            {/* Submit Button */}
             <div className="mt-11 flex flex-col items-center">
               <Button
                 type="submit"
@@ -282,12 +299,11 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
             </div>
           </form>
 
-          {/* Login/Signups */}
           <div className="mt-10 w-full px-4 text-left md:hidden lg:px-0">
             <p className="mb-1 pl-10 text-base font-extralight">
               Already have an account?{" "}
               <a
-                href="/login"
+                href="/login?type=agent"
                 className="font-semibold text-deepBlack italic hover:underline dark:text-deepBlack"
               >
                 Sign In
@@ -304,7 +320,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

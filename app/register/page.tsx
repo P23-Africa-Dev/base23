@@ -74,25 +74,25 @@ const MOBILE_CONTENT: Record<
 > = {
   account: {
     title: "First, the essential",
-    description: "This helps members recognise and trust you.",
+    description: "This helps companies recognise and trust you as an agent.",
     headingClassName: "text-3xl font-bold text-white",
     paragraphClassName: "max-w-sm pr-20 text-[14px] font-light text-white",
   },
   interests: {
-    title: "What is your secret sauce",
-    description: "Members will search for this skills!",
+    title: "What markets do you cover?",
+    description: "Companies search for agents by industry and strengths.",
     headingClassName: "text-2xl leading-6 pr-10 font-bold text-white",
     paragraphClassName: "max-w-sm  text-[14px]! font-light text-gray-300",
   },
   companyAccount: {
     title: "First, the essential",
-    description: "This helps members recognise and trust you.",
+    description: "Tell us about your company so agents can trust you.",
     headingClassName: "text-3xl font-bold text-white",
     paragraphClassName: "max-w-sm pr-20 text-[14px] font-light text-white",
   },
   questions: {
-    title: "Provide response appropriately",
-    description: "Answer a few quick questions to stand out.",
+    title: "A few hiring details",
+    description: "Help us match you with the right sales agents.",
     headingClassName: "text-2xl leading-6 pr-10 font-bold text-white",
     paragraphClassName: "max-w-sm  text-[14px]! font-light text-gray-300",
   },
@@ -103,16 +103,23 @@ const DESKTOP_HEADINGS: Record<StepKey, React.ReactNode> = {
   interests: (
     <>
       <div className="font-light">Almost There!</div>
-      <div>Superpowers</div>
+      <div>Your strengths</div>
     </>
   ),
   companyAccount: <>Let&apos;s get you started! </>,
   questions: (
     <>
       <div className="font-light">Almost There!</div>
-      <div>Standout!</div>
+      <div>Hiring details</div>
     </>
   ),
+};
+
+const DESKTOP_DESCRIPTIONS: Record<AccountType, string> = {
+  agent:
+    "Create your sales agent profile to get matched with companies hiring across Africa.",
+  company:
+    "Create your hiring account to find verified sales agents ready for your markets.",
 };
 
 function RegisterInner() {
@@ -187,16 +194,12 @@ function RegisterInner() {
   };
 
   const handleComplete = async () => {
-    if (accountType === 'agent') {
-      try {
-        await refresh();
-      } catch (err) {
-        console.error('Session refresh failed after registration:', err);
-      }
-      router.push('/dashboard');
-    } else {
-      router.push('/login?status=Registration+successful.+Please+log+in.');
+    try {
+      await refresh();
+    } catch (err) {
+      console.error('Session refresh failed after registration:', err);
     }
+    router.push('/dashboard');
   };
 
   if (registerStatus !== 'idle') {
@@ -227,8 +230,7 @@ function RegisterInner() {
                   {DESKTOP_HEADINGS[stepKey]}
                 </h2>
                 <p className="text-[13px] max-w-69.75 text-[#F3F0E9] mb-4.75 tracking-[0.5px]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor
+                  {DESKTOP_DESCRIPTIONS[accountType]}
                 </p>
               </div>
             }
@@ -236,7 +238,10 @@ function RegisterInner() {
               <div className="w-fit text-base mx-auto  my-[15%] pr-10">
                 <p className="mb-1 font-light">
                   Already have an account?{" "}
-                  <a href="/login" className="font-medium italic">
+                  <a
+                    href={`/login?type=${accountType}`}
+                    className="font-medium italic"
+                  >
                     Sign In
                   </a>
                 </p>
@@ -288,6 +293,8 @@ function RegisterInner() {
               position: formData.position,
               email: formData.email,
               phone: formData.phone,
+              password: formData.password,
+              password_confirmation: formData.password_confirmation,
               countries_of_operation: formData.countries_of_operation,
             }}
             onNext={(data) => nextStep(data)}

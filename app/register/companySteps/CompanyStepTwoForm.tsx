@@ -181,7 +181,7 @@ export default function CompanyStepTwoForm({
               <p className="text-sm">
                 Already have an account?{" "}
                 <a
-                  href="/login"
+                  href="/login?type=company"
                   className="font-bold text-primary italic hover:underline"
                 >
                   Sign In
