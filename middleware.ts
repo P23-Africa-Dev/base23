@@ -3,6 +3,15 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+  // Proxy POST authentication requests to the backend
+  if (
+    request.method === "POST" &&
+    ["/login", "/register", "/logout", "/forgot-password", "/reset-password"].includes(pathname)
+  ) {
+    return NextResponse.rewrite(new URL(`${API_URL}${pathname}`, request.url));
+  }
 
   // Check if the auth cookie exists
   const isAuthenticated = request.cookies.has("base23_authenticated");
