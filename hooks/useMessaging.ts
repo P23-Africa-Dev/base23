@@ -1,6 +1,6 @@
 'use client';
 
-import axios from 'axios';
+import axios from '@/lib/axios-config';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 

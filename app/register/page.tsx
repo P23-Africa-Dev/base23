@@ -11,6 +11,10 @@ import CompanyStepOneForm from "./companySteps/CompanyStepOneForm";
 import CompanyStepTwoForm from "./companySteps/CompanyStepTwoForm";
 import StepOneForm from "./stepForms/StepOneForm";
 import StepThreeForm from "./stepForms/StepThreeForm";
+import { submitRegistration } from "@/services/networkValidation";
+import RegistrationLoader from "@/components/auths/RegistrationLoader";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 type RegisterForm = {
   name: string;
@@ -120,6 +124,9 @@ function RegisterInner() {
   const step = Number(searchParams.get("step") || 1);
 
   const [formData, setFormData] = useState<Partial<RegisterForm>>({});
+  const { refresh } = useAuth();
+  const [registerStatus, setRegisterStatus] = useState<'idle' | 'uploading' | 'processing' | 'success' | 'error'>('idle');
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const flow = FLOWS[accountType];
   const stepKey: StepKey = flow[step - 1] ?? flow[0];
@@ -129,14 +136,78 @@ function RegisterInner() {
     router.push(`/register?type=${accountType}&step=${newStep}`);
   };
 
-  const nextStep = (data: Partial<RegisterForm>) => {
-    setFormData((prev) => ({ ...prev, ...data }));
+  const nextStep = async (data: Partial<RegisterForm>) => {
+    const updatedData = { ...formData, ...data };
+    setFormData(updatedData);
+
     if (step >= flow.length) {
-      router.push(accountType === "company" ? "/login" : "/dashboard");
+      setRegisterStatus('uploading');
+      
+      const fd = new FormData();
+      Object.entries(updatedData).forEach(([key, val]) => {
+        if (val === undefined || val === null) return;
+        if (val instanceof File) {
+          fd.append(key, val);
+        } else if (Array.isArray(val)) {
+          val.forEach((item) => fd.append(`${key}[]`, String(item)));
+        } else if (typeof val === 'object') {
+          fd.append(key, JSON.stringify(val));
+        } else {
+          fd.append(key, String(val));
+        }
+      });
+      
+      fd.append('account_type', accountType);
+
+      try {
+        const response = await submitRegistration(fd, {
+          onProgress: (progress) => {
+            setUploadProgress(progress);
+            if (progress >= 100) {
+              setRegisterStatus('processing');
+            }
+          },
+        });
+
+        if (response.success) {
+          setRegisterStatus('success');
+        } else {
+          setRegisterStatus('error');
+          toast.error(response.error?.message || 'Registration failed. Please try again.');
+          setTimeout(() => setRegisterStatus('idle'), 3000);
+        }
+      } catch (err: any) {
+        setRegisterStatus('error');
+        toast.error(err.message || 'An unexpected error occurred.');
+        setTimeout(() => setRegisterStatus('idle'), 3000);
+      }
     } else {
       goToStep(step + 1);
     }
   };
+
+  const handleComplete = async () => {
+    if (accountType === 'agent') {
+      try {
+        await refresh();
+      } catch (err) {
+        console.error('Session refresh failed after registration:', err);
+      }
+      router.push('/dashboard');
+    } else {
+      router.push('/login?status=Registration+successful.+Please+log+in.');
+    }
+  };
+
+  if (registerStatus !== 'idle') {
+    return (
+      <RegistrationLoader
+        status={registerStatus}
+        uploadProgress={uploadProgress}
+        onComplete={handleComplete}
+      />
+    );
+  }
 
   return (
     <>
