@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import { TEMP_AUTH_BYPASS } from '@/lib/temp-auth-bypass';
 
 const apiClient = axios.create({
     withCredentials: true,
@@ -44,7 +45,12 @@ apiClient.interceptors.response.use(
             if (status === 401 || status === 419) {
                 // Clear Edge authentication helper cookie on authorization failure
                 document.cookie = 'base23_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                
+
+                // TEMPORARY: skip session-expired redirect during UI review bypass
+                if (TEMP_AUTH_BYPASS) {
+                    return Promise.reject(error);
+                }
+
                 const path = window.location.pathname;
                 const isAuthPage =
                     path === '/login' ||

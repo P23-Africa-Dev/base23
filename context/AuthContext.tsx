@@ -9,6 +9,7 @@ import {
 } from "react";
 import type { User, SharedData } from "@/types";
 import axios from "@/lib/axios-config";
+import { TEMP_AUTH_BYPASS } from "@/lib/temp-auth-bypass";
 
 interface AuthContextValue {
   user: User | null;
@@ -27,9 +28,18 @@ const AuthContext = createContext<AuthContextValue>({
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [subscription, setSubscription] = useState<SharedData["subscription"] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  // TEMPORARY: skip auth loading gate while UI-review bypass is on
+  const [loading, setLoading] = useState<boolean>(!TEMP_AUTH_BYPASS);
 
   const fetchUser = async () => {
+    // TEMPORARY: skip /api/user during UI-review bypass (avoids 401 → login redirect)
+    if (TEMP_AUTH_BYPASS) {
+      setUser(null);
+      setSubscription(null);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.get("/api/user");
       const userData = response.data.data || response.data;

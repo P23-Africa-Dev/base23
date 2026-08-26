@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { resolveApiUrl } from "@/lib/resolve-api-url";
+import { TEMP_AUTH_BYPASS } from "@/lib/temp-auth-bypass";
 
 const AUTH_POST_PATHS = new Set([
   "/login",
@@ -9,6 +10,22 @@ const AUTH_POST_PATHS = new Set([
   "/forgot-password",
   "/reset-password",
 ]);
+
+const PROTECTED_PATHS = [
+  "/dashboard",
+  "/referrals",
+  "/directory",
+  "/message",
+  "/leads",
+  "/profile",
+  "/settings",
+  "/payment",
+  "/subscription-required",
+  "/admin",
+  "/chats",
+  "/connected-users",
+  "/dealcard",
+];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,6 +38,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(destination);
   }
 
+  // TEMPORARY: flip TEMP_AUTH_BYPASS to false in lib/temp-auth-bypass.ts to restore auth
+  if (TEMP_AUTH_BYPASS) {
+    return NextResponse.next();
+  }
+
   const isAuthenticated = request.cookies.has("base23_authenticated");
 
   const isAuthPage = [
@@ -30,23 +52,9 @@ export function middleware(request: NextRequest) {
     "/reset-password",
   ].some((path) => pathname === path || pathname.startsWith(path + "/"));
 
-  // TEMPORARY: auth gate disabled so management can review UI without signing in.
-  // Restore the path list below when review is done.
-  const isProtectedPage = [
-    // "/dashboard",
-    // "/referrals",
-    // "/directory",
-    // "/message",
-    // "/leads",
-    // "/profile",
-    // "/settings",
-    // "/payment",
-    // "/subscription-required",
-    // "/admin",
-    // "/chats",
-    // "/connected-users",
-    // "/dealcard",
-  ].some((path) => pathname === path || pathname.startsWith(path + "/"));
+  const isProtectedPage = PROTECTED_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(path + "/")
+  );
 
   if (isProtectedPage && !isAuthenticated) {
     const loginUrl = new URL("/login", request.url);
