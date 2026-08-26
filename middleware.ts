@@ -30,20 +30,22 @@ export function middleware(request: NextRequest) {
     "/reset-password",
   ].some((path) => pathname === path || pathname.startsWith(path + "/"));
 
+  // TEMPORARY: auth gate disabled so management can review UI without signing in.
+  // Restore the path list below when review is done.
   const isProtectedPage = [
-    "/dashboard",
-    "/referrals",
-    "/directory",
-    "/message",
-    "/leads",
-    "/profile",
-    "/settings",
-    "/payment",
-    "/subscription-required",
-    "/admin",
-    "/chats",
-    "/connected-users",
-    "/dealcard",
+    // "/dashboard",
+    // "/referrals",
+    // "/directory",
+    // "/message",
+    // "/leads",
+    // "/profile",
+    // "/settings",
+    // "/payment",
+    // "/subscription-required",
+    // "/admin",
+    // "/chats",
+    // "/connected-users",
+    // "/dealcard",
   ].some((path) => pathname === path || pathname.startsWith(path + "/"));
 
   if (isProtectedPage && !isAuthenticated) {
