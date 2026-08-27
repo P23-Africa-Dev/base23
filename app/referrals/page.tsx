@@ -121,10 +121,10 @@ export default function Referrals() {
 
   return (
     <AppLayout>
-      <div className="relative border-0 bg-transparent pt-0 pb-2.5">
+      <div className="relative border-0 bg-transparent pt-0 pb-2.5 h-full">
         {/* Zindex Background */}
         <div
-          className={`absolute z-2 hidden h-full w-full lg:block ${bgLoaded ? "bg-[#031C5B] dark:lg:bg-gray-900" : "bg-white"} `}
+          className="absolute z-2 hidden h-full w-full lg:block bg-[#031C5B] dark:lg:bg-gray-900"
         ></div>
         <div
           className="relative z-3 flex flex-1 bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl lg:py-2"
@@ -133,11 +133,11 @@ export default function Referrals() {
           }}
         >
           <div
-            className={`relative z-10 no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto lg:px-3 lg:pb-1`}
+            className={`relative z-10 no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto lg:overflow-hidden lg:px-3 lg:pb-1`}
           >
-            <div className="gap-5 lg:h-screen lg:overflow-hidden lg:pt-2 page-transition">
+            <div className="flex flex-col gap-5 h-full lg:h-screen lg:pt-4 lg:pb-5 lg:justify-between page-transition">
               {/*  Header Search Bar */}
-              <div className="sticky top-0 z-10 flex w-full items-center justify-between gap-2 overflow-hidden px-4 pt-4 pb-3 lg:max-w-[70%] lg:mx-auto lg:px-0">
+              <div className="sticky top-0 z-10 flex w-full max-w-[1155px] items-center justify-between gap-2 overflow-hidden px-4 pt-4 pb-3 mx-auto lg:px-0">
                 <div className="flex shrink-0 flex-col text-white italic lg:text-deepBlack xl:w-40">
                   <h2 className="text-[12px] leading-2 font-normal sm:text-[14px] md:text-[15px] lg:text-[17px] lg:leading-3">
                     Your smart
@@ -198,24 +198,24 @@ export default function Referrals() {
               </div>
 
               {/* Desktop slider + teal background — desktop only */}
-              <div className="mx-auto mt-2 hidden w-[95%] lg:block animate-fadeIn">
-                <div className="relative h-[416px]">
-                  <div className="relative z-10 flex max-h-22 w-full justify-center px-[30px]">
+              <div className="mx-auto mt-2 hidden w-full max-w-[1155px] lg:block animate-fadeIn">
+                <div className="relative h-[480px] xl:h-[520px] flex flex-col rounded-3xl overflow-hidden">
+                  <div
+                    style={{ backgroundImage: `url(${images.greenBg})` }}
+                    className="absolute inset-x-0 top-[28%] -bottom-4 bg-cover bg-center bg-no-repeat z-0"
+                  />
+                  <div className="relative z-10 flex-1 min-h-0 w-full flex items-center px-[24px] pt-3 pb-4">
                     <ReferralCardSlider
                       data={sliderData}
                       onMatch={handleSliderMatch}
                     />
                   </div>
-                  <div
-                    style={{ backgroundImage: `url(${images.referralbg})` }}
-                    className="relative z-0 h-[300px] w-full rounded-4xl bg-[#193E47] bg-cover bg-center bg-repeat bg-blend-saturation shadow-[2px_5px_10px_-4px_rgba(0,0,0,0.4),-2px_3px_10px_-1px_rgba(0,0,0,0.4)]"
-                  />
                 </div>
               </div>
 
               {/* Below-slider content — ALL screen sizes */}
-              <div className="mx-auto w-full px-4 pb-8 lg:w-[95%] lg:px-0 lg:pb-10">
-                <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
+              <div className="mx-auto w-full max-w-[1155px] px-4 pb-4 lg:px-0 flex-1 min-h-0 flex flex-col justify-end">
+                <div className="flex flex-col gap-4 lg:flex-row lg:justify-between items-end">
 
                   {/* Smart match chart */}
                   <div className="w-full lg:flex-1">

@@ -522,7 +522,11 @@ export const AppSidebar: React.FC = () => {
             <p
               className={`mb-4 text-xs font-light tracking-wider opacity-60 ${isLeadsPage ? "text-secondaryWhite" : "text-gray-400"}`}
             >
-              USER ACCOUNT
+              {authUser?.account_type === "agent"
+                ? "AGENT ACCOUNT"
+                : authUser?.account_type === "company"
+                  ? "COMPANY ACCOUNT"
+                  : "USER ACCOUNT"}
             </p>
 
             {/* User Profile Trigger */}
