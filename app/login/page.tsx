@@ -239,7 +239,7 @@ function LoginForm({ accountType }: { accountType: AccountType }) {
 
     setLoading(true);
     try {
-      await axios.post("/login", {
+      await axios.post("/api/auth/login", {
         email: email.trim(),
         password,
         remember,

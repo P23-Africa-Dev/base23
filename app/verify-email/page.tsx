@@ -37,7 +37,7 @@ function VerifyEmail() {
   };
 
   const logout = () => {
-    axios.post("/logout").then(() => {
+    axios.post("/api/auth/logout").then(() => {
       window.location.href = "/login";
     });
   };

@@ -213,6 +213,7 @@ const images = {
     blurProfilename: '/assets/blur-profile-name.png',
     dealBgCard: '/assets/deal-bg.png',
     informationCircle: '/assets/information-circle.png',
+    greenBg: '/assets/green-bg.png',
 };
 
 export default images;

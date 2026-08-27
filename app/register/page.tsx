@@ -177,10 +177,29 @@ function RegisterInner() {
         });
 
         if (response.success) {
+          // Allow middleware through while session cookie settles from the proxy
+          if (typeof document !== "undefined") {
+            document.cookie =
+              "base23_authenticated=true; path=/; max-age=2592000; SameSite=Lax; Secure";
+          }
           setRegisterStatus('success');
         } else {
           setRegisterStatus('error');
-          toast.error(response.error?.message || 'Registration failed. Please try again.');
+          const msg =
+            response.error?.message ||
+            'Registration failed. Please try again.';
+          // Surface proxy/misconfig 404s clearly instead of a blank Next error
+          if (
+            typeof msg === 'string' &&
+            (msg.toLowerCase().includes('could not be found') ||
+              msg.toLowerCase().includes('not found'))
+          ) {
+            toast.error(
+              'Registration service is temporarily unreachable. Please try again in a moment.',
+            );
+          } else {
+            toast.error(msg);
+          }
           setTimeout(() => setRegisterStatus('idle'), 3000);
         }
       } catch (err: any) {

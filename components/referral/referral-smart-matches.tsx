@@ -19,8 +19,8 @@ export default function ReferralSmartMatchChart() {
   };
 
   return (
-    <div className="flex gap-4 shrink-0">
-      <div className="flex h-47.5 w-18 flex-col items-center justify-between rounded-2xl bg-[#22272A] pt-9 pb-3 text-white shadow">
+    <div className="flex gap-4 w-full h-full">
+      <div className="flex h-47.5 w-18 flex-col items-center justify-between rounded-2xl bg-[#22272A] pt-9 pb-3 text-white shadow shrink-0">
         <p className="-rotate-90 text-sm font-bold tracking-widest text-white">
           1000+
         </p>
@@ -38,7 +38,7 @@ export default function ReferralSmartMatchChart() {
           </div>
         </div>
       </div>
-      <div className="relative min-w-58 mr-16 h-47.5 w-[60%] rounded-2xl bg-[#CDCADB] p-8 shadow-[2px_5px_5px_-4px_rgba(0,0,0,0.3),-2px_3px_5px_-1px_rgba(0,0,0,0.3)]">
+      <div className="relative flex-1 mr-20 h-47.5 rounded-2xl bg-[#CDCADB] p-8 shadow-[2px_5px_5px_-4px_rgba(0,0,0,0.3),-2px_3px_5px_-1px_rgba(0,0,0,0.3)]">
         {/* Floating profile badge - Clickable */}
         <div
           onClick={handleProfileSetupClick}
