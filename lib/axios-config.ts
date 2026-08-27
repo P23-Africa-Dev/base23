@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import { TEMP_AUTH_BYPASS } from '@/lib/temp-auth-bypass';
 
 const getCookie = (name: string): string | null => {
     if (typeof window === "undefined") return null;

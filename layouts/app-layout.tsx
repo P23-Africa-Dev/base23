@@ -2,6 +2,7 @@ import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { useUserActivityTracker } from '@/hooks/useUserActivityTracker';
 import { SubscriptionRenewalModal } from '@/components/modals/subscription-renewal-modal';
 import { useAuth } from '@/context/AuthContext';
+import { TEMP_AUTH_BYPASS } from '@/lib/temp-auth-bypass';
 import { usePathname } from 'next/navigation';
 import { type ReactNode } from 'react';
 
@@ -14,7 +15,8 @@ function AppLayout({ children }: AppLayoutProps) {
     const pathname = usePathname();
 
     useUserActivityTracker({
-        enabled: true,
+        // Avoid unauthenticated 401 spam while UI-review bypass is on
+        enabled: !TEMP_AUTH_BYPASS && !!user,
         updateInterval: 60000,
     });
 
