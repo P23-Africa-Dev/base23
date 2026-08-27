@@ -22,6 +22,7 @@ export function middleware(request: NextRequest) {
   }
 
   const isAuthenticated = request.cookies.has("base23_authenticated");
+  const bypassOverride = request.cookies.get("base23_bypass_auth_override")?.value;
 
   const isAuthPage = [
     "/login",
@@ -30,31 +31,41 @@ export function middleware(request: NextRequest) {
     "/reset-password",
   ].some((path) => pathname === path || pathname.startsWith(path + "/"));
 
-  // TEMPORARY: auth gate disabled so management can review UI without signing in.
-  // Restore the path list below when review is done.
   const isProtectedPage = [
-    // "/dashboard",
-    // "/referrals",
-    // "/directory",
-    // "/message",
-    // "/leads",
-    // "/profile",
-    // "/settings",
-    // "/payment",
-    // "/subscription-required",
-    // "/admin",
-    // "/chats",
-    // "/connected-users",
-    // "/dealcard",
+    "/dashboard",
+    "/referrals",
+    "/directory",
+    "/message",
+    "/leads",
+    "/profile",
+    "/settings",
+    "/payment",
+    "/subscription-required",
+    "/admin",
+    "/chats",
+    "/connected-users",
+    "/dealcard",
   ].some((path) => pathname === path || pathname.startsWith(path + "/"));
 
-  if (isProtectedPage && !isAuthenticated) {
+  // Allowed on manual override, local dev, or vercel preview/dev deployments
+  const isBypassAllowed =
+    process.env.NEXT_PUBLIC_BYPASS_AUTH === "true" ||
+    process.env.VERCEL_ENV === "preview" ||
+    process.env.VERCEL_ENV === "development" ||
+    process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" ||
+    process.env.NEXT_PUBLIC_VERCEL_ENV === "development" ||
+    process.env.NODE_ENV === "development";
+
+  // Check if auth bypass is active globally and not explicitly disabled via cookie override
+  const isBypassEnabled = isBypassAllowed && bypassOverride !== "enforced";
+
+  if (isProtectedPage && !isAuthenticated && !isBypassEnabled) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthPage && isAuthenticated) {
+  if (isAuthPage && isAuthenticated && !isBypassEnabled) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

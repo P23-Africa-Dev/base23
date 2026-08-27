@@ -27,7 +27,7 @@ export function isPrivateOrUnreachableApiHost(url: string): boolean {
   }
 }
 
-export function resolveApiUrl(env: NodeJS.ProcessEnv = process.env): string {
+export function resolveApiUrl(env: Partial<NodeJS.ProcessEnv> = process.env): string {
   const raw = (env.API_URL || env.NEXT_PUBLIC_API_URL || "").trim().replace(/\/$/, "");
   const onVercel = Boolean(env.VERCEL);
   const publicProductionApi = "https://api.noel54.com";

@@ -2,6 +2,30 @@
 
 import axios from 'axios';
 
+const getCookie = (name: string): string | null => {
+    if (typeof window === "undefined") return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
+    return null;
+};
+
+const isBypassActive = (): boolean => {
+    const isAllowed =
+        process.env.NEXT_PUBLIC_BYPASS_AUTH === "true" ||
+        process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" ||
+        process.env.NEXT_PUBLIC_VERCEL_ENV === "development" ||
+        process.env.NODE_ENV === "development";
+
+    if (!isAllowed) return false;
+
+    if (typeof window !== "undefined") {
+        const override = getCookie("base23_bypass_auth_override");
+        if (override === "enforced") return false;
+    }
+    return true;
+};
+
 const apiClient = axios.create({
     withCredentials: true,
     headers: {
@@ -42,18 +66,22 @@ apiClient.interceptors.response.use(
         if (typeof window !== 'undefined' && error.response) {
             const status = error.response.status;
             if (status === 401 || status === 419) {
-                // Clear Edge authentication helper cookie on authorization failure
-                document.cookie = 'base23_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                
-                const path = window.location.pathname;
-                const isAuthPage =
-                    path === '/login' ||
-                    path.startsWith('/login/') ||
-                    ['/register', '/forgot-password', '/reset-password', '/verify-email', '/confirm-password'].some(
-                        (p) => path === p || path.startsWith(p + '/')
-                    );
-                if (!isAuthPage) {
-                    window.location.href = '/login?session_expired=true';
+                if (isBypassActive()) {
+                    console.warn(`Auth bypass active: Ignored 401/419 error for endpoint ${error.config?.url}`);
+                } else {
+                    // Clear Edge authentication helper cookie on authorization failure
+                    document.cookie = 'base23_authenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    
+                    const path = window.location.pathname;
+                    const isAuthPage =
+                        path === '/login' ||
+                        path.startsWith('/login/') ||
+                        ['/register', '/forgot-password', '/reset-password', '/verify-email', '/confirm-password'].some(
+                            (p) => path === p || path.startsWith(p + '/')
+                        );
+                    if (!isAuthPage) {
+                        window.location.href = '/login?session_expired=true';
+                    }
                 }
             }
         }

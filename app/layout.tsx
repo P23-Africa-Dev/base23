@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { Montserrat } from "next/font/google";
+import DevAuthToggle from "@/components/DevAuthToggle";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout({
               style: { background: "#333", color: "#fff" },
             }}
           />
+          <DevAuthToggle />
         </AuthProvider>
       </body>
     </html>

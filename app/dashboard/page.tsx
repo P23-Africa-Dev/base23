@@ -267,9 +267,9 @@ function Dashboard() {
     <AppLayout>
       <OnboardingActivator needsOnboarding={needsOnboarding} />
 
-      <div className="main-dashboard relative border-0 bg-transparent pt-0 pb-2.5">
+      <div className="main-dashboard relative border-0 bg-transparent pt-0 h-full">
         <div
-          className={`absolute z-2 hidden h-full w-full lg:block ${bgLoaded ? "bg-[#031C5B] dark:lg:bg-gray-900" : "bg-white"} `}
+          className="absolute z-2 hidden h-full w-full lg:block bg-[#031C5B] dark:lg:bg-gray-900"
         ></div>
         <div
           className="relative z-3 flex flex-1 bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl lg:py-2"
@@ -277,10 +277,12 @@ function Dashboard() {
             backgroundImage: `url(${images.uibg})`,
           }}
         >
-          <div className="relative z-10 no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-9 lg:pl-7 xl:pr-17 xl:pl-12">
-            <h3 className="text-[27px] font-medium px-9.25 pt-3">
-              Good Morning <span className="font-bold">Kwame</span>{" "}
-            </h3>
+          <div className="relative z-10 no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto lg:overflow-hidden lg:justify-around px-2 pb-1 lg:pt-4 lg:pb-5 lg:pr-9 lg:pl-7 xl:pr-17 xl:pl-12">
+            <div className="w-full max-w-[1155px] mx-auto">
+              <h3 className="text-[27px] font-medium px-9.25 lg:px-0 pt-3">
+                Good Morning <span className="font-bold">Kwame</span>{" "}
+              </h3>
+            </div>
             <div className="relative mt-1.5 w-full bg-no-repeat px-2 pt-5 pb-4 lg:hidden animate-fadeIn">
               <Image
                 src={images.mobileCardBG}
@@ -333,7 +335,8 @@ function Dashboard() {
             </div>
 
             {/* FIRST ROW */}
-            <div className="grid auto-rows-min gap-4 lg:grid-cols-3 stagger-children px-8.5">
+            <div className="w-full max-w-[1155px] mx-auto">
+              <div className="grid auto-rows-min gap-4 lg:grid-cols-3 stagger-children px-8.5 lg:px-0">
               {/* CHART CONTAINER */}
               <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-linear-to-r from-[#A47AF0] to-[#A47AF0]/60 lg:block hover-lift">
                 <SplineAreaChart userId={auth.user?.id} />
@@ -873,14 +876,18 @@ function Dashboard() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* SECOND ROW */}
-            <div className="drop-shadow-[0px_4px_6px_rgba(0,0,0,0.6)] mt-7">
-              <div className="ticket-cutout relative aspect-auto h-133.75 w-full bg-white bg-cover rounded-3xl">
-                <div className="w-full h-[64%] bg-[#193E47] absolute bottom-0" />
-                <div className="relative no-scrollbar flex-1 overflow-y-auto lg:pb-0">
-                  <div className="sticky top-0 z-10 flex w-full max-w-[70%] mx-auto items-center justify-between overflow-hidden px-3 pt-4 pb-3 bg-white lg:px-0">
-                    <div className="flex w-full flex-col text-white italic lg:text-deepBlack xl:w-40">
+          {/* SECOND ROW */}
+            <div className="drop-shadow-[0px_4px_6px_rgba(0,0,0,0.6)] mt-4 lg:mt-6 flex flex-col items-center">
+              <div className="ticket-cutout relative flex flex-col w-full max-w-[1155px] bg-white rounded-3xl h-[480px] lg:h-[585px] overflow-hidden py-0">
+                <div
+                  style={{ backgroundImage: `url(${images.greenBg})` }}
+                  className="absolute inset-x-0 top-[33%] -bottom-4 bg-cover bg-center bg-no-repeat z-0"
+                />
+                <div className="relative z-10 w-full bg-white pt-4 pb-3 rounded-t-3xl">
+                  <div className="flex w-full max-w-[90%] lg:max-w-[85%] xl:max-w-[75%] mx-auto items-center justify-between px-3 lg:px-0">
+                    <div className="flex flex-col text-deepBlack italic xl:w-40">
                       <h2 className="text-[12px] leading-2 font-normal sm:text-[14px] md:text-[15px] lg:text-[17px] lg:leading-3">
                         Your smart
                       </h2>
@@ -889,7 +896,7 @@ function Dashboard() {
                       </h3>
                     </div>
 
-                    <div className="flex w-[57%] items-center space-x-2 lg:mr-14 lg:w-[60%] lg:items-start">
+                    <div className="flex w-[62%] items-center space-x-2 lg:mr-14 lg:w-[60%] lg:items-start">
                       <div className="relative w-full cursor-pointer">
                         <input
                           type="text"
@@ -898,7 +905,7 @@ function Dashboard() {
                           onChange={(e) => setSearchQuery(e.target.value)}
                           onKeyPress={handleSearchKeyPress}
                           disabled={isSearching}
-                          className="w-full rounded-full border-0 bg-gray-700 px-4 text-sm py-2 text-deepBlack placeholder:text-sm placeholder:text-white placeholder:italic focus:ring-0 focus:ring-primary/30 focus:outline-none disabled:opacity-50 lg:bg-[#27E6A729] lg:px-4 lg:py-3 lg:pr-18 lg:pl-5 lg:placeholder:text-deepBlue dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
+                          className="w-full rounded-full border-0 bg-gray-700 px-4 text-sm py-2 text-white lg:text-deepBlack placeholder:text-sm placeholder:text-white placeholder:italic focus:ring-0 focus:ring-primary/30 focus:outline-none disabled:opacity-50 lg:bg-[#27E6A729] lg:px-4 lg:py-3 lg:pr-18 lg:pl-5 lg:placeholder:text-deepBlue dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
                         />
                         <button
                           onClick={handleSearchIconClick}
@@ -933,7 +940,7 @@ function Dashboard() {
                   </div>
                 </div>
 
-                <div className="mx-auto w-full h-130.25 max-h-130.25 px-12.5">
+                <div className="relative z-10 mx-auto w-full flex-1 min-h-0 px-6 lg:px-12.5 pb-4 flex flex-col justify-center">
                   <ReferralCardSlider
                     data={sliderData}
                     onMatch={handleSliderMatch}

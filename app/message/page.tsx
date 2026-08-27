@@ -23,6 +23,7 @@ type User = {
     company_name?: string;
     industry?: string;
     country?: string;
+    account_type?: 'company' | 'agent';
 };
 
 type Conversation = {
@@ -344,6 +345,10 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
 
     // Handle starting a conversation with a connection
     const handleStartConversation = (userId: number) => {
+        if (authUser?.account_type !== 'company') {
+            toast.error('Only company accounts can start a new chat.');
+            return;
+        }
         axios.post('/messages/start', { user_id: userId, redirect_to: 'message/single' })
             .then((res) => { router.push(res.data.redirect ?? '/message/single'); })
             .catch((err) => {
@@ -423,7 +428,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="relative z-[1] no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto pb-1 lg:px-2 lg:py-0 lg:pr-9 lg:pl-7 xl:pr-17 xl:pl-12">
+                    <div className="relative z-[1] no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto pb-1 lg:px-2 lg:py-0 lg:pr-9 lg:pl-7 xl:pr-17 xl:pl-12 bg-red">
                         {/* -------------------------------------------MOBILE STRUCTURE-------------------------------------------------------- */}
                         <div className="h-screen lg:pt-5 page-transition">
                             {/* FIRST ROW MOBILE MESSAGE STATS */}
@@ -466,7 +471,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                     </div>
 
                                     {/* Message Stats */}
-                                    <div className="mt-6 max-h-[120px] w-[75%] sm:max-h-[90px]">
+                                    <div className="mt-10 max-h-[120px] w-[75%] sm:max-h-[90px]">
 
                                         <div className="relative w-full bg-no-repeat pb-4 lg:hidden">
                                             <img
@@ -727,8 +732,8 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                             </div>
 
                             {/* ALL NETWORKS */}
-                            <div className="grid grid-cols-1 gap-x-0 pb-10 lg:mt-12 lg:ml-4 lg:grid-cols-[63%_35%]">
-                                <div className="relative aspect-auto h-[45vh] overflow-hidden rounded-3xl bg-deepBlack bg-cover bg-center bg-no-repeat p-4 pb-30 md:h-[75vh] lg:bg-transparent lg:pr-15 lg:pb-20 lg:pl-16">
+                            <div className="grid grid-cols-1 gap-x-0 pb-10 lg:mt-24 lg:ml-4 lg:grid-cols-[665px_1fr] ">
+                                <div className="relative aspect-auto h-[45vh] overflow-hidden rounded-3xl bg-deepBlack bg-cover bg-center bg-no-repeat p-4 pb-5 md:h-[75vh] lg:bg-transparent lg:pr-15 lg:pb-5 lg:pl-16 lg:w-[665px] lg:h-[498px] flex flex-col">
                                     <img
                                         src={images.messageCardBg}
                                         alt={`lead card bg`}
@@ -736,7 +741,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                     />
 
 
-                                    <div className="relative no-scrollbar flex-1 overflow-y-auto px-2 pb-10">
+                                    <div className="relative z-10 flex flex-col flex-1 min-h-0 w-full overflow-hidden px-2 pb-10">
                                         {/* ==================================== Search Header
                                         MOBILE AND DESKTOP
                                          ====================================================*/}
@@ -802,7 +807,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
 
 
                                         {/* Desktop Cards Container */}
-                                        <div className="h-[30vh] sm:h-[50vh] lg:h-[55vh]  no-scrollbar divide-y divide-white/20  overflow-y-auto pb-8 lg:pb-0">
+                                        <div className="flex-1 no-scrollbar divide-y divide-white/20 overflow-y-auto pb-8 lg:pb-0">
                                             {filteredConnections.length > 0 ? (
                                                 filteredConnections.map((user) => (
                                                     <div key={user.id} onClick={() => handleStartConversation(user.id)} className="cursor-pointer">
@@ -832,27 +837,29 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                     </div>
                                 </div>
 
-                                <div className="relative hidden aspect-auto overflow-hidden bg-deepBlack bg-cover bg-center bg-no-repeat lg:block lg:bg-transparent">
-                                    <div className="relative bg-transparent px-4 pt-2 pb-4">
-                                        <div className="sticky top-0 z-10 mx-4 mb-2 flex items-center justify-between overflow-hidden rounded-t-3xl px-5 py-0 pt-4 pb-2 shadow-[-2px_-2px_2px_-3px_rgba(0,0,0,0.1),-5px_5px_2px_-3px_rgba(0,0,0,0.1)] lg:bg-white">
+                                <div className="relative hidden aspect-auto overflow-hidden bg-deepBlack bg-cover bg-center bg-no-repeat lg:flex lg:bg-transparent lg:h-[498px] flex flex-col mt-12 lg:mt-0">
+                                    <div className="relative mx-4 flex flex-col flex-1 min-h-0 overflow-hidden bg-white rounded-3xl shadow-[-2px_-2px_5px_-3px_rgba(0,0,0,0.5),-2px_2px_5px_-3px_rgba(0,0,0,0.5)]">
+                                        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
                                             <h3 className="text-base font-normal text-deepBlack">
                                                 {' '}
                                                 Your Most Recent <span className="font-bold">Chats</span>{' '}
                                             </h3>
 
-                                            <div className="flex w-[20%] items-end justify-end">
-                                                <Link className="block cursor-pointer" href={'/message/single'}>
-                                                    <button className="flex h-10 w-10 items-center justify-center rounded-full bg-deepBlack">
-                                                        <div className="relative h-6 w-6">
-                                                            <img src={images.bubbleChatadd} className="absolute object-contain" alt="" />
-                                                        </div>
-                                                    </button>
-                                                </Link>
-                                            </div>
+                                            {authUser?.account_type === 'company' && (
+                                                <div className="flex w-[20%] items-end justify-end">
+                                                    <Link className="block cursor-pointer" href={'/message/single'}>
+                                                        <button className="flex h-10 w-10 items-center justify-center rounded-full bg-deepBlack">
+                                                            <div className="relative h-6 w-6">
+                                                                <img src={images.bubbleChatadd} className="absolute object-contain" alt="" />
+                                                            </div>
+                                                        </button>
+                                                    </Link>
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Search Header */}
-                                        <div className="sticky top-20 z-10 mx-4 flex items-center justify-between overflow-hidden bg-white px-4 py-4">
+                                        <div className="flex items-center justify-between px-6 py-3">
                                             <div className="flex w-[75%]">
                                                 <div className="relative w-full cursor-pointer">
                                                     <input
@@ -860,7 +867,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                                         placeholder="Search"
                                                         value={searchChatQuery}
                                                         onChange={(e) => setSearchChatQuery(e.target.value)}
-                                                        className="w-full rounded-full border-0 bg-gray-700 px-4 py-2 text-deepBlack placeholder:text-white focus:ring-0 focus:ring-primary/30 focus:outline-none lg:bg-[#F6FCFF] lg:px-4 lg:py-2 lg:pl-5 lg:placeholder:text-primary/80 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
+                                                        className="w-full rounded-full border-0 bg-gray-50 px-4 py-2 text-deepBlack placeholder:text-gray-400 focus:ring-0 focus:ring-primary/30 focus:outline-none lg:bg-[#F6FCFF] lg:px-4 lg:py-2 lg:pl-5 lg:placeholder:text-primary/80 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
                                                     />
                                                     <img
                                                         src={images.desktopSearch}
@@ -885,7 +892,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                         </div>
 
                                         {/* Cards Container */}
-                                        <div className="no-scrollbar space-y-2 divide-y divide-white/50 overflow-y-auto p-4">
+                                        <div className="flex-1 overflow-y-auto no-scrollbar divide-y divide-gray-100 px-6">
                                             {/* Mapping over the data to render the list items */}
                                             {filteredConversations.length > 0 ? (
                                                 filteredConversations.map((conversation) => {
@@ -922,7 +929,7 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                                     );
                                                 })
                                             ) : (
-                                                <div className="py-3 text-center text-gray-500">
+                                                <div className="py-8 text-center text-gray-500">
                                                     <p className="text-sm">
                                                         {searchChatQuery
                                                             ? 'No conversations found matching your search.'
@@ -930,10 +937,11 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                                     </p>
                                                 </div>
                                             )}
+                                        </div>
 
-                                            {/* Add New Chat */}
-
-                                            <div className="rounded-b-2xl bg-white pt-15 pb-8 shadow-[-2px_-2px_5px_-3px_rgba(0,0,0,0.5),-2px_2px_5px_-3px_rgba(0,0,0,0.5)]">
+                                        {/* Add New Chat */}
+                                        <div className="border-t border-gray-100 bg-white py-4 px-6">
+                                        {authUser?.account_type === 'company' && (
                                                 <div className="mx-auto max-w-[240px]">
                                                     <Link href="/message/single">
                                                         <button className="w-full rounded-full bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF] px-6 py-2.5 text-sm font-light text-white transition-opacity duration-300 hover:opacity-90">
@@ -941,8 +949,8 @@ function Message({ connections = DUMMY_CONNECTIONS, conversations = DUMMY_CONVER
                                                         </button>
                                                     </Link>
                                                 </div>
+                                        )}
                                             </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
