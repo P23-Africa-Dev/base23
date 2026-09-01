@@ -133,30 +133,30 @@ export default function Referrals() {
           }}
         >
           <div
-            className={`relative z-10 no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto lg:overflow-hidden lg:px-3 lg:pb-1`}
+            className={`relative z-10 no-scrollbar flex min-h-screen lg:h-screen lg:max-h-[96vh] w-full flex-col gap-3 overflow-y-auto lg:overflow-hidden px-3 sm:px-4 lg:px-3 pb-24 sm:pb-20 lg:pb-1`}
           >
-            <div className="flex flex-col gap-5 h-full lg:h-screen lg:pt-4 lg:pb-5 lg:justify-between page-transition">
+            <div className="flex flex-col gap-4 sm:gap-5 h-auto lg:h-screen lg:pt-4 lg:pb-5 lg:justify-between page-transition">
               {/*  Header Search Bar */}
-              <div className="sticky top-0 z-10 flex w-full max-w-[1155px] items-center justify-between gap-2 overflow-hidden px-4 pt-4 pb-3 mx-auto lg:px-0">
-                <div className="flex shrink-0 flex-col text-white italic lg:text-deepBlack xl:w-40">
-                  <h2 className="text-[12px] leading-2 font-normal sm:text-[14px] md:text-[15px] lg:text-[17px] lg:leading-3">
+              <div className="sticky top-0 z-20 flex w-full max-w-[1155px] items-center justify-between gap-2 overflow-hidden px-1 pt-3 pb-2 sm:px-2 sm:pt-4 sm:pb-3 mx-auto lg:px-0">
+                <div className="flex shrink-0 flex-col text-deepBlack dark:text-white italic xl:w-40">
+                  <h2 className="text-[12px] leading-tight font-normal sm:text-[14px] md:text-[15px] lg:text-[17px] lg:leading-3">
                     Your smart
                   </h2>
-                  <h3 className="text-base font-extrabold sm:text-xl lg:text-[25px]">
+                  <h3 className="text-base font-extrabold sm:text-xl lg:text-[25px] leading-tight">
                     matches
                   </h3>
                 </div>
 
-                <div className="flex flex-1 items-center space-x-2 lg:mr-14 lg:items-start">
+                <div className="flex flex-1 items-center space-x-2 lg:mr-14 lg:items-start max-w-xl">
                   <div className="relative w-full cursor-pointer">
                     <input
                       type="text"
-                      placeholder="Search "
+                      placeholder="Search"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyDown={handleSearchKeyPress}
                       disabled={isSearching}
-                      className="w-full rounded-full border-0 bg-gray-700 px-4 text-sm py-2.5 text-deepBlack placeholder:text-sm placeholder:text-white placeholder:italic focus:ring-0 focus:ring-primary/30 focus:outline-none disabled:opacity-50 lg:bg-[#27E6A729] lg:px-4 lg:py-3 lg:pr-18 lg:pl-5 lg:placeholder:text-deepBlue dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
+                      className="w-full rounded-full border-0 bg-[#27E6A729] dark:bg-gray-800 px-4 text-sm py-2.5 sm:py-3 text-deepBlack dark:text-gray-100 placeholder:text-sm placeholder:text-deepBlue/70 dark:placeholder-gray-400 placeholder:italic focus:ring-2 focus:ring-[#27E6A7]/40 focus:outline-none disabled:opacity-50 lg:px-4 lg:py-3 lg:pr-18 lg:pl-5 lg:placeholder:text-deepBlue"
                     />
                     <button
                       onClick={handleSearchIconClick}
@@ -189,15 +189,31 @@ export default function Referrals() {
                 <FilterSidebar variant="dashboard" />
               </div>
 
-              {/* Mobile slider */}
-              <div className="block lg:hidden px-3 pb-4 h-[62svh] min-h-95 max-h-155">
+              {/* Mobile slider (< md) */}
+              <div className="block md:hidden px-1 h-[410px] sm:h-[440px] max-h-[500px]">
                 <ReferralCardSlider
                   data={sliderData}
                   onMatch={handleSliderMatch}
                 />
               </div>
 
-              {/* Desktop slider + teal background — desktop only */}
+              {/* Tablet slider (md to lg) */}
+              <div className="hidden md:block lg:hidden mx-auto w-full max-w-[800px] animate-fadeIn">
+                <div className="relative h-[430px] flex flex-col rounded-3xl overflow-hidden">
+                  <div
+                    style={{ backgroundImage: `url(${images.greenBg})` }}
+                    className="absolute inset-x-0 top-[26%] -bottom-4 bg-cover bg-center bg-no-repeat z-0"
+                  />
+                  <div className="relative z-10 flex-1 min-h-0 w-full flex items-center px-4 pt-2 pb-3">
+                    <ReferralCardSlider
+                      data={sliderData}
+                      onMatch={handleSliderMatch}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop slider + teal background (>= lg) — desktop only */}
               <div className="mx-auto mt-2 hidden w-full max-w-[1155px] lg:block animate-fadeIn">
                 <div className="relative h-[480px] xl:h-[520px] flex flex-col rounded-3xl overflow-hidden">
                   <div
@@ -214,8 +230,8 @@ export default function Referrals() {
               </div>
 
               {/* Below-slider content — ALL screen sizes */}
-              <div className="mx-auto w-full max-w-[1155px] px-4 pb-4 lg:px-0 flex-1 min-h-0 flex flex-col justify-end">
-                <div className="flex flex-col gap-4 lg:flex-row lg:justify-between items-end">
+              <div className="mx-auto w-full max-w-[1155px] px-1 sm:px-2 lg:px-0 flex-1 min-h-0 flex flex-col justify-end">
+                <div className="flex flex-col gap-4 lg:flex-row lg:justify-between items-stretch lg:items-end">
 
                   {/* Smart match chart */}
                   <div className="w-full lg:flex-1">
@@ -223,11 +239,11 @@ export default function Referrals() {
                   </div>
 
                   {/* Right column: Shortlisted + History + Setup */}
-                  <div className="flex flex-col gap-4 lg:flex-row">
+                  <div className="flex flex-col gap-4 sm:flex-row lg:flex-row items-stretch">
 
                     {/* Shortlisted */}
-                    <div className="drop-shadow-[1px_1px_2px_0px_#000000,1px_4px_7px_3px_#00000026]">
-                      <div className="relative w-full bg-white px-6 py-3.5 match-cutout h-57.25 no-scrollbar rounded-3xl overflow-hidden lg:min-w-116.5">
+                    <div className="drop-shadow-[1px_1px_2px_0px_#000000,1px_4px_7px_3px_#00000026] flex-1 sm:flex-initial">
+                      <div className="relative w-full bg-white px-4 sm:px-6 py-3.5 match-cutout h-57.25 no-scrollbar rounded-3xl overflow-hidden sm:min-w-90 lg:min-w-116.5">
                         <div className="sticky top-0 z-2 flex items-center justify-between overflow-hidden border-b bg-white px-2 pt-1 pb-2">
                           <h2 className="text-[14px] leading-none font-extrabold text-deepBlack">
                             Shortlisted
@@ -292,17 +308,17 @@ export default function Referrals() {
                     </div>
 
                     {/* History chart + Setup New Profile */}
-                    <div className="flex flex-row gap-4 lg:w-48 lg:flex-col lg:gap-y-2.5 lg:bg-transparent lg:px-2">
-                      <div className="flex-1 lg:flex-none">
+                    <div className="flex flex-row gap-3 sm:gap-4 sm:w-48 lg:w-48 sm:flex-col lg:flex-col sm:gap-y-2.5 lg:gap-y-2.5 lg:bg-transparent lg:px-2">
+                      <div className="flex-1 sm:flex-none lg:flex-none">
                         <MatchingHistoryChart />
                       </div>
                       <div
                         onClick={() => setOpenProfile(true)}
-                        className="flex-1 lg:flex-none relative flex min-h-22.5 py-4 px-5 cursor-pointer flex-col rounded-2xl bg-[linear-gradient(90deg,#DF87B1_0%,#CD6BD0_49.4%,#BE51EA_92.79%)] shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.2),-2px_3px_5px_-1px_rgba(0,0,0,0.2)]"
+                        className="flex-1 sm:flex-none lg:flex-none relative flex min-h-22.5 py-3.5 sm:py-4 px-4 sm:px-5 cursor-pointer flex-col justify-between rounded-2xl bg-[linear-gradient(90deg,#DF87B1_0%,#CD6BD0_49.4%,#BE51EA_92.79%)] shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.2),-2px_3px_5px_-1px_rgba(0,0,0,0.2)] transition-transform hover:scale-[1.02] active:scale-98"
                       >
                         <div className="flex w-full justify-end">
-                          <div className="flex h-9.25 w-9.25 items-center justify-center rounded-lg bg-[#F5F4F4] shadow-md">
-                            <div className="relative h-5.5 w-5.5">
+                          <div className="flex h-8.5 w-8.5 sm:h-9.25 sm:w-9.25 items-center justify-center rounded-lg bg-[#F5F4F4] shadow-md">
+                            <div className="relative h-5 w-5 sm:h-5.5 sm:w-5.5">
                               <Image
                                 src={images.margicband}
                                 className="absolute object-contain"
@@ -314,8 +330,8 @@ export default function Referrals() {
                           </div>
                         </div>
                         <div className="mt-2 flex flex-col leading-snug text-white italic">
-                          <h4 className="text-[20px] leading-6 font-extrabold">Set-up</h4>
-                          <h4 className="text-[20px] leading-6 font-extrabold">New Profile</h4>
+                          <h4 className="text-[17px] sm:text-[20px] leading-tight font-extrabold">Set-up</h4>
+                          <h4 className="text-[17px] sm:text-[20px] leading-tight font-extrabold">New Profile</h4>
                         </div>
                       </div>
                     </div>

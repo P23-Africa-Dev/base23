@@ -185,15 +185,15 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 src={images.preferenceHorizontal}
                 width={28}
                 height={28}
-                className="h-7 w-7 cursor-pointer lg:hidden"
+                className="h-7 w-7 cursor-pointer lg:hidden shrink-0"
                 alt="filter"
               />
               <Image
-                alt=""
+                alt="refresh"
                 src={Refresh2}
                 width={32}
                 height={32}
-                className="ml-8.25"
+                className="ml-2 sm:ml-4 lg:ml-8.25 h-7 w-7 lg:h-8 lg:w-8 shrink-0 cursor-pointer"
               />
             </div>
           )}

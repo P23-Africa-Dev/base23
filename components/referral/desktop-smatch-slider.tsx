@@ -126,21 +126,22 @@ export default function ReferralCardSlider({
   return (
     <div className="relative select-none h-full w-full">
 
-      {/* ── MOBILE & TABLET (< lg): single card with floating arrows ── */}
-      <div className="flex flex-col lg:hidden h-full">
+      {/* ── MOBILE (< md): single card with floating arrows & pagination ── */}
+      <div className="flex flex-col md:hidden h-full">
         {/* Card row: arrows + card */}
         <div className="relative flex flex-1 items-center justify-center min-h-0">
 
-          {/* Prev arrow — floats left of card */}
+          {/* Prev arrow */}
           <button
             onClick={goPrev}
-            className="absolute left-0 z-40 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow-[0_2px_12px_rgba(0,0,0,0.18)] transition active:scale-90 hover:shadow-[0_4px_16px_rgba(0,0,0,0.22)]"
+            aria-label="Previous Match"
+            className="absolute left-0 z-40 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-[0_2px_12px_rgba(0,0,0,0.18)] border border-gray-100 transition active:scale-90 hover:bg-white"
           >
             <ChevronLeft className="h-5 w-5 text-[#0B1727]" />
           </button>
 
-          {/* Card area — centred, leaves room for arrows */}
-          <div className="relative mx-12 h-full w-full max-w-[320px] sm:max-w-90">
+          {/* Card area */}
+          <div className="relative mx-10 h-full w-full max-w-[310px] sm:max-w-[340px]">
             {/* Swipe overlay */}
             <motion.div
               className="absolute inset-0 z-20 cursor-grab active:cursor-grabbing"
@@ -173,15 +174,145 @@ export default function ReferralCardSlider({
             </AnimatePresence>
           </div>
 
-          {/* Next arrow — floats right of card */}
+          {/* Next arrow */}
           <button
             onClick={goNext}
-            className="absolute right-0 z-40 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow-[0_2px_12px_rgba(0,0,0,0.18)] transition active:scale-90 hover:shadow-[0_4px_16px_rgba(0,0,0,0.22)]"
+            aria-label="Next Match"
+            className="absolute right-0 z-40 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-[0_2px_12px_rgba(0,0,0,0.18)] border border-gray-100 transition active:scale-90 hover:bg-white"
           >
             <ChevronRight className="h-5 w-5 text-[#0B1727]" />
           </button>
         </div>
 
+        {/* Pagination Dots */}
+        {data.length > 1 && (
+          <div className="flex items-center justify-center gap-1.5 pt-2 pb-0.5">
+            {data.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setDirection(i > activeIndex ? 1 : -1);
+                  setActiveIndex(i);
+                }}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`transition-all duration-300 rounded-full ${
+                  i === activeIndex
+                    ? "h-1.5 w-5 bg-[#193E47]"
+                    : "h-1.5 w-1.5 bg-gray-300 hover:bg-gray-400"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── TABLET (md to lg): 3-card layout with side peeks & pagination ── */}
+      <div className="hidden md:flex lg:hidden flex-col h-full relative">
+        <div className="relative flex flex-1 items-center justify-center min-h-0 w-full px-2">
+          {/* Prev arrow */}
+          <button
+            onClick={goPrev}
+            aria-label="Previous Match"
+            className="absolute left-2 z-40 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/95 backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.18)] border border-gray-100 transition active:scale-90 hover:bg-white"
+          >
+            <ChevronLeft className="h-5 w-5 text-[#0B1727]" />
+          </button>
+
+          {/* 3-Card Grid */}
+          <div className="grid grid-cols-[0.85fr_1.3fr_0.85fr] gap-x-4 h-full w-full max-w-[720px] items-center pointer-events-none">
+            {/* Left Card (slot -1) */}
+            <motion.div
+              key={`tablet-left-${getUserAt(-1).id}`}
+              onClick={goPrev}
+              className="h-[85%] cursor-pointer pointer-events-auto opacity-70 hover:opacity-90 transition-opacity"
+            >
+              <CardSlot
+                slot={-1}
+                user={getUserAt(-1)}
+                onMatch={() => onMatch(getUserAt(-1))}
+                onCardClick={() => handleCardClick(getUserAt(-1))}
+                isCenter={false}
+              />
+            </motion.div>
+
+            {/* Center Card (slot 0) */}
+            <div className="h-full relative pointer-events-auto">
+              <motion.div
+                className="absolute inset-0 z-20 cursor-grab active:cursor-grabbing"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0}
+                dragMomentum={false}
+                onDragStart={() => (isDragging.current = true)}
+                onDragEnd={handleDragEnd}
+                style={{ touchAction: "pan-y" }}
+              />
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={`tablet-center-${centerUser.id}-${activeIndex}`}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  className="h-full"
+                >
+                  <CardSlot
+                    slot={0}
+                    user={centerUser}
+                    onMatch={() => onMatch(centerUser)}
+                    onCardClick={() => handleCardClick(centerUser)}
+                    isCenter
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Right Card (slot 1) */}
+            <motion.div
+              key={`tablet-right-${getUserAt(1).id}`}
+              onClick={goNext}
+              className="h-[85%] cursor-pointer pointer-events-auto opacity-70 hover:opacity-90 transition-opacity"
+            >
+              <CardSlot
+                slot={1}
+                user={getUserAt(1)}
+                onMatch={() => onMatch(getUserAt(1))}
+                onCardClick={() => handleCardClick(getUserAt(1))}
+                isCenter={false}
+              />
+            </motion.div>
+          </div>
+
+          {/* Next arrow */}
+          <button
+            onClick={goNext}
+            aria-label="Next Match"
+            className="absolute right-2 z-40 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/95 backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.18)] border border-gray-100 transition active:scale-90 hover:bg-white"
+          >
+            <ChevronRight className="h-5 w-5 text-[#0B1727]" />
+          </button>
+        </div>
+
+        {/* Tablet Pagination */}
+        {data.length > 1 && (
+          <div className="flex items-center justify-center gap-2 pt-2">
+            {data.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setDirection(i > activeIndex ? 1 : -1);
+                  setActiveIndex(i);
+                }}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`transition-all duration-300 rounded-full ${
+                  i === activeIndex
+                    ? "h-2 w-6 bg-[#193E47]"
+                    : "h-2 w-2 bg-gray-300 hover:bg-gray-400"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ── DESKTOP (≥ lg): 5-card grid ── */}
