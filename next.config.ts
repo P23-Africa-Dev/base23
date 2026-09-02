@@ -4,6 +4,17 @@ import { resolveApiUrl } from "./lib/resolve-api-url";
 const API_URL = resolveApiUrl();
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "react-icons",
+      "date-fns",
+      "framer-motion",
+    ],
+  },
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   async rewrites() {
     // afterFiles: App Router pages/route handlers win first (e.g. /register, /api/auth/*).
     // fallback: proxy remaining /api and backend paths that have no Next.js route.

@@ -127,17 +127,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchUser();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F3F0E9]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-pinkLight border-[#0B1727]/10" />
-          <p className="text-sm font-medium text-[#0B1727]/70">Checking authentication...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <AuthContext.Provider
       value={{ user, subscription, loading, refresh: fetchUser }}

@@ -1,7 +1,3 @@
-"use client";
-
-export const dynamic = "force-dynamic";
-
 import LeftDesktopContent from "@/components/auths/LeftDesktopContent";
 import AuthLayout from "@/layouts/auth-layout";
 import Link from "next/link";

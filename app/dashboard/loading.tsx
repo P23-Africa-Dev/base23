@@ -1,0 +1,12 @@
+import AppLayout from "@/layouts/app-layout";
+import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton";
+
+export default function DashboardLoading() {
+  return (
+    <AppLayout>
+      <div className="relative min-h-screen bg-[#F3F0E9] dark:bg-gray-900 py-6">
+        <DashboardSkeleton />
+      </div>
+    </AppLayout>
+  );
+}

@@ -18,12 +18,13 @@ import useSmartMatch from "@/hooks/use-smart-match";
 import SmartMatchService from "@/services/smart-match-service";
 import images from "@/constants/image";
 import toast from "react-hot-toast";
+import { ReferralsSkeleton } from "@/components/skeletons/referrals-skeleton";
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
 export default function Referrals() {
-  const { matches, matchWithUser } = useSmartMatch();
+  const { matches, matchWithUser, isLoadingMatches } = useSmartMatch();
 
   const sliderData: SliderConnection[] = useMemo(() => {
     if (matches && matches.length > 0) {
@@ -118,6 +119,16 @@ export default function Referrals() {
     setIsMatchOpen(false);
     setActiveUser(null);
   };
+
+  if (isLoadingMatches && matches.length === 0) {
+    return (
+      <AppLayout>
+        <div className="relative min-h-screen bg-[#F3F0E9] dark:bg-gray-900 py-6">
+          <ReferralsSkeleton />
+        </div>
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout>

@@ -4,7 +4,11 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { Montserrat } from "next/font/google";
-import DevAuthToggle from "@/components/DevAuthToggle";
+import dynamic from "next/dynamic";
+
+const DevAuthToggle = dynamic(() => import("@/components/DevAuthToggle"), {
+  ssr: false,
+});
 
 const montserrat = Montserrat({
   subsets: ["latin"],

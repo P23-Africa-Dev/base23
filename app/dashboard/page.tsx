@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 
 import UserCard from "@/components/cards/UserCard";
 import SplineAreaChart from "@/components/chart/BasicAreaChart";
+import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton";
 import { FilterSidebar } from "@/components/sidebars/dashbord-filter";
 import UserProfileSidebar from "@/components/sidebars/user-show-sidebar";
 import images from "@/constants/image";
@@ -55,7 +56,7 @@ type User = {
 };
 
 function Dashboard() {
-  const { user: authUser } = useAuth();
+  const { user: authUser, loading: authLoading } = useAuth();
   const auth = { user: authUser };
 
   const { matches, matchWithUser } = useSmartMatch();
@@ -262,6 +263,16 @@ function Dashboard() {
     img.src = images.uibg;
     img.onload = () => setBgLoaded(true);
   }, []);
+
+  if (authLoading && !authUser) {
+    return (
+      <AppLayout>
+        <div className="relative min-h-screen bg-[#F3F0E9] dark:bg-gray-900 py-6">
+          <DashboardSkeleton />
+        </div>
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout>
