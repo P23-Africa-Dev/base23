@@ -1,3 +1,5 @@
+'use client';
+
 import { getAPICallDelay, waitForCSRF } from '@/utils/csrf';
 import axios from '@/lib/axios-config';
 import { useEffect, useRef } from 'react';

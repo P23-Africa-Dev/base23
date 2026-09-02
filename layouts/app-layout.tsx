@@ -1,3 +1,5 @@
+'use client';
+
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { useUserActivityTracker } from '@/hooks/useUserActivityTracker';
 import { SubscriptionRenewalModal } from '@/components/modals/subscription-renewal-modal';
