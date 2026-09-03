@@ -415,14 +415,22 @@ const slotConfig: Record<number, SlotConfig> = {
   "-2": {
     cardSize: "h-[72%] w-full",
     imageRadius: "rounded-2xl",
-    titleClass: "text-[10px] xl:text-[12px] leading-4",
-    roleClass: "text-[8px] xl:text-[10px]",
+    titleClass: "text-[9px] xl:text-[11px] leading-3.5",
+    roleClass: "text-[7px] xl:text-[9px]",
+    iconSize: "h-[14px] xl:h-[17px] w-[14px] xl:w-[17px]",
+    iconInnerSize: "h-2 xl:h-3 w-2 xl:w-3",
+    compatibilityText: "text-[8px] xl:text-[10px]",
+    buttonClass: "px-1.5 xl:px-2 py-[3px] xl:py-[4px] text-[6px] xl:text-[7px]",
   },
   "-1": {
     cardSize: "h-[84%] w-full",
     imageRadius: "rounded-2xl",
-    titleClass: "text-[11px] xl:text-[14px] leading-4",
-    roleClass: "text-[8.5px] xl:text-[11px]",
+    titleClass: "text-[10px] xl:text-[13px] leading-4",
+    roleClass: "text-[8px] xl:text-[10px]",
+    iconSize: "h-[16px] xl:h-[20px] w-[16px] xl:w-[20px]",
+    iconInnerSize: "h-2.5 xl:h-3.5 w-2.5 xl:w-3.5",
+    compatibilityText: "text-[9px] xl:text-[11px]",
+    buttonClass: "px-2 xl:px-3 py-[4px] xl:py-[6px] text-[6.5px] xl:text-[8px]",
   },
   "0": {
     cardSize: "h-full w-full",
@@ -437,14 +445,22 @@ const slotConfig: Record<number, SlotConfig> = {
   "1": {
     cardSize: "h-[84%] w-full",
     imageRadius: "rounded-2xl",
-    titleClass: "text-[11px] xl:text-[14px] leading-4",
-    roleClass: "text-[8.5px] xl:text-[11px]",
+    titleClass: "text-[10px] xl:text-[13px] leading-4",
+    roleClass: "text-[8px] xl:text-[10px]",
+    iconSize: "h-[16px] xl:h-[20px] w-[16px] xl:w-[20px]",
+    iconInnerSize: "h-2.5 xl:h-3.5 w-2.5 xl:w-3.5",
+    compatibilityText: "text-[9px] xl:text-[11px]",
+    buttonClass: "px-2 xl:px-3 py-[4px] xl:py-[6px] text-[6.5px] xl:text-[8px]",
   },
   "2": {
     cardSize: "h-[72%] w-full",
     imageRadius: "rounded-2xl",
-    titleClass: "text-[10px] xl:text-[12px] leading-4",
-    roleClass: "text-[8px] xl:text-[10px]",
+    titleClass: "text-[9px] xl:text-[11px] leading-3.5",
+    roleClass: "text-[7px] xl:text-[9px]",
+    iconSize: "h-[14px] xl:h-[17px] w-[14px] xl:w-[17px]",
+    iconInnerSize: "h-2 xl:h-3 w-2 xl:w-3",
+    compatibilityText: "text-[8px] xl:text-[10px]",
+    buttonClass: "px-1.5 xl:px-2 py-[3px] xl:py-[4px] text-[6px] xl:text-[7px]",
   },
 };
 
@@ -471,62 +487,55 @@ function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps)
             }}
           />
 
-          {/* NAME OVERLAY - Only for the active center card */}
-          {isCenter && (
-            <div
-              style={{ backgroundImage: `url(${images.blurProfilename})` }}
-              className="absolute bottom-2 xl:bottom-3 left-1/2 w-[92%] -translate-x-1/2 rounded-xl bg-cover bg-center bg-no-repeat px-2 text-center"
-            >
-              <div className="py-1.5 xl:py-2.5 text-white">
-                <h1 className={`font-bold ${config.titleClass}`}>{user.name}</h1>
-                <p className={`mt-0.5 font-medium ${config.roleClass}`}>{user.role}</p>
-              </div>
+          {/* NAME OVERLAY — shown on all cards, scaled per slot */}
+          <div
+            style={{ backgroundImage: `url(${images.blurProfilename})` }}
+            className="absolute bottom-2 xl:bottom-3 left-1/2 w-[92%] -translate-x-1/2 rounded-xl bg-cover bg-center bg-no-repeat px-2 text-center"
+          >
+            <div className={`${isCenter ? 'py-1.5 xl:py-2.5' : 'py-1 xl:py-1.5'} text-white`}>
+              <h1 className={`font-bold ${config.titleClass}`}>{user.name}</h1>
+              <p className={`mt-0.5 font-medium ${config.roleClass}`}>{user.role}</p>
             </div>
-          )}
+          </div>
         </div>
 
-        {/* BOTTOM BAR */}
-        {isCenter ? (
-          <div className="flex flex-col items-center gap-0.5 px-1 xl:px-4 pb-0.5 xl:pb-1 shrink-0 z-30">
-            <div className="flex items-center gap-1 xl:gap-1.5">
-              <div
-                className={`flex ${config.iconSize} items-center justify-center rounded-full bg-[#193E47] shrink-0`}
-              >
-                <div className={`relative ${config.iconInnerSize}`}>
-                  <img
-                    src={images.aiMagic}
-                    className="absolute inset-0 h-full w-full object-contain"
-                    alt=""
-                  />
-                </div>
+        {/* BOTTOM CTA BAR — shown on all cards */}
+        <div className={`flex flex-col items-center gap-0.5 ${isCenter ? 'px-1 xl:px-4 pb-0.5 xl:pb-1' : 'px-0.5 xl:px-2 pb-0.5'} shrink-0 z-30`}>
+          <div className="flex items-center gap-1 xl:gap-1.5">
+            <div
+              className={`flex ${config.iconSize} items-center justify-center rounded-full bg-[#193E47] shrink-0`}
+            >
+              <div className={`relative ${config.iconInnerSize}`}>
+                <img
+                  src={images.aiMagic}
+                  className="absolute inset-0 h-full w-full object-contain"
+                  alt=""
+                />
               </div>
+            </div>
 
+            {isCenter && (
               <div className="leading-2.5 shrink-0">
                 <h5 className="text-[6.5px] xl:text-[7.5px] font-medium">Smart Matching</h5>
                 <p className="text-[8px] xl:text-[9px] font-bold">Compatibility</p>
               </div>
+            )}
 
-              <div className={`font-extrabold ${config.compatibilityText} shrink-0`}>
-                {user.compatibility}%
-              </div>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onMatch();
-                }}
-                className={`ml-1 rounded-full bg-darkBlue font-bold whitespace-nowrap shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] text-white pointer-events-auto relative z-30 shrink-0 ${config.buttonClass}`}
-              >
-                View
-              </button>
+            <div className={`font-extrabold ${config.compatibilityText} shrink-0`}>
+              {user.compatibility}%
             </div>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onMatch();
+              }}
+              className={`ml-1 rounded-full bg-darkBlue font-bold whitespace-nowrap shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] text-white pointer-events-auto relative z-30 shrink-0 ${config.buttonClass}`}
+            >
+              View
+            </button>
           </div>
-        ) : (
-          <div className="flex items-center gap-2 px-3 py-1 bg-white justify-center shrink-0">
-            <div className="shrink-0 h-2.5 w-2.5 xl:h-3 xl:w-3 rounded-full bg-[#A17BF6]" />
-            <div className="flex-1 h-0.75 rounded-full bg-linear-to-r from-pink-300 to-pink-200" />
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );
