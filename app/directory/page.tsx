@@ -25,11 +25,11 @@ export default function DirectorPage() {
 
     return (
         <AppLayout>
-            <div className="relative border-0 bg-transparent pt-0 pb-2.5">
-                <div className="absolute z-[2] hidden h-full w-full bg-[#031C5B] lg:block dark:lg:bg-gray-900" />
+            <div className="relative border-0 bg-white dark:bg-gray-900 pt-0 pb-2.5">
+                <div className="absolute z-[2] hidden h-full w-full bg-white lg:block dark:lg:bg-gray-900" />
 
                 <div
-                    className="relative z-[3] flex flex-1 bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl lg:py-2"
+                    className="relative z-[3] flex flex-1 bg-white dark:bg-gray-900 bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl lg:py-2"
                     style={{ backgroundImage: `url(${images.uibg})` }}
                 >
                     {/* ── Main scroll container ── */}

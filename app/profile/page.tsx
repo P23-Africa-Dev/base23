@@ -67,12 +67,11 @@ function ProfileInner() {
     ];
 
     return (
-        <div className="relative min-h-screen">
-            {/* Dark sidebar strip (matches app chrome) */}
-            <div className="absolute z-[2] hidden h-full w-full bg-[#031C5B] lg:block" />
+        <div className="relative min-h-screen bg-white dark:bg-gray-900">
+            <div className="absolute z-[2] hidden h-full w-full bg-white lg:block dark:bg-gray-900" />
 
             <div
-                className="relative z-[3] flex flex-1 flex-col bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl"
+                className="relative z-[3] flex flex-1 flex-col bg-white dark:bg-gray-900 bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl"
                 style={{ backgroundImage: `url(${images.uibg})` }}
             >
                 <div className="flex h-screen max-h-[96vh] flex-col overflow-hidden px-3 py-4 lg:px-8 lg:py-6">

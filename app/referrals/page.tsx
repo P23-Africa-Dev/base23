@@ -123,7 +123,7 @@ export default function Referrals() {
   if (isLoadingMatches && matches.length === 0) {
     return (
       <AppLayout>
-        <div className="relative min-h-screen bg-[#F3F0E9] dark:bg-gray-900 py-6">
+        <div className="relative min-h-screen bg-white dark:bg-gray-900 py-6">
           <ReferralsSkeleton />
         </div>
       </AppLayout>
@@ -132,13 +132,13 @@ export default function Referrals() {
 
   return (
     <AppLayout>
-      <div className="relative border-0 bg-transparent pt-0 pb-2.5 h-full">
+      <div className="relative border-0 bg-white dark:bg-gray-900 pt-0 pb-2.5 h-full">
         {/* Zindex Background */}
         <div
-          className="absolute z-2 hidden h-full w-full lg:block bg-[#031C5B] dark:lg:bg-gray-900"
+          className="absolute z-2 hidden h-full w-full lg:block bg-white dark:lg:bg-gray-900"
         ></div>
         <div
-          className="relative z-3 flex flex-1 bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl lg:py-2"
+          className="relative z-3 flex flex-1 bg-white dark:bg-gray-900 bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl lg:py-2"
           style={{
             backgroundImage: `url(${images.uibg})`,
           }}

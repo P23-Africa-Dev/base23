@@ -328,11 +328,11 @@ function MessageContent(props: Props) {
                 )}
             </AnimatePresence>
 
-            <div className="relative border-0 bg-transparent pt-0 pb-2.5">
+            <div className="relative border-0 bg-white dark:bg-gray-900 pt-0 pb-2.5">
                 {/* Zindex Background */}
-                <div className={`absolute z-[2] hidden h-full w-full lg:block ${bgLoaded ? 'bg-[#031C5B] dark:lg:bg-gray-900' : 'bg-white'} `}></div>
+                <div className="absolute z-[2] hidden h-full w-full bg-white lg:block dark:lg:bg-gray-900"></div>
                 <div
-                    className="relative z-[3] flex flex-1 h-[98lvh] bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl lg:py-2"
+                    className="relative z-[3] flex flex-1 h-[98lvh] bg-white dark:bg-gray-900 bg-cover bg-no-repeat lg:mt-1.5 lg:mr-2 lg:rounded-4xl lg:py-2"
                     style={{
                         backgroundImage: `url(${images.uibg})`,
                     }}
