@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import type { SmartMatchData } from "@/services/notification-service";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
+import NavLink from "@/components/NavLink";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineUserGroup } from "react-icons/hi2";
@@ -321,7 +321,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                 >
                   {PROFILE_SHOWCASE_ITEMS.map((item) => (
                     <li key={item.name}>
-                      <Link
+                      <NavLink
                         href={item.href}
                         className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
                       >
@@ -329,7 +329,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                           {item.icon}
                         </div>
                         <span className="text-[13px]">{item.name}</span>
-                      </Link>
+                      </NavLink>
                     </li>
                   ))}
                   <li>
@@ -365,7 +365,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.1 + index * 0.06 }}
                     >
-                      <Link
+                      <NavLink
                         href={item.href}
                         className={`group relative flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors ${
                           active
@@ -384,7 +384,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                         {active && (
                           <span className="ml-auto h-2 w-2 rounded-full bg-[#27E6A7]" />
                         )}
-                      </Link>
+                      </NavLink>
                     </motion.li>
                   );
                 })}
@@ -420,7 +420,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                         <span className="text-[15px] font-medium">{item.name}</span>
                       </button>
                     ) : (
-                      <Link
+                      <NavLink
                         href={item.href}
                         className="group flex items-center gap-3 rounded-2xl px-4 py-3 text-white/70 transition-colors hover:bg-white/8 hover:text-white"
                       >
@@ -428,7 +428,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                           <img src={item.icon} alt="" className="h-5 w-5 object-contain" />
                         </div>
                         <span className="text-[15px] font-medium">{item.name}</span>
-                      </Link>
+                      </NavLink>
                     )}
                   </motion.li>
                 ))}
@@ -457,7 +457,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                 const active = isActive(item.href);
                 return (
                   <li key={item.name} className="relative">
-                    <Link
+                    <NavLink
                       href={item.href}
                       className="relative flex items-center"
                       aria-current={active ? "page" : undefined}
@@ -521,7 +521,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                         </div>
                         <span className="text-[14px]">{item.name}</span>
                       </div>
-                    </Link>
+                    </NavLink>
                   </li>
                 );
               })}
@@ -596,7 +596,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                     </div>
                   </button>
                 ) : (
-                  <Link
+                  <NavLink
                     key={item.name}
                     href={item.href}
                     className="flex items-center pb-2.5 font-light text-white transition-colors duration-200 hover:text-white/80"
@@ -607,7 +607,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                         {item.name}
                       </span>
                     </div>
-                  </Link>
+                  </NavLink>
                 ),
               )}
             </div>
@@ -654,7 +654,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
             <ul className="mb-2 space-y-1 border-b border-secondaryWhite pb-2">
               {PROFILE_SHOWCASE_ITEMS.map((item) => (
                 <li key={item.name}>
-                  <Link
+                  <NavLink
                     href={item.href}
                     className="flex items-center gap-3 rounded-xl px-2 py-2 text-white/80 hover:bg-secondaryWhite hover:text-[#0b1727]"
                   >
@@ -662,7 +662,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
                       {item.icon}
                     </div>
                     <span className="text-[13px]">{item.name}</span>
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
