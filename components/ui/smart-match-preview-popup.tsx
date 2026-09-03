@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Loader2, HelpCircle, Building2, Clock, Tags, TrendingUp } from 'lucide-react';
 import React from 'react';
+import { createPortal } from 'react-dom';
 
 export interface CompatibilityBreakdown {
     industry_match: number;
@@ -62,7 +63,11 @@ export default function SmartMatchPreviewPopup({
     // Generate fallback avatar URL
     const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=6366f1&color=ffffff&size=200`;
 
-    return (
+    // Portal target — always document.body so the popup escapes any
+    // ancestor overflow:hidden or Framer Motion transform stacking context.
+    const portalTarget = typeof document !== 'undefined' ? document.body : null;
+
+    const popup = (
         <AnimatePresence>
             {isOpen && (
                 <>
@@ -460,4 +465,7 @@ export default function SmartMatchPreviewPopup({
             )}
         </AnimatePresence>
     );
+
+    if (!portalTarget) return popup;
+    return createPortal(popup, portalTarget);
 }
