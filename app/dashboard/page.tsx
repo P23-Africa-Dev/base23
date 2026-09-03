@@ -266,7 +266,7 @@ function Dashboard() {
 
   if (authLoading && !authUser) {
     return (
-      <AppLayout>
+      <AppLayout isSidebarLoading={true}>
         <div className="relative min-h-screen bg-[#F3F0E9] dark:bg-gray-900 py-6">
           <DashboardSkeleton />
         </div>

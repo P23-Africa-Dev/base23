@@ -421,24 +421,24 @@ const slotConfig: Record<number, SlotConfig> = {
   "-1": {
     cardSize: "h-[84%] w-full",
     imageRadius: "rounded-2xl",
-    titleClass: "text-[12px] xl:text-[14px] leading-4",
-    roleClass: "text-[9px] xl:text-[11px]",
+    titleClass: "text-[11px] xl:text-[14px] leading-4",
+    roleClass: "text-[8.5px] xl:text-[11px]",
   },
   "0": {
     cardSize: "h-full w-full",
     imageRadius: "rounded-3xl",
-    titleClass: "text-base xl:text-xl leading-5",
-    roleClass: "text-xs xl:text-sm",
-    iconSize: "h-[22px] xl:h-[25px] w-[22px] xl:w-[25px]",
-    iconInnerSize: "h-3.5 xl:h-4.5 w-3.5 xl:w-4.5",
-    compatibilityText: "text-xs xl:text-[13.8px]",
-    buttonClass: "px-4 xl:px-[29px] py-[8px] xl:py-[11.5px] text-[8px] xl:text-[9px]",
+    titleClass: "text-sm xl:text-xl leading-tight xl:leading-5",
+    roleClass: "text-[11px] xl:text-sm",
+    iconSize: "h-[20px] xl:h-[25px] w-[20px] xl:w-[25px]",
+    iconInnerSize: "h-3 xl:h-4.5 w-3 xl:w-4.5",
+    compatibilityText: "text-[11px] xl:text-[13.8px]",
+    buttonClass: "px-2.5 xl:px-[29px] py-[5px] xl:py-[11.5px] text-[7.5px] xl:text-[9px]",
   },
   "1": {
     cardSize: "h-[84%] w-full",
     imageRadius: "rounded-2xl",
-    titleClass: "text-[12px] xl:text-[14px] leading-4",
-    roleClass: "text-[9px] xl:text-[11px]",
+    titleClass: "text-[11px] xl:text-[14px] leading-4",
+    roleClass: "text-[8.5px] xl:text-[11px]",
   },
   "2": {
     cardSize: "h-[72%] w-full",
@@ -455,9 +455,9 @@ function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps)
   return (
     <div
       onClick={onCardClick}
-      className={`flex ${config.cardSize} flex-col items-center justify-center rounded-3xl bg-white p-2 shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.4),-2px_3px_5px_-1px_rgba(0,0,0,0.4)] cursor-pointer pointer-events-auto relative z-30 transition-transform hover:scale-[1.01]`}
+      className={`flex ${config.cardSize} flex-col items-center justify-center rounded-3xl bg-white p-1.5 xl:p-2 shadow-[1px_3px_5px_-1px_rgba(0,0,0,0.4),-2px_3px_5px_-1px_rgba(0,0,0,0.4)] cursor-pointer pointer-events-auto relative z-30 transition-transform hover:scale-[1.01]`}
     >
-      <div className="relative flex h-full w-full flex-col gap-3">
+      <div className="relative flex h-full w-full flex-col gap-1.5 xl:gap-3">
         {/* IMAGE */}
         <div
           className={`relative flex-1 min-h-0 w-full overflow-hidden shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] ${config.imageRadius}`}
@@ -475,9 +475,9 @@ function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps)
           {isCenter && (
             <div
               style={{ backgroundImage: `url(${images.blurProfilename})` }}
-              className="absolute bottom-3 left-1/2 w-[92%] -translate-x-1/2 rounded-xl bg-cover bg-center bg-no-repeat px-2 text-center"
+              className="absolute bottom-2 xl:bottom-3 left-1/2 w-[92%] -translate-x-1/2 rounded-xl bg-cover bg-center bg-no-repeat px-2 text-center"
             >
-              <div className="py-2.5 text-white">
+              <div className="py-1.5 xl:py-2.5 text-white">
                 <h1 className={`font-bold ${config.titleClass}`}>{user.name}</h1>
                 <p className={`mt-0.5 font-medium ${config.roleClass}`}>{user.role}</p>
               </div>
@@ -487,10 +487,10 @@ function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps)
 
         {/* BOTTOM BAR */}
         {isCenter ? (
-          <div className="flex flex-col items-center gap-0.5 px-2 xl:px-4 pb-1">
+          <div className="flex flex-col items-center gap-0.5 px-1 xl:px-4 pb-0.5 xl:pb-1 shrink-0 z-30">
             <div className="flex items-center gap-1 xl:gap-1.5">
               <div
-                className={`flex ${config.iconSize} items-center justify-center rounded-full bg-[#193E47]`}
+                className={`flex ${config.iconSize} items-center justify-center rounded-full bg-[#193E47] shrink-0`}
               >
                 <div className={`relative ${config.iconInnerSize}`}>
                   <img
@@ -501,12 +501,12 @@ function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps)
                 </div>
               </div>
 
-              <div className="leading-2.5">
+              <div className="leading-2.5 shrink-0">
                 <h5 className="text-[6.5px] xl:text-[7.5px] font-medium">Smart Matching</h5>
-                <p className="text-[9px] font-bold">Compatibility</p>
+                <p className="text-[8px] xl:text-[9px] font-bold">Compatibility</p>
               </div>
 
-              <div className={`font-extrabold ${config.compatibilityText}`}>
+              <div className={`font-extrabold ${config.compatibilityText} shrink-0`}>
                 {user.compatibility}%
               </div>
 
@@ -515,15 +515,15 @@ function CardSlot({ slot, user, onMatch, onCardClick, isCenter }: CardSlotProps)
                   e.stopPropagation();
                   onMatch();
                 }}
-                className={`ml-1 rounded-full bg-darkBlue font-bold whitespace-nowrap shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] text-white pointer-events-auto relative z-30 ${config.buttonClass}`}
+                className={`ml-1 rounded-full bg-darkBlue font-bold whitespace-nowrap shadow-[0_4px_4px_0_#0000004D,0_8px_12px_6px_#00000026] text-white pointer-events-auto relative z-30 shrink-0 ${config.buttonClass}`}
               >
                 View
               </button>
             </div>
           </div>
         ) : (
-          <div className="flex items-center gap-2 px-3 py-1 bg-white justify-center">
-            <div className="shrink-0 h-3 w-3 rounded-full bg-[#A17BF6]" />
+          <div className="flex items-center gap-2 px-3 py-1 bg-white justify-center shrink-0">
+            <div className="shrink-0 h-2.5 w-2.5 xl:h-3 xl:w-3 rounded-full bg-[#A17BF6]" />
             <div className="flex-1 h-0.75 rounded-full bg-linear-to-r from-pink-300 to-pink-200" />
           </div>
         )}

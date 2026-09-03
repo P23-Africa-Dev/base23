@@ -32,12 +32,17 @@ function GlobalModals() {
     return <StepModal open={open} onClose={closeModal} />;
 }
 
-export default function AppLayoutTemplate({ children }: { children: React.ReactNode }) {
+interface AppLayoutTemplateProps {
+    children: React.ReactNode;
+    isSidebarLoading?: boolean;
+}
+
+export default function AppLayoutTemplate({ children, isSidebarLoading }: AppLayoutTemplateProps) {
     return (
         <OnboardingProvider>
             <AppShell defaultSidebarOpen>
                 <div className="flex w-full">
-                    <AppSidebar />
+                    <AppSidebar isLoading={isSidebarLoading} />
                     <TooltipProvider delayDuration={100}>
                         <AppContent className="pt-16 lg:pt-0">{children}</AppContent>
                     </TooltipProvider>

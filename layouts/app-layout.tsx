@@ -10,9 +10,10 @@ import { type ReactNode } from 'react';
 
 interface AppLayoutProps {
     children: ReactNode;
+    isSidebarLoading?: boolean;
 }
 
-function AppLayout({ children }: AppLayoutProps) {
+function AppLayout({ children, isSidebarLoading }: AppLayoutProps) {
     const { user, subscription } = useAuth();
     const pathname = usePathname();
 
@@ -29,7 +30,7 @@ function AppLayout({ children }: AppLayoutProps) {
         && !pathname.startsWith('/subscription-required');
 
     return (
-        <AppLayoutTemplate>
+        <AppLayoutTemplate isSidebarLoading={isSidebarLoading}>
             <SubscriptionRenewalModal
                 open={shouldShowRenewalModal}
                 onClose={() => {

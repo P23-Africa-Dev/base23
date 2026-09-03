@@ -13,6 +13,7 @@ import { SlSettings } from "react-icons/sl";
 import DealCardPopup from "./DealCardPopup";
 import { LogoutConfirmationModal } from "./ui/logout-confirmation-modal";
 import NotificationCard from "./ui/notification-card";
+import { SidebarSkeleton } from "@/components/skeletons/sidebar-skeleton";
 
 const SIDEBAR_BG = "#0B1727";
 
@@ -93,8 +94,12 @@ const userAccountItems: NavItem[] = [
   { name: "Help", icon: `${images.profileIcon}`, href: "/help" },
 ];
 
-export const AppSidebar: React.FC = () => {
-  const { user: authUser } = useAuth();
+interface AppSidebarProps {
+  isLoading?: boolean;
+}
+
+export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => {
+  const { user: authUser, loading: authLoading } = useAuth();
   const pathname = usePathname() ?? "";
   const isLeadsPage = pathname === "/leads";
   const isActive = (href: string) =>
@@ -204,7 +209,9 @@ export const AppSidebar: React.FC = () => {
   };
   const handleSmartMatchDecline = (_data: SmartMatchData) => {};
 
-  if (!authUser) return null;
+  if (isLoading || authLoading || !authUser) {
+    return <SidebarSkeleton />;
+  }
 
   return (
     <div className="">
