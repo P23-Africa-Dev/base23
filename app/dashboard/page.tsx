@@ -58,6 +58,10 @@ type User = {
 function Dashboard() {
   const { user: authUser, loading: authLoading } = useAuth();
   const auth = { user: authUser };
+  // Hydration barrier: SSR and first client render both use auth.user=null
+  // so the tree is identical. After mount, real auth state kicks in.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   const { matches, matchWithUser } = useSmartMatch();
 
@@ -264,7 +268,7 @@ function Dashboard() {
     img.onload = () => setBgLoaded(true);
   }, []);
 
-  if (authLoading && !authUser) {
+  if (!mounted || (authLoading && !authUser)) {
     return (
       <AppLayout isSidebarLoading={true}>
         <div className="relative min-h-screen bg-white dark:bg-gray-900 py-6">

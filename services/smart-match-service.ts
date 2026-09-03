@@ -11,6 +11,10 @@ import type {
     SmartMatchPreferences,
 } from '@/types/smart-match';
 import axios from 'axios';
+import { TEMP_AUTH_BYPASS } from '@/lib/temp-auth-bypass';
+
+// Hard cap for all smart-match API calls — prevents dead sockets hanging the UI
+const SM_TIMEOUT_MS = 1500;
 
 // Python FastAPI Smart Match API
 const SMART_MATCH_API_BASE = 'http://127.0.0.1:3100/api/smart-match';
@@ -72,31 +76,22 @@ export const SmartMatchService = {
      * Get smart matches for the current user
      */
     async getMatches(limit: number = 20): Promise<SmartMatchesResponse> {
+        // Fast-path: no Python service running in dev bypass mode
+        if (TEMP_AUTH_BYPASS) {
+            return { success: false, matches: [], total_count: 0, has_preferences: false, message: 'bypass' };
+        }
         try {
             const response = await axios.get<SmartMatchesResponse>(`${SMART_MATCH_API_BASE}/matches`, {
                 params: { limit },
                 headers: { 'X-User-Id': getUserId() },
+                timeout: SM_TIMEOUT_MS,
             });
-            // Debug log to see raw API response
-            console.log('SmartMatchService.getMatches - Raw API response:', response.data);
-            if (response.data?.matches?.[0]) {
-                console.log('First match user_needs:', response.data.matches[0].user_needs);
-            }
-            // Ensure matches is always an array
             return {
                 ...response.data,
                 matches: response.data?.matches || [],
             };
-        } catch (error) {
-            console.error('Error fetching smart matches:', error);
-            // Return empty response on error
-            return {
-                success: false,
-                matches: [],
-                total_count: 0,
-                has_preferences: false,
-                message: 'Failed to fetch matches',
-            };
+        } catch {
+            return { success: false, matches: [], total_count: 0, has_preferences: false, message: 'Failed to fetch matches' };
         }
     },
 
@@ -104,18 +99,17 @@ export const SmartMatchService = {
      * Get current user's smart match preferences
      */
     async getPreferences(): Promise<PreferencesResponse> {
+        if (TEMP_AUTH_BYPASS) {
+            return { success: false, preferences: null, message: 'bypass' };
+        }
         try {
             const response = await axios.get<PreferencesResponse>(`${SMART_MATCH_API_BASE}/preferences`, {
                 headers: { 'X-User-Id': getUserId() },
+                timeout: SM_TIMEOUT_MS,
             });
             return response.data;
-        } catch (error) {
-            console.error('Error fetching preferences:', error);
-            return {
-                success: false,
-                preferences: null,
-                message: 'Failed to fetch preferences',
-            };
+        } catch {
+            return { success: false, preferences: null, message: 'Failed to fetch preferences' };
         }
     },
 
@@ -234,23 +228,21 @@ export const SmartMatchService = {
      * Get recent network (recently connected users)
      */
     async getRecentNetwork(limit: number = 10): Promise<RecentNetworkResponse> {
+        if (TEMP_AUTH_BYPASS) {
+            return { success: false, connections: [], total_count: 0 };
+        }
         try {
             const response = await axios.get<RecentNetworkResponse>(`${SMART_MATCH_API_BASE}/recent-network`, {
                 params: { limit },
                 headers: { 'X-User-Id': getUserId() },
+                timeout: SM_TIMEOUT_MS,
             });
-            // Ensure connections is always an array
             return {
                 ...response.data,
                 connections: response.data?.connections || [],
             };
-        } catch (error) {
-            console.error('Error fetching recent network:', error);
-            return {
-                success: false,
-                connections: [],
-                total_count: 0,
-            };
+        } catch {
+            return { success: false, connections: [], total_count: 0 };
         }
     },
 

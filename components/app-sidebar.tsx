@@ -110,8 +110,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
+  // Hydration barrier — SSR and first client paint both render <SidebarSkeleton />,
+  // preventing React from throwing away the server DOM tree due to auth mismatch.
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
     setMobileProfileOpen(false);
@@ -209,7 +213,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ isLoading = false }) => 
   };
   const handleSmartMatchDecline = (_data: SmartMatchData) => {};
 
-  if (isLoading || authLoading || !authUser) {
+  if (!mounted || isLoading || authLoading || !authUser) {
     return <SidebarSkeleton />;
   }
 
